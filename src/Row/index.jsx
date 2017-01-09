@@ -37,7 +37,7 @@ module.exports = React.createClass({
     var cells = props.children || props.columns
             .map(this.renderCell.bind(this, this.props))
 
-    return <div {...props}>{cells}</div>
+    return <div className={props.className} style={props.style}>{cells}</div>
   },
 
   prepareProps: function(thisProps){
