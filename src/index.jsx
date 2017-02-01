@@ -351,6 +351,7 @@ module.exports = React.createClass({
             filterIconColor  : props.filterIconColor,
             menuIconColor    : props.menuIconColor,
             menuIcon    : props.menuIcon,
+            sortIcons     : props.sortIcons,
             filterIcon    : props.filterIcon,
             scrollbarSize    : props.scrollbarSize,
             sortInfo         : props.sortInfo,

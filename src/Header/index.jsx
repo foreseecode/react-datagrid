@@ -291,9 +291,14 @@ module.exports = React.createClass({
         var menuIcon = props.menuIcon || <svg version="1.1" style={{transform: 'translate3d(0,0,0)', height:'100%', width: '100%', padding: '0px 2px' }} viewBox="0 0 3 4">
                 <polygon points="0,0 1.5,3 3,0 " style={{fill: props.menuIconColor,strokeWidth:0, fillRule: 'nonZero'}} />
             </svg>
-
+            
+        var sortIcons = props.sortIcons ? props.sortIcons.map(function(sortIcon){
+                        return <span>{sortIcon}</span>;
+                      }) : '';
+        
         return <div className="z-show-menu" onMouseUp={this.handleShowMenuMouseUp.bind(this, props, column, index)}>
             {menuIcon}
+            {sortIcons}
         </div>
     },
 
