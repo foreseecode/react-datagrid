@@ -305,7 +305,11 @@ module.exports = React.createClass({
     handleShowMenuMouseUp: function(props, column, index, event){
         event.nativeEvent.stopSort = true
 
-        this.showMenu(column, event)
+        this.showCustomMenu(column, event)
+    },
+    
+    showCustomMenu: function(column, event){
+      ;(this.props.onMenuClick || emptyFn)(column, event)
     },
 
     showMenu: function(column, event){

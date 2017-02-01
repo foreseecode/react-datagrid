@@ -418,6 +418,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            onDropColumn: this.onDropColumn,
 	            onSortChange: props.onSortChange,
+	            onMenuClick: props.onMenuClick,
 	            onColumnResizeDragStart: this.onColumnResizeDragStart,
 	            onColumnResizeDrag: this.onColumnResizeDrag,
 	            onColumnResizeDrop: this.onColumnResizeDrop,
@@ -30416,7 +30417,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    handleShowMenuMouseUp: function handleShowMenuMouseUp(props, column, index, event) {
 	        event.nativeEvent.stopSort = true;
 
-	        this.showMenu(column, event);
+	        this.showCustomMenu(column, event);
+	    },
+
+	    showCustomMenu: function showCustomMenu(column, event) {
+	        ;(this.props.onMenuClick || emptyFn)(column, event);
 	    },
 
 	    showMenu: function showMenu(column, event) {

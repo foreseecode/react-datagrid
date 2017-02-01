@@ -363,6 +363,7 @@ module.exports = React.createClass({
 
             onDropColumn     : this.onDropColumn,
             onSortChange     : props.onSortChange,
+            onMenuClick      : props.onMenuClick,
             onColumnResizeDragStart: this.onColumnResizeDragStart,
             onColumnResizeDrag: this.onColumnResizeDrag,
             onColumnResizeDrop: this.onColumnResizeDrop,
