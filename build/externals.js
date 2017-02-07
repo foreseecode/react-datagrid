@@ -1,5 +1,6 @@
 'use strict';
 
 module.exports = {
-  // 'react': 'React'
+  'react': 'React',
+  'react-dom': 'ReactDOM'
 }
