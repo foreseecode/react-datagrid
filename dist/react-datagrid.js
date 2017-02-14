@@ -30409,7 +30409,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return React.createElement(
 	            'div',
 	            { className: 'z-show-menu', onMouseUp: this.handleShowMenuMouseUp.bind(this, props, column, index) },
-	            menuIcon,
+	            column.children,
 	            sortIcons
 	        );
 	    },

@@ -297,7 +297,7 @@ module.exports = React.createClass({
                       }) : '';
         
         return <div className="z-show-menu" onMouseUp={this.handleShowMenuMouseUp.bind(this, props, column, index)}>
-            {menuIcon}
+            {column.children}
             {sortIcons}
         </div>
     },
