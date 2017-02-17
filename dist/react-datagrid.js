@@ -30345,6 +30345,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                className: className,
 	                style: style,
 	                text: text,
+	                title: column.title,
 	                header: true,
 	                onMouseOut: this.handleMouseOut.bind(this, column),
 	                onMouseOver: this.handleMouseOver.bind(this, column)
@@ -33361,7 +33362,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            className: 'z-content',
 	            style: {
 	                padding: props.contentPadding
-	            }
+	            },
+	            title: props.title
 	        };
 
 	        var content = props.renderCell ? props.renderCell(contentProps, text, props) : React.DOM.div(contentProps, text);

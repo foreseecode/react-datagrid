@@ -125,8 +125,9 @@ var Cell = React.createClass({
         var contentProps = {
             className: 'z-content',
             style    : {
-                padding: props.contentPadding
-            }
+              padding: props.contentPadding
+            },
+            title: props.title
         }
 
         var content = props.renderCell?

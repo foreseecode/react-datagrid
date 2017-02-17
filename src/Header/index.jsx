@@ -239,6 +239,7 @@ module.exports = React.createClass({
                 className={className}
                 style={style}
                 text={text}
+                title={column.title}
                 header={true}
                 onMouseOut={this.handleMouseOut.bind(this, column)}
                 onMouseOver={this.handleMouseOver.bind(this, column)}
