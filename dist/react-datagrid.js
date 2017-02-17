@@ -634,6 +634,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            menu: state.menu,
 	            menuColumn: state.menuColumn,
 	            showMenu: this.showMenu,
+	            noScroller: !props.scrollable,
 
 	            // cellFactory     : props.cellFactory,
 	            // rowStyle        : props.rowStyle,
@@ -671,7 +672,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        props.empty = !props.data.length;
 
 	        props.rowHeight = this.prepareRowHeight(props);
-	        props.virtualRendering = this.isVirtualRendering(props);
 
 	        props.filterable = this.prepareFilterable(props);
 	        props.resizableColumns = this.prepareResizableColumns(props);
@@ -787,12 +787,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        return props.reorderColumns || !!props.onColumnOrderChange;
-	    },
-
-	    isVirtualRendering: function isVirtualRendering(props) {
-	        props = props || this.props;
-
-	        return props.virtualRendering || props.rowHeight != null;
 	    },
 
 	    prepareRowHeight: function prepareRowHeight() {
@@ -28549,6 +28543,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            props.emptyText
 	        ) : React.createElement('div', _extends({}, props.tableProps, { ref: 'table' }));
 
+	        if (props.noScroller) {
+	            return content;
+	        }
+
 	        return React.createElement(
 	            Scroller,
 	            {
@@ -34774,6 +34772,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        rowHeight: 31,
 
 	        groupNestingWidth: 20,
+
+	        scrollable: true,
 
 	        defaultStyle: {
 	            position: 'relative'

@@ -584,6 +584,7 @@ module.exports = React.createClass({
             menu            : state.menu,
             menuColumn      : state.menuColumn,
             showMenu        : this.showMenu,
+            noScroller      : !props.scrollable,
 
             // cellFactory     : props.cellFactory,
             // rowStyle        : props.rowStyle,
@@ -624,7 +625,6 @@ module.exports = React.createClass({
         props.empty      = !props.data.length
 
         props.rowHeight = this.prepareRowHeight(props)
-        props.virtualRendering = this.isVirtualRendering(props)
 
         props.filterable = this.prepareFilterable(props)
         props.resizableColumns = this.prepareResizableColumns(props)
@@ -744,12 +744,6 @@ module.exports = React.createClass({
         }
 
         return props.reorderColumns || !!props.onColumnOrderChange
-    },
-
-    isVirtualRendering: function(props){
-        props = props || this.props
-
-        return props.virtualRendering || (props.rowHeight != null)
     },
 
     prepareRowHeight: function(){
