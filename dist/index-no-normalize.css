@@ -671,14 +671,24 @@ html.u-app body * {
 }
 .react-datagrid.z-with-column-menu .z-column-header .z-show-filter,
 .react-datagrid.z-with-column-menu .z-column-header .z-show-menu {
-  display: none;
   position: absolute;
   cursor: pointer;
   right: 0px;
   top: 0px;
-  width: 15px;
   height: 100%;
   border-left: 1px solid #a8a8a8;
+}
+.react-datagrid.z-with-column-menu .z-column-header .z-show-sort {
+  float: left;
+  margin-top: 8px;
+}
+.react-datagrid.z-with-column-menu .z-column-header .z-show-right-node {
+  float: right;
+  margin-top: 9px;
+  color: #627085;
+}
+.react-datagrid.z-with-column-menu .z-column-header .z-show-sort + .z-show-right-node {
+  margin-left: 5px;
 }
 .react-datagrid.z-with-column-menu .z-column-header .z-show-filter {
   right: 15px;
