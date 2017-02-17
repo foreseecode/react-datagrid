@@ -241,9 +241,9 @@ module.exports = React.createClass({
                 text={text}
                 title={column.title}
                 header={true}
+                contentProps={events}
                 onMouseOut={this.handleMouseOut.bind(this, column)}
                 onMouseOver={this.handleMouseOver.bind(this, column)}
-                {...events}
             >
                 {filter}
                 {menu}
@@ -266,8 +266,8 @@ module.exports = React.createClass({
             sortInfo.push(columnSortInfo)
         }
 
-        if (typeof column.toggleSort === 'function'){
-            column.toggleSort(columnSortInfo, sortInfo)
+        if (typeof column.sortable === 'function'){
+            column.sortable(columnSortInfo, sortInfo)
         } else {
 
             var dir     = columnSortInfo.dir
@@ -279,9 +279,9 @@ module.exports = React.createClass({
             if (!newDir){
                 sortInfo = removeColumnSort(column, sortInfo)
             }
+            ;(this.props.onSortChange || emptyFn)(sortInfo)
         }
 
-        ;(this.props.onSortChange || emptyFn)(sortInfo)
     },
 
     renderColumnMenu: function(props, state, column, index){
@@ -289,9 +289,9 @@ module.exports = React.createClass({
             return
         }
         
-        return <div className="z-show-menu clearfix" onMouseUp={this.handleShowMenuMouseUp.bind(this, props, column, index)}>
+        return <div className="z-show-menu clearfix">
           {props.sortIcons && 
-            <div className="z-show-sort">
+            <div className="z-show-sort" onClick={this.toggleSort.bind(this, column)}>
               {props.sortIcons}
             </div>
           }
@@ -299,16 +299,6 @@ module.exports = React.createClass({
             <div className="z-show-right-node">{column.rightNode}</div>
           }
         </div>
-    },
-
-    handleShowMenuMouseUp: function(props, column, index, event){
-        event.nativeEvent.stopSort = true
-
-        this.showCustomMenu(column, event)
-    },
-    
-    showCustomMenu: function(column, event){
-      ;(this.props.onMenuClick || emptyFn)(column, event)
     },
 
     showMenu: function(column, event){
@@ -456,6 +446,10 @@ module.exports = React.createClass({
         }
 
         if (!this.props.reorderColumns){
+            return
+        }
+        
+        if (column.noDrag) {
             return
         }
 

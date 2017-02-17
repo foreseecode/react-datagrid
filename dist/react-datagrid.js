@@ -30098,8 +30098,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 	var React = __webpack_require__(177);
 	var Region = __webpack_require__(181);
 	var ReactMenu = React.createFactory(__webpack_require__(265));
@@ -30336,7 +30334,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        return React.createElement(
 	            Cell,
-	            _extends({
+	            {
 	                key: column.name,
 	                contentPadding: props.cellPadding,
 	                columns: props.columns || [],
@@ -30347,9 +30345,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                text: text,
 	                title: column.title,
 	                header: true,
+	                contentProps: events,
 	                onMouseOut: this.handleMouseOut.bind(this, column),
 	                onMouseOver: this.handleMouseOver.bind(this, column)
-	            }, events),
+	            },
 	            filter,
 	            menu,
 	            resizer
@@ -30370,8 +30369,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            sortInfo.push(columnSortInfo);
 	        }
 
-	        if (typeof column.toggleSort === 'function') {
-	            column.toggleSort(columnSortInfo, sortInfo);
+	        if (typeof column.sortable === 'function') {
+	            column.sortable(columnSortInfo, sortInfo);
 	        } else {
 
 	            var dir = columnSortInfo.dir;
@@ -30383,9 +30382,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (!newDir) {
 	                sortInfo = removeColumnSort(column, sortInfo);
 	            }
+	            ;(this.props.onSortChange || emptyFn)(sortInfo);
 	        }
-
-	        ;(this.props.onSortChange || emptyFn)(sortInfo);
 	    },
 
 	    renderColumnMenu: function renderColumnMenu(props, state, column, index) {
@@ -30395,10 +30393,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        return React.createElement(
 	            'div',
-	            { className: 'z-show-menu clearfix', onMouseUp: this.handleShowMenuMouseUp.bind(this, props, column, index) },
+	            { className: 'z-show-menu clearfix' },
 	            props.sortIcons && React.createElement(
 	                'div',
-	                { className: 'z-show-sort' },
+	                { className: 'z-show-sort', onClick: this.toggleSort.bind(this, column) },
 	                props.sortIcons
 	            ),
 	            column.rightNode && React.createElement(
@@ -30407,16 +30405,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                column.rightNode
 	            )
 	        );
-	    },
-
-	    handleShowMenuMouseUp: function handleShowMenuMouseUp(props, column, index, event) {
-	        event.nativeEvent.stopSort = true;
-
-	        this.showCustomMenu(column, event);
-	    },
-
-	    showCustomMenu: function showCustomMenu(column, event) {
-	        ;(this.props.onMenuClick || emptyFn)(column, event);
 	    },
 
 	    showMenu: function showMenu(column, event) {
@@ -30554,6 +30542,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        if (!this.props.reorderColumns) {
+	            return;
+	        }
+
+	        if (column.noDrag) {
 	            return;
 	        }
 
@@ -33363,8 +33355,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            style: {
 	                padding: props.contentPadding
 	            },
-	            title: props.title
+	            title: props.title,
+	            onMouseUp: props.contentProps ? props.contentProps.onMouseUp : null,
+	            onMouseDown: props.contentProps ? props.contentProps.onMouseDown : null
 	        };
+
+	        delete props.contentProps;
 
 	        var content = props.renderCell ? props.renderCell(contentProps, text, props) : React.DOM.div(contentProps, text);
 
