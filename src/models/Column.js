@@ -51,12 +51,6 @@ var Column = function(col, props){
     }
     col.resizable = !!col.resizable
 
-    //filterable
-    if (props && props.filterable === false){
-        col.filterable = false
-    }
-    col.filterable = !!col.filterable
-
     var visibleInfo = getVisibleInfo(col)
     var visible = visibleInfo.visible
 
@@ -84,7 +78,6 @@ Column.displayName = 'Column'
 
 Column.defaults = {
     sortable  : true,
-    filterable: true,
     resizable : true,
     defaultVisible: true,
     type      : 'string'

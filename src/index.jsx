@@ -10,7 +10,6 @@ var assign   = require('object-assign')
 import LoadMask from 'react-load-mask'
 var Region   = require('region')
 
-var PaginationToolbar = React.createFactory(require('./PaginationToolbar'))
 var Column = require('./models/Column')
 
 var PropTypes      = require('./PropTypes')
@@ -84,17 +83,14 @@ module.exports = React.createClass({
     displayName: 'ReactDataGrid',
 
     mixins: [
-        require('./RowSelect'),
-        require('./ColumnFilter')
+        require('./RowSelect')
     ],
 
     propTypes: {
         loading          : React.PropTypes.bool,
-        virtualRendering : React.PropTypes.bool,
 
         //specify false if you don't want any column to be resizable
         resizableColumns : React.PropTypes.bool,
-        filterable: React.PropTypes.bool,
 
         //specify false if you don't want column menus to be displayed
         withColumnMenu   : React.PropTypes.bool,
@@ -113,7 +109,6 @@ module.exports = React.createClass({
          * @cfg {Number/String} columnMinWidth=50
          */
         columnMinWidth   : PropTypes.numeric,
-        scrollBy         : PropTypes.numeric,
         rowHeight        : PropTypes.numeric,
         sortInfo         : PropTypes.sortInfo,
         columns          : PropTypes.column,
@@ -130,31 +125,11 @@ module.exports = React.createClass({
 
     componentDidMount: function(){
         window.addEventListener('click', this.windowClickListener = this.onWindowClick)
-        // this.checkRowHeight(this.props)
     },
 
     componentWillUnmount: function(){
-        this.scroller = null
         window.removeEventListener('click', this.windowClickListener)
     },
-
-    // checkRowHeight: function(props) {
-    //     if (this.isVirtualRendering(props)){
-
-    //         //if virtual rendering and no rowHeight specifed, we use
-    //         var row = this.findRowById(SIZING_ID)
-    //         var config = {}
-
-    //         if (row){
-    //             this.setState({
-    //                 rowHeight: config.rowHeight = row.offsetHeight
-    //             })
-    //         }
-
-    //         //this ensures rows are kept in view
-    //         this.updateStartIndex(props, undefined, config)
-    //     }
-    // },
 
     onWindowClick: function(event){
         if (this.state.menu){
@@ -171,78 +146,13 @@ module.exports = React.createClass({
         var defaultSelected = props.defaultSelected
 
         return {
-            startIndex: 0,
-            scrollLeft: 0,
-            scrollTop : 0,
             menuColumn: null,
             defaultSelected: defaultSelected,
-            visibility: {},
-            defaultPageSize: props.defaultPageSize,
-            defaultPage : props.defaultPage
+            visibility: {}
         }
-    },
-
-    updateStartIndex: function() {
-        this.handleScrollTop()
-    },
-
-    handleScrollLeft: function(scrollLeft){
-
-        this.setState({
-            scrollLeft: scrollLeft,
-            menuColumn: null
-        })
-    },
-
-    handleScrollTop: function(scrollTop){
-        var props = this.p
-        var state = this.state
-
-        scrollTop = scrollTop === undefined? this.state.scrollTop: scrollTop
-
-        state.menuColumn = null
-
-        this.scrollTop = scrollTop
-
-        if (props.virtualRendering){
-
-            var prevIndex        = this.state.startIndex || 0
-            var renderStartIndex = Math.ceil(scrollTop / props.rowHeight)
-
-            state.startIndex = renderStartIndex
-
-            // var data = this.prepareData(props)
-
-            // if (renderStartIndex >= data.length){
-            //     renderStartIndex = 0
-            // }
-
-            // state.renderStartIndex = renderStartIndex
-
-            // var endIndex = this.getRenderEndIndex(props, state)
-
-            // if (endIndex > data.length){
-            //     renderStartIndex -= data.length - endIndex
-            //     renderStartIndex = Math.max(0, renderStartIndex)
-
-            //     state.renderStartIndex = renderStartIndex
-            // }
-
-            // // console.log('scroll!');
-            // var sign = signum(renderStartIndex - prevIndex)
-
-            // state.topOffset = -sign * Math.ceil(scrollTop - state.renderStartIndex * this.props.rowHeight)
-
-            // console.log(scrollTop, sign);
-        } else {
-            state.scrollTop = scrollTop
-        }
-
-        this.setState(state)
     },
 
     getRenderEndIndex: function(props, state){
-        var startIndex = state.startIndex
         var rowCount   = props.rowCountBuffer
         var length     = props.data.length
 
@@ -260,7 +170,7 @@ module.exports = React.createClass({
             rowCount = Math.floor(maxHeight / props.rowHeight)
         }
 
-        var endIndex = startIndex + rowCount
+        var endIndex = rowCount
 
         if (endIndex > length - 1){
             endIndex = length
@@ -342,22 +252,17 @@ module.exports = React.createClass({
         var columns    = getVisibleColumns(props, state)
 
         return (props.headerFactory || HeaderFactory)({
-            scrollLeft       : state.scrollLeft,
             resizing         : state.resizing,
             columns          : columns,
             allColumns       : allColumns,
             columnVisibility : state.visibility,
             cellPadding      : props.headerPadding || props.cellPadding,
-            filterIconColor  : props.filterIconColor,
             menuIconColor    : props.menuIconColor,
             menuIcon    : props.menuIcon,
             sortIcons     : props.sortIcons,
-            filterIcon    : props.filterIcon,
-            scrollbarSize    : props.scrollbarSize,
             sortInfo         : props.sortInfo,
             resizableColumns : props.resizableColumns,
             reorderColumns   : props.reorderColumns,
-            filterable: props.filterable,
             withColumnMenu   : props.withColumnMenu,
             sortable         : props.sortable,
 
@@ -370,7 +275,6 @@ module.exports = React.createClass({
 
             toggleColumn     : this.toggleColumn.bind(this, props),
             showMenu         : this.showMenu,
-            filterMenuFactory : this.filterMenuFactory,
             menuColumn       : state.menuColumn,
             columnMenuFactory: props.columnMenuFactory
 
@@ -384,7 +288,6 @@ module.exports = React.createClass({
     },
 
     prepareRenderProps: function(props){
-
         var result = {}
         var list = {
             className: true,
@@ -402,7 +305,6 @@ module.exports = React.createClass({
     },
 
     render: function(){
-
         var props = this.prepareProps(this.props, this.state)
 
         this.p = props
@@ -428,43 +330,8 @@ module.exports = React.createClass({
             loadMask = <LoadMask visible={props.loading} />
         }
 
-        var paginationToolbar
-
-        if (props.pagination){
-            var page    = props.page
-            var minPage = props.minPage
-            var maxPage = props.maxPage
-
-            var paginationToolbarFactory = props.paginationFactory || PaginationToolbar
-            var paginationProps = assign({
-                dataSourceCount : props.dataSourceCount,
-                page            : page,
-                pageSize        : props.pageSize,
-                minPage         : minPage,
-                maxPage         : maxPage,
-                reload          : this.reload,
-                onPageChange    : this.gotoPage,
-                onPageSizeChange: this.setPageSize,
-                border          : props.style.border
-            }, props.paginationToolbarProps)
-
-            paginationToolbar = paginationToolbarFactory(paginationProps)
-
-            if (paginationToolbar === undefined){
-                paginationToolbar = PaginationToolbar(paginationProps)
-            }
-        }
-
         var topToolbar
         var bottomToolbar
-
-        if (paginationToolbar){
-            if (paginationToolbar.props.position == 'top'){
-                topToolbar = paginationToolbar
-            } else {
-                bottomToolbar = paginationToolbar
-            }
-        }
 
         var result = (
             <div {...renderProps}>
@@ -499,103 +366,18 @@ module.exports = React.createClass({
         return table
     },
 
-    handleVerticalScrollOverflow: function(sign, scrollTop) {
-
-        var props = this.p
-        var page  = props.page
-
-        if (this.isValidPage(page + sign, props)){
-            this.gotoPage(page + sign)
-        }
-    },
-
-    fixHorizontalScrollbar: function() {
-        var scroller = this.scroller
-
-        if (scroller){
-            scroller.fixHorizontalScrollbar()
-        }
-    },
-
-    onWrapperMount: function(wrapper, scroller){
-        this.scroller = scroller
-    },
-
     prepareWrapper: function(props, state){
-        var virtualRendering = props.virtualRendering
-
         var data       = props.data
-        var scrollTop  = state.scrollTop
-        var startIndex = state.startIndex
-        var endIndex   = virtualRendering?
-                            this.getRenderEndIndex(props, state):
-                            0
-
-        var renderCount = virtualRendering?
-                            endIndex + 1 - startIndex:
-                            data.length
-
-        var totalLength = state.groupData?
-                            data.length + state.groupData.groupsCount:
-                            data.length
-
-        if (props.virtualRendering){
-            scrollTop = startIndex * props.rowHeight
-        }
-
-        // var topLoader
-        // var bottomLoader
-        // var loadersSize = 0
-
-        // if (props.virtualPagination){
-
-        //     if (props.page < props.maxPage){
-        //         loadersSize += 2 * props.rowHeight
-        //         bottomLoader = <div style={{height: 2 * props.rowHeight, position: 'relative', width: props.columnFlexCount? 'calc(100% - ' + props.scrollbarSize + ')': props.minRowWidth - props.scrollbarSize}}>
-        //             <LoadMask visible={true} style={{background: 'rgba(128, 128, 128, 0.17)'}}/>
-        //         </div>
-        //     }
-
-        //     if (props.page > props.minPage){
-        //         loadersSize += 2 * props.rowHeight
-        //         topLoader = <div style={{height: 2 * props.rowHeight, position: 'relative', width: props.columnFlexCount? 'calc(100% - ' + props.scrollbarSize + ')': props.minRowWidth - props.scrollbarSize}}>
-        //             <LoadMask visible={true} style={{background: 'rgba(128, 128, 128, 0.17)'}}/>
-        //         </div>
-        //     }
-        // }
 
         var wrapperProps = assign({
             ref             : 'wrapper',
-            onMount         : this.onWrapperMount,
-            scrollLeft      : state.scrollLeft,
-            scrollTop       : scrollTop,
-            topOffset       : state.topOffset,
-            startIndex      : startIndex,
-            totalLength     : totalLength,
-            renderCount     : renderCount,
-            endIndex        : endIndex,
 
             allColumns      : props.columns,
-
-            onScrollLeft    : this.handleScrollLeft,
-            onScrollTop     : this.handleScrollTop,
-            // onScrollOverflow: props.virtualPagination? this.handleVerticalScrollOverflow: null,
 
             menu            : state.menu,
             menuColumn      : state.menuColumn,
             showMenu        : this.showMenu,
-            noScroller      : !props.scrollable,
-
-            // cellFactory     : props.cellFactory,
-            // rowStyle        : props.rowStyle,
-            // rowClassName    : props.rowClassName,
-            // rowContextMenu  : props.rowContextMenu,
-
-            // topLoader: topLoader,
-            // bottomLoader: bottomLoader,
-            // loadersSize: loadersSize,
-
-            // onRowClick: this.handleRowClick,
+            
             selected        : props.selected == null?
                 state.defaultSelected:
                 props.selected
@@ -605,7 +387,6 @@ module.exports = React.createClass({
         wrapperProps.tableProps = this.getTableProps(wrapperProps, state)
 
         return (props.WrapperFactory || WrapperFactory)(wrapperProps)
-
     },
 
     handleRowClick: function(rowProps, event){
@@ -626,17 +407,15 @@ module.exports = React.createClass({
 
         props.rowHeight = this.prepareRowHeight(props)
 
-        props.filterable = this.prepareFilterable(props)
         props.resizableColumns = this.prepareResizableColumns(props)
         props.reorderColumns = this.prepareReorderColumns(props)
 
         this.prepareClassName(props)
         props.style = this.prepareStyle(props)
 
-        this.preparePaging(props, state)
         this.prepareColumns(props, state)
 
-        props.minRowWidth = props.totalColumnWidth + props.scrollbarSize
+        props.minRowWidth = props.totalColumnWidth;
 
         return props
     },
@@ -646,38 +425,10 @@ module.exports = React.createClass({
         return props.loading == null? showLoadMask && this.state.defaultLoading: props.loading
     },
 
-    preparePaging: function(props, state) {
-        props.pagination = this.preparePagination(props)
-
-        if (props.pagination){
-            props.pageSize = this.preparePageSize(props)
-            props.dataSourceCount = this.prepareDataSourceCount(props)
-
-            props.minPage = 1
-            props.maxPage = Math.ceil((props.dataSourceCount || 1) / props.pageSize)
-            props.page    = clamp(this.preparePage(props), props.minPage, props.maxPage)
-        }
-    },
-
-    preparePagination: function(props) {
-        return props.pagination === false?
-                false:
-                !!props.pageSize || !!props.paginationFactory || this.isRemoteDataSource(props)
-    },
-
     prepareDataSourceCount: function(props) {
         return props.dataSourceCount == null? this.state.defaultDataSourceCount: props.dataSourceCount
     },
 
-    preparePageSize: function(props) {
-        return props.pageSize == null? this.state.defaultPageSize: props.pageSize
-    },
-
-    preparePage: function(props) {
-        return props.page == null?
-            this.state.defaultPage:
-            props.page
-    },
     /**
      * Returns true if in the current configuration,
      * the datagrid should load its data remotely.
@@ -722,14 +473,6 @@ module.exports = React.createClass({
         return data
     },
 
-    prepareFilterable: function(props) {
-        if (props.filterable === false){
-            return false
-        }
-
-        return props.filterable || !!props.onFilter
-    },
-
     prepareResizableColumns: function(props) {
         if (props.resizableColumns === false){
             return false
@@ -762,80 +505,12 @@ module.exports = React.createClass({
         }
     },
 
-    isValidPage: function(page, props) {
-        return page >= 1 && page <= this.getMaxPage(props)
-    },
-
-    getMaxPage: function(props) {
-        props = props || this.props
-
-        var count    = this.prepareDataSourceCount(props) || 1
-        var pageSize = this.preparePageSize(props)
-
-        return Math.ceil(count / pageSize)
-    },
-
     reload: function() {
         if (this.dataSource){
             return this.loadDataSource(this.dataSource, this.props)
         }
     },
-
-    clampPage: function(page) {
-        return clamp(page, 1, this.getMaxPage(this.props))
-    },
-
-    setPageSize: function(pageSize) {
-
-        var stateful
-        var newPage = this.preparePage(this.props)
-        var newState = {}
-
-        if (typeof this.props.onPageSizeChange == 'function'){
-            this.props.onPageSizeChange(pageSize, this.p)
-        }
-
-        if (this.props.pageSize == null){
-            stateful = true
-            this.state.defaultPageSize = pageSize
-            newState.defaultPageSize = pageSize
-        }
-
-        if (!this.isValidPage(newPage, this.props)){
-
-            newPage = this.clampPage(newPage)
-
-            if (typeof this.props.onPageChange == 'function'){
-                this.props.onPageChange(newPage)
-            }
-
-            if (this.props.page == null){
-                stateful = true
-                this.state.defaultPage = newPage
-                newState.defaultPage   = newPage
-            }
-        }
-
-        if (stateful){
-            this.reload()
-            this.setState(newState)
-        }
-    },
-
-    gotoPage: function(page) {
-        if (typeof this.props.onPageChange == 'function'){
-            this.props.onPageChange(page)
-        } else {
-            this.state.defaultPage = page
-            var result = this.reload()
-            this.setState({
-                defaultPage: page
-            })
-
-            return result
-        }
-    },
-
+    
     /**
      * Loads remote data
      *
@@ -853,21 +528,6 @@ module.exports = React.createClass({
 
         if (props.sortInfo){
             dataSourceQuery.sortInfo = props.sortInfo
-        }
-
-        var pagination = this.preparePagination(props)
-        var pageSize
-        var page
-
-        if (pagination){
-            pageSize = this.preparePageSize(props)
-            page     = this.preparePage(props)
-
-            assign(dataSourceQuery, {
-                pageSize: pageSize,
-                page    : page,
-                skip    : (page - 1) * pageSize
-            })
         }
 
         if (typeof dataSource == 'function'){
@@ -987,10 +647,7 @@ module.exports = React.createClass({
         this.groupData(nextProps)
 
         if (this.isRemoteDataSource(nextProps)){
-            var otherPage     = this.props.page != nextProps.page
-            var otherPageSize = this.props.pageSize != nextProps.pageSize
-
-            if (nextProps.reload || otherPage || otherPageSize){
+            if (nextProps.reload){
                 this.loadDataSource(nextProps.dataSource, nextProps)
             }
         }
@@ -1117,23 +774,6 @@ module.exports = React.createClass({
     },
 
     onColumnResizeDrop: function(config, resizeInfo){
-
-        var horizScrollbar = this.refs.wrapper.refs.horizScrollbar
-
-        if (horizScrollbar && this.state.scrollLeft){
-
-            setTimeout(function(){
-                //FF needs this, since it does not trigger scroll event when scrollbar dissapears
-                //so we might end up with grid content not visible (to the left)
-
-                var domNode = findDOMNode(horizScrollbar)
-                if (domNode && !domNode.scrollLeft){
-                    this.handleScrollLeft(0)
-                }
-            }.bind(this), 1)
-
-        }
-
         var props   = this.props
         var columns = props.columns
 
