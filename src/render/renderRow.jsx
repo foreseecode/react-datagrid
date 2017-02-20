@@ -29,7 +29,7 @@ module.exports = function renderRow(props, data, index, fn){
     var renderKey   = key
 
     if (!props.groupBy){
-        renderKey = index
+        renderKey = index - props.startIndex
     }
 
     var selected = false
@@ -52,7 +52,7 @@ module.exports = function renderRow(props, data, index, fn){
         renderText : props.renderText,
         cellPadding: props.cellPadding,
         rowHeight  : props.rowHeight,
-        minWidth   : props.minRowWidth,
+        minWidth   : props.minRowWidth - props.scrollbarSize,
         columns    : props.columns,
 
         rowContextMenu: props.rowContextMenu,
