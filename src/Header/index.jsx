@@ -420,6 +420,7 @@ module.exports = React.createClass({
         assign(props, thisProps)
 
         this.prepareClassName(props)
+        this.prepareStyle(props)
 
         var columnMap = {}
 
@@ -439,5 +440,11 @@ module.exports = React.createClass({
         if (this.state.dragging){
             props.className += ' ' + props.draggingClassName
         }
+    },
+
+    prepareStyle: function(props){
+        var style = props.style = {}
+
+        assign(style, props.defaultStyle)
     }
 })

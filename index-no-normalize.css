@@ -406,7 +406,7 @@ html.u-app body * {
   -ms-box-flex: 1;
   -ms-flex: 1;
   flex: 1;
-  overflow-x: scroll;
+  overflow: hidden;
   position: relative;
   display: -webkit-box;
   display: -ms-flexbox;

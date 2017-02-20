@@ -10,6 +10,8 @@ module.exports = React.createClass({
     displayName: 'ReactDataGrid.Wrapper',
 
     propTypes: {
+        rowHeight   : React.PropTypes.any,
+        renderCount : React.PropTypes.number
     },
 
     getDefaultProps: function(){
