@@ -332,8 +332,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            toggleColumn: this.toggleColumn.bind(this, props),
 	            showMenu: this.showMenu,
 	            menuColumn: state.menuColumn,
-	            columnMenuFactory: props.columnMenuFactory
-
+	            columnMenuFactory: props.columnMenuFactory,
+	            style: {
+	                minWidth: props.totalColumnWidth
+	            }
 	        });
 	    },
 
@@ -26787,10 +26789,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    displayName: 'ReactDataGrid.Wrapper',
 
-	    propTypes: {
-	        rowHeight: React.PropTypes.any,
-	        renderCount: React.PropTypes.number
-	    },
+	    propTypes: {},
 
 	    getDefaultProps: function getDefaultProps() {
 	        return {};
@@ -27245,7 +27244,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        assign(props, thisProps);
 
 	        this.prepareClassName(props);
-	        this.prepareStyle(props);
 
 	        var columnMap = {};(props.columns || []).forEach(function (col) {
 	            columnMap[col.name] = col;
@@ -27263,12 +27261,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (this.state.dragging) {
 	            props.className += ' ' + props.draggingClassName;
 	        }
-	    },
-
-	    prepareStyle: function prepareStyle(props) {
-	        var style = props.style = {};
-
-	        assign(style, props.defaultStyle);
 	    }
 	});
 

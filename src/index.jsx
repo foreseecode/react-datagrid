@@ -276,8 +276,10 @@ module.exports = React.createClass({
             toggleColumn     : this.toggleColumn.bind(this, props),
             showMenu         : this.showMenu,
             menuColumn       : state.menuColumn,
-            columnMenuFactory: props.columnMenuFactory
-
+            columnMenuFactory: props.columnMenuFactory,
+            style: {
+              minWidth: props.totalColumnWidth
+            }
         })
     },
 
