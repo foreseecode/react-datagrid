@@ -47,11 +47,7 @@ module.exports = React.createClass({
         var content = props.empty?
             <div className="z-empty-text" style={props.emptyTextStyle}>{props.emptyText}</div>:
             <div {...props.tableProps} ref="table"/>
-            
-          
-        if(props.noScroller) {
-          return content;
-        }
+
 
         return <Scroller
                 onMount={this.onMount}

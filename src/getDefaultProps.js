@@ -53,8 +53,6 @@ module.exports = function(){
         rowHeight: 31,
 
         groupNestingWidth: 20,
-        
-        scrollable: true,
 
         defaultStyle: {
             position: 'relative'
