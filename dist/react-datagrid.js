@@ -323,7 +323,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            endIndex = length;
 	        }
 
-	        return endIndex;
+	        return endIndex - 1;
 	    },
 
 	    onDropColumn: function onDropColumn(index, dropIndex) {
@@ -519,6 +519,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            } else {
 	                bottomToolbar = paginationToolbar;
 	            }
+	        }
+
+	        if (renderProps.style.height) {
+	            var HEADER_HEIGHT = 40;
+	            var HORIZONTAL_SCROLLBAR = 15;
+	            renderProps.style.height += HEADER_HEIGHT + HORIZONTAL_SCROLLBAR;
 	        }
 
 	        var result = _react2.default.createElement(
@@ -28650,8 +28656,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	var IS_FIREFOX = global && global.navigator && global.navigator.userAgent && !! ~global.navigator.userAgent.toLowerCase().indexOf('firefox');
 
 	if (IS_MAC) {
-	  horizontalScrollbarStyle.position = 'absolute';
 	  horizontalScrollbarStyle.height = 20;
+	  horizontalScrollbarStyle.marginTop = -5;
 	}
 
 	var PT = _react2['default'].PropTypes;
@@ -30387,7 +30393,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 
 	    renderColumnMenu: function renderColumnMenu(props, state, column, index) {
-	        if (!props.withColumnMenu) {
+	        if (!props.withColumnMenu || !props.sortIcons && !column.rightNode) {
 	            return;
 	        }
 

@@ -285,7 +285,7 @@ module.exports = React.createClass({
     },
 
     renderColumnMenu: function(props, state, column, index){
-        if (!props.withColumnMenu){
+        if (!props.withColumnMenu || (!props.sortIcons && !column.rightNode)) {
             return
         }
         

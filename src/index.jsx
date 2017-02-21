@@ -266,7 +266,7 @@ module.exports = React.createClass({
             endIndex = length
         }
 
-        return endIndex
+        return endIndex - 1;
     },
 
     onDropColumn: function(index, dropIndex){
@@ -465,7 +465,13 @@ module.exports = React.createClass({
                 bottomToolbar = paginationToolbar
             }
         }
-
+        
+        if(renderProps.style.height) {
+          const HEADER_HEIGHT = 40;
+          const HORIZONTAL_SCROLLBAR = 15;
+          renderProps.style.height += HEADER_HEIGHT + HORIZONTAL_SCROLLBAR;
+        }
+        
         var result = (
             <div {...renderProps}>
                 {topToolbar}
