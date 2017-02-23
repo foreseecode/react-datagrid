@@ -27119,6 +27119,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    col.sortable = !!col.sortable;
 
+	    //draggable
+	    if (col && col.draggable === undefined) {
+	        col.draggable = true;
+	    }
+
+	    //fixed
+	    if (col && col.fixed === undefined) {
+	        col.fixed = false;
+	    }
+	    if (col.fixed) {
+	        col.draggable = false;
+	    }
+
 	    //resizable
 	    if (props && props.resizableColumns === false) {
 	        col.resizable = false;
@@ -30185,10 +30198,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var dragColumn = props.columns[dragIndex];
 	            var dropColumn = props.columns[dropIndex];
 
-	            dragIndex = findIndexByName(props.allColumns, dragColumn.name);
-	            dropIndex = findIndexByName(props.allColumns, dropColumn.name);
+	            if (!dropColumn.fixed) {
+	                dragIndex = findIndexByName(props.allColumns, dragColumn.name);
+	                dropIndex = findIndexByName(props.allColumns, dropColumn.name);
 
-	            this.props.onDropColumn(dragIndex, dropIndex);
+	                this.props.onDropColumn(dragIndex, dropIndex);
+	            }
 	        }
 
 	        this.setState(getDropState());
@@ -30223,6 +30238,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var state = this.state;
 
 	        var cellMap = {};
+
+	        props.columns = props.columns.sort(function (a, b) {
+	            return !a.fixed && b.fixed;
+	        });
+
 	        var cells = props.columns.map(function (col, index) {
 	            var cell = this.renderCell(props, state, col, index);
 	            cellMap[col.name] = cell;
@@ -30513,6 +30533,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 
 	    handleMouseUp: function handleMouseUp(column, event) {
+	        if (!column.draggable) {
+	            return;
+	        }
+
 	        if (this.state.dragging) {
 	            return;
 	        }
@@ -30551,7 +30575,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return;
 	        }
 
-	        if (column.noDrag) {
+	        if (!column.draggable) {
 	            return;
 	        }
 

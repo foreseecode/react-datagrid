@@ -80,11 +80,13 @@ module.exports = React.createClass({
             //we need to search them and make this transform
             var dragColumn = props.columns[dragIndex]
             var dropColumn = props.columns[dropIndex]
+            
+            if(!dropColumn.fixed) {
+              dragIndex = findIndexByName(props.allColumns, dragColumn.name)
+              dropIndex = findIndexByName(props.allColumns, dropColumn.name)
 
-            dragIndex = findIndexByName(props.allColumns, dragColumn.name)
-            dropIndex = findIndexByName(props.allColumns, dropColumn.name)
-
-            this.props.onDropColumn(dragIndex, dropIndex)
+              this.props.onDropColumn(dragIndex, dropIndex)
+            }
         }
 
         this.setState(getDropState())
@@ -119,6 +121,11 @@ module.exports = React.createClass({
         var state = this.state
 
         var cellMap = {}
+        
+        props.columns = props.columns.sort(function(a, b) { 
+          return !a.fixed && b.fixed 
+        });
+        
         var cells = props.columns
                         .map(function(col, index){
                             var cell = this.renderCell(props, state, col, index)
@@ -411,6 +418,10 @@ module.exports = React.createClass({
     },
 
     handleMouseUp: function(column, event){
+        if (!column.draggable){
+          return
+        }
+        
         if (this.state.dragging){
             return
         }
@@ -449,7 +460,7 @@ module.exports = React.createClass({
             return
         }
         
-        if (column.noDrag) {
+        if (!column.draggable) {
             return
         }
 

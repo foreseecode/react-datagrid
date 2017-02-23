@@ -44,6 +44,20 @@ var Column = function(col, props){
         col.sortable = false
     }
     col.sortable = !!col.sortable
+    
+
+    //draggable
+    if (col && col.draggable === undefined){
+        col.draggable = true;
+    }
+    
+    //fixed
+    if(col && col.fixed === undefined) {
+        col.fixed = false;
+    }
+    if(col.fixed) {
+      col.draggable = false;
+    }
 
     //resizable
     if (props && props.resizableColumns === false){

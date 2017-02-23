@@ -1097,7 +1097,6 @@ html.u-app body * {
 .react-datagrid.z-with-column-menu .z-column-header .z-show-filter,
 .react-datagrid.z-with-column-menu .z-column-header .z-show-menu {
   position: absolute;
-  cursor: pointer;
   right: 0px;
   top: 0px;
   height: 100%;
@@ -1107,6 +1106,7 @@ html.u-app body * {
   display: none;
   float: left;
   margin-top: 8px;
+  cursor: pointer;
 }
 .react-datagrid.z-with-column-menu .z-column-header .z-show-right-node {
   float: right;
