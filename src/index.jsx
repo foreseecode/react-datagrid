@@ -5,6 +5,7 @@ require('es6-promise').polyfill()
 
 import { findDOMNode } from 'react-dom'
 import React from 'react'
+import _ from 'lodash'
 
 var assign   = require('object-assign')
 import LoadMask from 'react-load-mask'
@@ -410,10 +411,9 @@ module.exports = React.createClass({
         this.data       = props.data
         this.dataSource = props.dataSource
         
-        
-        props.columns = props.columns.sort(function(a, b) { 
-          return !a.fixed && b.fixed 
-        });
+        var fixedColumns = _.filter(props.columns, { fixed: true }) ;
+        var nonFixedColumns = _.filter(props.columns, { fixed: false }) ;
+        props.columns = fixedColumns.concat(nonFixedColumns);
 
         var header      = this.prepareHeader(props, this.state)
         var wrapper     = this.prepareWrapper(props, this.state)
