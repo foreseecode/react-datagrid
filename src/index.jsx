@@ -487,7 +487,13 @@ module.exports = React.createClass({
                     {resizeProxy}
                 </div>
 
-                {loadMask}
+                {this.props.loadingNode && props.loading &&
+                  <div className="react-load-mask react-load-mask--visible">
+                    {this.props.loadingNode}
+                  </div>
+                }
+                {!this.props.loadingNode && loadMask}
+                
                 {renderMenu(menuProps)}
                 {bottomToolbar}
             </div>

@@ -547,7 +547,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	                footer,
 	                resizeProxy
 	            ),
-	            loadMask,
+	            this.props.loadingNode && props.loading && _react2.default.createElement(
+	                'div',
+	                { className: 'react-load-mask react-load-mask--visible' },
+	                this.props.loadingNode
+	            ),
+	            !this.props.loadingNode && loadMask,
 	            renderMenu(menuProps),
 	            bottomToolbar
 	        );
