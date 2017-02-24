@@ -127,7 +127,7 @@ var Cell = React.createClass({
             style    : {
               padding: props.contentPadding
             },
-            title: props.title,
+            title: props.title || (column.alt ? props.text : null),
             onMouseUp: props.contentProps ? props.contentProps.onMouseUp : null,
             onMouseDown: props.contentProps ? props.contentProps.onMouseDown : null
         }

@@ -409,6 +409,11 @@ module.exports = React.createClass({
 
         this.data       = props.data
         this.dataSource = props.dataSource
+        
+        
+        props.columns = props.columns.sort(function(a, b) { 
+          return !a.fixed && b.fixed 
+        });
 
         var header      = this.prepareHeader(props, this.state)
         var wrapper     = this.prepareWrapper(props, this.state)

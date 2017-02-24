@@ -465,6 +465,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.data = props.data;
 	        this.dataSource = props.dataSource;
 
+	        props.columns = props.columns.sort(function (a, b) {
+	            return !a.fixed && b.fixed;
+	        });
+
 	        var header = this.prepareHeader(props, this.state);
 	        var wrapper = this.prepareWrapper(props, this.state);
 	        var footer = this.prepareFooter(props, this.state);
@@ -30239,10 +30243,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        var cellMap = {};
 
-	        props.columns = props.columns.sort(function (a, b) {
-	            return !a.fixed && b.fixed;
-	        });
-
 	        var cells = props.columns.map(function (col, index) {
 	            var cell = this.renderCell(props, state, col, index);
 	            cellMap[col.name] = cell;
@@ -33385,7 +33385,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            style: {
 	                padding: props.contentPadding
 	            },
-	            title: props.title,
+	            title: props.title || (column.alt ? props.text : null),
 	            onMouseUp: props.contentProps ? props.contentProps.onMouseUp : null,
 	            onMouseDown: props.contentProps ? props.contentProps.onMouseDown : null
 	        };
