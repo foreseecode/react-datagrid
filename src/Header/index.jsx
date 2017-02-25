@@ -414,10 +414,7 @@ module.exports = React.createClass({
     },
 
     handleMouseUp: function(column, event){
-        if (!column.draggable){
-          return
-        }
-        
+      
         if (this.state.dragging){
             return
         }

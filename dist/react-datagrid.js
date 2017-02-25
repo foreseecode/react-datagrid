@@ -47649,9 +47649,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 
 	    handleMouseUp: function handleMouseUp(column, event) {
-	        if (!column.draggable) {
-	            return;
-	        }
 
 	        if (this.state.dragging) {
 	            return;
