@@ -1110,7 +1110,7 @@ html.u-app body * {
 }
 .react-datagrid.z-with-column-menu .z-column-header .z-show-right-node {
   float: right;
-  margin-top: 9px;
+  height: 100%;
   color: #627085;
 }
 .react-datagrid.z-with-column-menu .z-column-header .z-show-sort + .z-show-right-node {
