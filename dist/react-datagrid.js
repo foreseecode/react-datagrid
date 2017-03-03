@@ -46042,38 +46042,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    }
 	  }, {
-	    key: 'componentWillReceiveProps',
-	    value: function componentWillReceiveProps() {
-	      setTimeout(this.fixHorizontalScrollbar, 0);
-	    }
-	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      this.fixHorizontalScrollbar();(this.props.onMount || emptyFn)(this);
-
-	      setTimeout((function () {
-	        this.fixHorizontalScrollbar();
-	      }).bind(this), 0);
-	    }
-	  }, {
-	    key: 'fixHorizontalScrollbar',
-	    value: function fixHorizontalScrollbar() {
-
-	      var thisNode = (0, _reactDom.findDOMNode)(this);
-
-	      if (!thisNode) {
-	        return;
-	      }
-
-	      this.horizontalScrollerNode = this.horizontalScrollerNode || thisNode.querySelector('.z-horizontal-scroller');
-
-	      var dom = this.horizontalScrollerNode;
-
-	      if (dom) {
-	        var height = dom.style.height;
-
-	        dom.style.height = height == '0.2px' ? '0.1px' : '0.2px';
-	      }
+	      ;(this.props.onMount || emptyFn)(this);
 	    }
 	  }, {
 	    key: 'getVerticalScrollbarNode',
