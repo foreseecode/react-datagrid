@@ -182,6 +182,12 @@ module.exports = React.createClass({
             defaultPage : props.defaultPage
         }
     },
+    
+    toTheTop: function() {
+      if(this.refs.wrapper) {
+        this.refs.wrapper.toTheTop();
+      }
+    },
 
     updateStartIndex: function() {
         this.handleScrollTop()

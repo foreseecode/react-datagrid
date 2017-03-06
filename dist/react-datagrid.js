@@ -243,6 +243,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	    },
 
+	    toTheTop: function toTheTop() {
+	        if (this.refs.wrapper) {
+	            this.refs.wrapper.toTheTop();
+	        }
+	    },
+
 	    updateStartIndex: function updateStartIndex() {
 	        this.handleScrollTop();
 	    },
@@ -45667,6 +45673,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        ;(this.props.onMount || emptyFn)(this, scroller);
 	    },
 
+	    toTheTop: function toTheTop() {
+	        if (this.refs.scroller) {
+	            this.refs.scroller.toTheTop();
+	        }
+	    },
+
 	    render: function render() {
 
 	        var props = this.prepareProps(this.props);
@@ -45691,6 +45703,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return React.createElement(
 	            Scroller,
 	            {
+	                ref: 'scroller',
 	                onMount: this.onMount,
 	                preventDefaultHorizontal: true,
 
@@ -45908,6 +45921,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  _createClass(Scroller, [{
+	    key: 'toTheTop',
+	    value: function toTheTop() {
+	      if (this.refs.verticalScrollbar) {
+	        var node = (0, _reactDom.findDOMNode)(this.refs.verticalScrollbar);
+	        node.scrollTop = 0;
+	      }
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var props = this.p = this.prepareProps(this.props);
@@ -46085,6 +46106,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _react2['default'].createElement(
 	          'div',
 	          {
+	            ref: 'verticalScrollbar',
 	            className: 'ref-verticalScrollbar',
 	            onScroll: onScroll,
 	            style: { overflow: 'auto', width: '100%', height: '100%' }

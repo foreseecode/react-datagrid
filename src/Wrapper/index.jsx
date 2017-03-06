@@ -28,6 +28,12 @@ module.exports = React.createClass({
     onMount: function(scroller){
         ;(this.props.onMount || emptyFn)(this, scroller)
     },
+    
+    toTheTop: function() {
+      if(this.refs.scroller) {
+        this.refs.scroller.toTheTop();
+      }
+    },
 
     render: function() {
 
@@ -50,6 +56,7 @@ module.exports = React.createClass({
 
 
         return <Scroller
+                ref="scroller"
                 onMount={this.onMount}
                 preventDefaultHorizontal={true}
 
