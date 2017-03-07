@@ -419,7 +419,7 @@ html.u-app body * {
   visibility: hidden;
 }
 .z-horizontal-scroller {
-  height: 0.1px;
+  height: 1px;
   visibility: hidden;
 }
 .z-vertical-scrollbar {
