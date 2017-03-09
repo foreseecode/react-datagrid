@@ -167,14 +167,13 @@ module.exports = React.createClass({
     },
 
     getInitialState: function(){
+      this.scrollLeft = 0;
 
         var props = this.props
         var defaultSelected = props.defaultSelected
 
         return {
             startIndex: 0,
-            scrollLeft: 0,
-            scrollTop : 0,
             menuColumn: null,
             defaultSelected: defaultSelected,
             visibility: {},
@@ -194,58 +193,15 @@ module.exports = React.createClass({
     },
 
     handleScrollLeft: function(scrollLeft){
-
-        this.setState({
-            scrollLeft: scrollLeft,
-            menuColumn: null
-        })
-    },
-
-    handleScrollTop: function(scrollTop){
-        var props = this.p
-        var state = this.state
-
-        scrollTop = scrollTop === undefined? this.state.scrollTop: scrollTop
-
-        state.menuColumn = null
-
-        this.scrollTop = scrollTop
-
-        if (props.virtualRendering){
-
-            var prevIndex        = this.state.startIndex || 0
-            var renderStartIndex = Math.ceil(scrollTop / props.rowHeight)
-
-            state.startIndex = renderStartIndex
-
-            // var data = this.prepareData(props)
-
-            // if (renderStartIndex >= data.length){
-            //     renderStartIndex = 0
-            // }
-
-            // state.renderStartIndex = renderStartIndex
-
-            // var endIndex = this.getRenderEndIndex(props, state)
-
-            // if (endIndex > data.length){
-            //     renderStartIndex -= data.length - endIndex
-            //     renderStartIndex = Math.max(0, renderStartIndex)
-
-            //     state.renderStartIndex = renderStartIndex
-            // }
-
-            // // console.log('scroll!');
-            // var sign = signum(renderStartIndex - prevIndex)
-
-            // state.topOffset = -sign * Math.ceil(scrollTop - state.renderStartIndex * this.props.rowHeight)
-
-            // console.log(scrollTop, sign);
-        } else {
-            state.scrollTop = scrollTop
-        }
-
-        this.setState(state)
+      this.scrollLeft = scrollLeft;
+      
+      if(this.refs.header && this.refs.header.refs.zHeader) {
+        this.refs.header.scrollLeft(scrollLeft);
+      }
+      
+        // this.setState({
+        //     menuColumn: null
+        // })
     },
 
     getRenderEndIndex: function(props, state){
@@ -273,7 +229,7 @@ module.exports = React.createClass({
             endIndex = length
         }
 
-        return endIndex - 1;
+        return length;
     },
 
     onDropColumn: function(index, dropIndex){
@@ -349,6 +305,7 @@ module.exports = React.createClass({
         var columns    = getVisibleColumns(props, state)
 
         return (props.headerFactory || HeaderFactory)({
+            ref             : 'header',
             scrollLeft       : state.scrollLeft,
             resizing         : state.resizing,
             columns          : columns,
@@ -548,7 +505,6 @@ module.exports = React.createClass({
         var virtualRendering = props.virtualRendering
 
         var data       = props.data
-        var scrollTop  = state.scrollTop
         var startIndex = state.startIndex
         var endIndex   = virtualRendering?
                             this.getRenderEndIndex(props, state):
@@ -561,10 +517,6 @@ module.exports = React.createClass({
         var totalLength = state.groupData?
                             data.length + state.groupData.groupsCount:
                             data.length
-
-        if (props.virtualRendering){
-            scrollTop = startIndex * props.rowHeight
-        }
 
         // var topLoader
         // var bottomLoader
@@ -590,8 +542,6 @@ module.exports = React.createClass({
         var wrapperProps = assign({
             ref             : 'wrapper',
             onMount         : this.onWrapperMount,
-            scrollLeft      : state.scrollLeft,
-            scrollTop       : scrollTop,
             topOffset       : state.topOffset,
             startIndex      : startIndex,
             totalLength     : totalLength,
@@ -600,13 +550,13 @@ module.exports = React.createClass({
 
             allColumns      : props.columns,
 
-            onScrollLeft    : this.handleScrollLeft,
-            onScrollTop     : this.handleScrollTop,
+            onScroll        : this.handleScroll,
             // onScrollOverflow: props.virtualPagination? this.handleVerticalScrollOverflow: null,
 
             menu            : state.menu,
             menuColumn      : state.menuColumn,
             showMenu        : this.showMenu,
+            scrollerHeight  : props.style.height,
 
             // cellFactory     : props.cellFactory,
             // rowStyle        : props.rowStyle,
@@ -628,6 +578,12 @@ module.exports = React.createClass({
 
         return (props.WrapperFactory || WrapperFactory)(wrapperProps)
 
+    },
+    
+    handleScroll() {
+      if(this.scrollLeft !== this.refs.wrapper.refs.table.scrollLeft) {
+        this.handleScrollLeft(this.refs.wrapper.refs.table.scrollLeft);
+      }
     },
 
     handleRowClick: function(rowProps, event){
@@ -1149,7 +1105,7 @@ module.exports = React.createClass({
 
         var horizScrollbar = this.refs.wrapper.refs.horizScrollbar
 
-        if (horizScrollbar && this.state.scrollLeft){
+        if (horizScrollbar && this.scrollLeft){
 
             setTimeout(function(){
                 //FF needs this, since it does not trigger scroll event when scrollbar dissapears

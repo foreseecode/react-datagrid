@@ -13,6 +13,7 @@ module.exports = function(props){
                         props.scrollTop
 
     return normalize({
-        transform: 'translate3d(' + -props.scrollLeft + 'px, ' + -scrollTop + 'px, 0px)'
+				height: props.scrollerHeight,
+				overflow: 'auto'
     })
 }

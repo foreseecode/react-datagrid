@@ -99,7 +99,6 @@ module.exports = React.createClass({
             cellClassName    : 'z-column-header',
             defaultStyle    : {},
             sortInfo        : null,
-            scrollLeft      : 0,
             scrollTop       : 0
         }
     },
@@ -150,17 +149,20 @@ module.exports = React.createClass({
 
         var style = normalize(props.style)
         var headerStyle = normalize({
-            paddingRight: props.scrollbarSize,
-            transform   : 'translate3d(' + -props.scrollLeft + 'px, ' + -props.scrollTop + 'px, 0px)'
+            paddingRight: props.scrollbarSize
         })
 
         return (
             <div style={style} className={props.className}>
-                <div className='z-header' style={headerStyle}>
+                <div className='z-header' ref="zHeader" style={headerStyle}>
                     {cells}
                 </div>
             </div>
         )
+    },
+    
+    scrollLeft: function(scrollLeft) {
+      this.refs.zHeader.style.transform = `translate3d(${-scrollLeft}px,0,0)`;
     },
 
     renderCell: function(props, state, column, index){

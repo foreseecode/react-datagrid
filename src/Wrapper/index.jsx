@@ -55,28 +55,7 @@ module.exports = React.createClass({
             <div {...props.tableProps} ref="table"/>
 
 
-        return <Scroller
-                ref="scroller"
-                onMount={this.onMount}
-                preventDefaultHorizontal={true}
-
-                loadMask={!props.loadMaskOverHeader}
-                loading={props.loading}
-
-                scrollbarSize={props.scrollbarSize}
-
-                minVerticalScrollStep={props.rowHeight}
-                scrollTop={props.scrollTop}
-                scrollLeft={props.scrollLeft}
-
-                scrollHeight={verticalScrollerSize}
-                scrollWidth={props.minRowWidth}
-
-                onVerticalScroll={this.onVerticalScroll}
-                onHorizontalScroll={this.onHorizontalScroll}
-            >
-            {content}
-        </Scroller>
+        return content
     },
 
     onVerticalScrollOverflow: function() {

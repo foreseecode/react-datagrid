@@ -227,14 +227,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 
 	    getInitialState: function getInitialState() {
+	        this.scrollLeft = 0;
 
 	        var props = this.props;
 	        var defaultSelected = props.defaultSelected;
 
 	        return {
 	            startIndex: 0,
-	            scrollLeft: 0,
-	            scrollTop: 0,
 	            menuColumn: null,
 	            defaultSelected: defaultSelected,
 	            visibility: {},
@@ -254,58 +253,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 
 	    handleScrollLeft: function handleScrollLeft(scrollLeft) {
+	        this.scrollLeft = scrollLeft;
 
-	        this.setState({
-	            scrollLeft: scrollLeft,
-	            menuColumn: null
-	        });
-	    },
-
-	    handleScrollTop: function handleScrollTop(scrollTop) {
-	        var props = this.p;
-	        var state = this.state;
-
-	        scrollTop = scrollTop === undefined ? this.state.scrollTop : scrollTop;
-
-	        state.menuColumn = null;
-
-	        this.scrollTop = scrollTop;
-
-	        if (props.virtualRendering) {
-
-	            var prevIndex = this.state.startIndex || 0;
-	            var renderStartIndex = Math.ceil(scrollTop / props.rowHeight);
-
-	            state.startIndex = renderStartIndex;
-
-	            // var data = this.prepareData(props)
-
-	            // if (renderStartIndex >= data.length){
-	            //     renderStartIndex = 0
-	            // }
-
-	            // state.renderStartIndex = renderStartIndex
-
-	            // var endIndex = this.getRenderEndIndex(props, state)
-
-	            // if (endIndex > data.length){
-	            //     renderStartIndex -= data.length - endIndex
-	            //     renderStartIndex = Math.max(0, renderStartIndex)
-
-	            //     state.renderStartIndex = renderStartIndex
-	            // }
-
-	            // // console.log('scroll!');
-	            // var sign = signum(renderStartIndex - prevIndex)
-
-	            // state.topOffset = -sign * Math.ceil(scrollTop - state.renderStartIndex * this.props.rowHeight)
-
-	            // console.log(scrollTop, sign);
-	        } else {
-	            state.scrollTop = scrollTop;
+	        if (this.refs.header && this.refs.header.refs.zHeader) {
+	            this.refs.header.scrollLeft(scrollLeft);
 	        }
 
-	        this.setState(state);
+	        // this.setState({
+	        //     menuColumn: null
+	        // })
 	    },
 
 	    getRenderEndIndex: function getRenderEndIndex(props, state) {
@@ -333,7 +289,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            endIndex = length;
 	        }
 
-	        return endIndex - 1;
+	        return length;
 	    },
 
 	    onDropColumn: function onDropColumn(index, dropIndex) {
@@ -407,6 +363,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var columns = getVisibleColumns(props, state);
 
 	        return (props.headerFactory || HeaderFactory)({
+	            ref: 'header',
 	            scrollLeft: state.scrollLeft,
 	            resizing: state.resizing,
 	            columns: columns,
@@ -606,17 +563,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var virtualRendering = props.virtualRendering;
 
 	        var data = props.data;
-	        var scrollTop = state.scrollTop;
 	        var startIndex = state.startIndex;
 	        var endIndex = virtualRendering ? this.getRenderEndIndex(props, state) : 0;
 
 	        var renderCount = virtualRendering ? endIndex + 1 - startIndex : data.length;
 
 	        var totalLength = state.groupData ? data.length + state.groupData.groupsCount : data.length;
-
-	        if (props.virtualRendering) {
-	            scrollTop = startIndex * props.rowHeight;
-	        }
 
 	        // var topLoader
 	        // var bottomLoader
@@ -642,8 +594,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var wrapperProps = assign({
 	            ref: 'wrapper',
 	            onMount: this.onWrapperMount,
-	            scrollLeft: state.scrollLeft,
-	            scrollTop: scrollTop,
 	            topOffset: state.topOffset,
 	            startIndex: startIndex,
 	            totalLength: totalLength,
@@ -652,13 +602,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            allColumns: props.columns,
 
-	            onScrollLeft: this.handleScrollLeft,
-	            onScrollTop: this.handleScrollTop,
+	            onScroll: this.handleScroll,
 	            // onScrollOverflow: props.virtualPagination? this.handleVerticalScrollOverflow: null,
 
 	            menu: state.menu,
 	            menuColumn: state.menuColumn,
 	            showMenu: this.showMenu,
+	            scrollerHeight: props.style.height,
 
 	            // cellFactory     : props.cellFactory,
 	            // rowStyle        : props.rowStyle,
@@ -678,6 +628,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        return (props.WrapperFactory || WrapperFactory)(wrapperProps);
 	    },
+
+	    handleScroll: function handleScroll() {
+	        if (this.scrollLeft !== this.refs.wrapper.refs.table.scrollLeft) {
+	            this.handleScrollLeft(this.refs.wrapper.refs.table.scrollLeft);
+	        }
+	    },
+
 
 	    handleRowClick: function handleRowClick(rowProps, event) {
 	        if (this.props.onRowClick) {
@@ -1177,7 +1134,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        var horizScrollbar = this.refs.wrapper.refs.horizScrollbar;
 
-	        if (horizScrollbar && this.state.scrollLeft) {
+	        if (horizScrollbar && this.scrollLeft) {
 
 	            setTimeout(function () {
 	                //FF needs this, since it does not trigger scroll event when scrollbar dissapears
@@ -45700,30 +45657,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            props.emptyText
 	        ) : React.createElement('div', _extends({}, props.tableProps, { ref: 'table' }));
 
-	        return React.createElement(
-	            Scroller,
-	            {
-	                ref: 'scroller',
-	                onMount: this.onMount,
-	                preventDefaultHorizontal: true,
-
-	                loadMask: !props.loadMaskOverHeader,
-	                loading: props.loading,
-
-	                scrollbarSize: props.scrollbarSize,
-
-	                minVerticalScrollStep: props.rowHeight,
-	                scrollTop: props.scrollTop,
-	                scrollLeft: props.scrollLeft,
-
-	                scrollHeight: verticalScrollerSize,
-	                scrollWidth: props.minRowWidth,
-
-	                onVerticalScroll: this.onVerticalScroll,
-	                onHorizontalScroll: this.onHorizontalScroll
-	            },
-	            content
-	        );
+	        return content;
 	    },
 
 	    onVerticalScrollOverflow: function onVerticalScrollOverflow() {},
@@ -47329,7 +47263,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            cellClassName: 'z-column-header',
 	            defaultStyle: {},
 	            sortInfo: null,
-	            scrollLeft: 0,
 	            scrollTop: 0
 	        };
 	    },
@@ -47381,8 +47314,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        var style = normalize(props.style);
 	        var headerStyle = normalize({
-	            paddingRight: props.scrollbarSize,
-	            transform: 'translate3d(' + -props.scrollLeft + 'px, ' + -props.scrollTop + 'px, 0px)'
+	            paddingRight: props.scrollbarSize
 	        });
 
 	        return React.createElement(
@@ -47390,10 +47322,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            { style: style, className: props.className },
 	            React.createElement(
 	                'div',
-	                { className: 'z-header', style: headerStyle },
+	                { className: 'z-header', ref: 'zHeader', style: headerStyle },
 	                cells
 	            )
 	        );
+	    },
+
+	    scrollLeft: function scrollLeft(_scrollLeft) {
+	        this.refs.zHeader.style.transform = 'translate3d(' + -_scrollLeft + 'px,0,0)';
 	    },
 
 	    renderCell: function renderCell(props, state, column, index) {
@@ -50944,7 +50880,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return {
 	        className: 'z-table',
 	        style: tableStyle(props),
-	        children: rows
+	        children: rows,
+	        onScroll: props.onScroll
 	    };
 	};
 
@@ -51294,7 +51231,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var style = assign({}, props.defaultStyle, props.style);
 
-	    style.height = props.rowHeight;
+	    style.minHeight = props.rowHeight;
 	    style.minWidth = props.minWidth;
 
 	    return style;
@@ -51311,11 +51248,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var colors = ['blue', 'red', 'magenta'];
 	module.exports = function (props) {
-	    var scrollTop = props.virtualRendering ? -(props.topOffset || 0) : props.scrollTop;
+	  var scrollTop = props.virtualRendering ? -(props.topOffset || 0) : props.scrollTop;
 
-	    return normalize({
-	        transform: 'translate3d(' + -props.scrollLeft + 'px, ' + -scrollTop + 'px, 0px)'
-	    });
+	  return normalize({
+	    height: props.scrollerHeight,
+	    overflow: 'auto'
+	  });
 	};
 
 /***/ },

@@ -1239,11 +1239,6 @@ html.u-app body * {
 .react-datagrid .z-column-content {
   overflow: visible;
 }
-.react-datagrid.z-cell-ellipsis .z-row .z-cell .z-content {
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-}
 .react-datagrid .z-row.z-over,
 .react-datagrid .z-row.z-over.z-odd {
   background: #d7e7ff;
@@ -1262,9 +1257,6 @@ html.u-app body * {
   cursor: default;
 }
 .react-datagrid .z-row .z-cell .z-content {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   padding: 0px 5px;
 }
 .react-datagrid .z-group-row.z-over,
