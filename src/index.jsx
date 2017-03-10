@@ -436,8 +436,7 @@ module.exports = React.createClass({
         
         if(renderProps.style.height) {
           const HEADER_HEIGHT = 40;
-          const HORIZONTAL_SCROLLBAR = 15;
-          renderProps.style.height += HEADER_HEIGHT + HORIZONTAL_SCROLLBAR;
+          renderProps.style.height += HEADER_HEIGHT;
         }
         
         var result = (

@@ -494,8 +494,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        if (renderProps.style.height) {
 	            var HEADER_HEIGHT = 40;
-	            var HORIZONTAL_SCROLLBAR = 15;
-	            renderProps.style.height += HEADER_HEIGHT + HORIZONTAL_SCROLLBAR;
+	            renderProps.style.height += HEADER_HEIGHT;
 	        }
 
 	        var result = _react2.default.createElement(
@@ -47458,7 +47457,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 
 	    renderColumnMenu: function renderColumnMenu(props, state, column, index) {
-	        if (!props.withColumnMenu || !props.sortIcons && !column.rightNode) {
+	        if (!props.withColumnMenu || (!props.sortIcons || !column.sortable) && !column.rightNode) {
 	            return;
 	        }
 

@@ -201,8 +201,8 @@ module.exports = React.createClass({
                         <span className="z-column-resize" onMouseDown={this.handleResizeMouseDown.bind(this, column)} />:
                         null
 
-        if (column.sortable){
-            text = <span >{text}<span className="z-icon-sort-info" /></span>
+        if (column.sortable) {
+            text = <span >{text}<span className="z-icon-sort-info"/></span>
 
             var sortInfo = getColumnSortInfo(column, props.sortInfo)
 
@@ -290,12 +290,12 @@ module.exports = React.createClass({
     },
 
     renderColumnMenu: function(props, state, column, index){
-        if (!props.withColumnMenu || (!props.sortIcons && !column.rightNode)) {
+        if (!props.withColumnMenu || ((!props.sortIcons || !column.sortable) && !column.rightNode)) {
             return
         }
         
         return <div className="z-show-menu clearfix">
-          {props.sortIcons && 
+          {props.sortIcons &&  
             <div className="z-show-sort" onClick={this.toggleSort.bind(this, column)}>
               {props.sortIcons}
             </div>

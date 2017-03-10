@@ -35,8 +35,8 @@
                 
             .z-show-sort
                 display: none
-                float: left
-                margin-top: 8px
+                float: left  
+                line-height: 43px;
                 cursor pointer
                 
             .z-show-right-node
@@ -85,12 +85,6 @@
                 //     display block
                 //     border-left 3px solid $datagrid-column-sort-icon-color
 
-            &.z-filterable .z-show-filter.z-active
-            &.z-filterable .z-show-filter:hover
-            .z-show-menu.z-active
-            .z-show-menu:hover
-                background $datagrid-column-menu-icon-hover-background
-
             &.z-active .z-show-menu
             &.z-active.z-filterable .z-show-filter
 
@@ -135,9 +129,6 @@
         &.z-sortable
             .z-inner
                 cursor pointer
-
-        &.z-over
-            background $datagrid-header-over-background
 
         //style for the sort icon
         .z-icon-sort-info
