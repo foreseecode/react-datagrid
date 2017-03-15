@@ -202,7 +202,14 @@ module.exports = React.createClass({
                         null
 
         if (column.sortable) {
-            text = <span >{text}<span className="z-icon-sort-info"/></span>
+            text = (
+              <span>{text} {props.sortIcons && column.sortable &&
+                  <span className="z-show-sort" onClick={this.toggleSort.bind(this, column)}>
+                    {props.sortIcons}
+                  </span>
+                }
+              </span>
+            )
 
             var sortInfo = getColumnSortInfo(column, props.sortInfo)
 
@@ -290,16 +297,11 @@ module.exports = React.createClass({
     },
 
     renderColumnMenu: function(props, state, column, index){
-        if (!props.withColumnMenu || ((!props.sortIcons || !column.sortable) && !column.rightNode)) {
+        if (!props.withColumnMenu || (!column.rightNode)) {
             return
         }
         
         return <div className="z-show-menu clearfix">
-          {props.sortIcons &&  
-            <div className="z-show-sort" onClick={this.toggleSort.bind(this, column)}>
-              {props.sortIcons}
-            </div>
-          }
           {column.rightNode &&
             <div className="z-show-right-node">{column.rightNode}</div>
           }

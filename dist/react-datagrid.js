@@ -47371,7 +47371,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	                'span',
 	                null,
 	                text,
-	                React.createElement('span', { className: 'z-icon-sort-info' })
+	                ' ',
+	                props.sortIcons && column.sortable && React.createElement(
+	                    'span',
+	                    { className: 'z-show-sort', onClick: this.toggleSort.bind(this, column) },
+	                    props.sortIcons
+	                )
 	            );
 
 	            var sortInfo = getColumnSortInfo(column, props.sortInfo);
@@ -47457,18 +47462,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 
 	    renderColumnMenu: function renderColumnMenu(props, state, column, index) {
-	        if (!props.withColumnMenu || (!props.sortIcons || !column.sortable) && !column.rightNode) {
+	        if (!props.withColumnMenu || !column.rightNode) {
 	            return;
 	        }
 
 	        return React.createElement(
 	            'div',
 	            { className: 'z-show-menu clearfix' },
-	            props.sortIcons && React.createElement(
-	                'div',
-	                { className: 'z-show-sort', onClick: this.toggleSort.bind(this, column) },
-	                props.sortIcons
-	            ),
 	            column.rightNode && React.createElement(
 	                'div',
 	                { className: 'z-show-right-node' },

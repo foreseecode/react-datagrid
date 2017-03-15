@@ -35,17 +35,11 @@
                 
             .z-show-sort
                 display: none
-                float: left  
-                line-height: 45px;
-                cursor pointer
                 
             .z-show-right-node
                 float: right
                 height: 100%
                 color: #627085
-                
-            .z-show-sort + .z-show-right-node
-                margin-left: 5px
 
             // .z-show-menu
             //     // color $datagrid-column-sort-icon-color
@@ -143,14 +137,14 @@
                 border-bottom $datagrid-column-sort-icon-height solid $datagrid-column-sort-icon-color
                 
             .z-show-sort
-                display: block !important
+                display: inline-block !important
 
         &.z-desc
             .z-icon-sort-info
                 border-top $datagrid-column-sort-icon-height solid $datagrid-column-sort-icon-color
                 
             .z-show-sort
-                display: block !important
+                display: inline-block !important
 
         //styles to be applied to the column header when it is dragged
         &.z-drag
