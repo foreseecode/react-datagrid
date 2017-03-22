@@ -1205,8 +1205,8 @@ html.u-app body * {
 .react-datagrid .z-column-header.z-last .z-inner .z-column-resize {
   display: none !important;
 }
-.react-datagrid .z-header .z-column-header.z-cell:not(.z-first) {
-  border-left: 1px solid #a8a8a8;
+.react-datagrid .z-header .z-column-header.z-cell:not(.z-last) {
+  border-right: 1px solid #a8a8a8;
 }
 .react-datagrid .z-header .z-column-header.z-cell.z-last {
   border-right: 1px solid #a8a8a8;
