@@ -50441,8 +50441,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        return React.createElement(
 	            'div',
-	            { name: renderProps.name, style: renderProps.style,
-	                textPadding: renderProps.textPadding },
+	            { className: renderProps.className,
+	                name: renderProps.name,
+	                style: renderProps.style },
 	            content,
 	            props.children
 	        );
@@ -51071,7 +51072,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    return React.createElement(
 	      'div',
-	      props,
+	      { className: props.className,
+	        style: props.style,
+	        onClick: props.onClick,
+	        onContextMenu: props.onContextMenu,
+	        onMouseEnter: props.onMouseEnter,
+	        onMouseLeave: props.onMouseLeave },
 	      cells
 	    );
 	  },

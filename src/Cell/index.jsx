@@ -142,9 +142,13 @@ var Cell = React.createClass({
 
         delete renderProps.data
 
+
+
+
         return (
-            <div name={renderProps.name} style={renderProps.style}
-              textPadding={renderProps.textPadding} >
+            <div className={renderProps.className}
+              name={renderProps.name} 
+              style={renderProps.style}>
                 {content}
                 {props.children}
             </div>

@@ -37,7 +37,12 @@ module.exports = React.createClass({
     var cells = props.children || props.columns
             .map(this.renderCell.bind(this, this.props))
 
-    return <div {...props}>{cells}</div>
+    return <div className={props.className}
+      style={props.style}
+      onClick={props.onClick}
+      onContextMenu={props.onContextMenu}
+      onMouseEnter={props.onMouseEnter}
+      onMouseLeave={props.onMouseLeave}>{cells}</div>
   },
 
   prepareProps: function(thisProps){
