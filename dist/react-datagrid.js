@@ -50310,7 +50310,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var normalize = __webpack_require__(195);
 
 	var TEXT_ALIGN_2_JUSTIFY = {
-	    right: 'flex-end',
+	    right: 'right',
 	    center: 'center'
 	};
 
@@ -50392,7 +50392,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var textAlign = column && column.textAlign || (props.style || {}).textAlign;
 
 	        if (textAlign) {
-	            alignStyle = { justifyContent: TEXT_ALIGN_2_JUSTIFY[textAlign] };
+	            alignStyle = { textAlign: TEXT_ALIGN_2_JUSTIFY[textAlign] };
 	        }
 
 	        var style = assign({}, props.defaultStyle, sizeStyle, alignStyle, props.style);
