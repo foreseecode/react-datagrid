@@ -50441,7 +50441,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        return React.createElement(
 	            'div',
-	            renderProps,
+	            { name: renderProps.name, style: renderProps.style,
+	                textPadding: renderProps.textPadding },
 	            content,
 	            props.children
 	        );
