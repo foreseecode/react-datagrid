@@ -131,7 +131,12 @@ module.exports = React.createClass({
 
     componentDidMount: function(){
         window.addEventListener('click', this.windowClickListener = this.onWindowClick)
+        this.hasVerticalScrollbar();
         // this.checkRowHeight(this.props)
+    },
+    
+    componentDidUpdate: function() {
+      this.hasVerticalScrollbar();
     },
 
     componentWillUnmount: function(){
@@ -180,6 +185,23 @@ module.exports = React.createClass({
             defaultPageSize: props.defaultPageSize,
             defaultPage : props.defaultPage
         }
+    },
+    
+    hasVerticalScrollbar: function() {
+      if(this.refs.wrapper && this.refs.wrapper.refs.table) {
+        const tableElement = this.refs.wrapper.refs.table;
+        const hasVerticalScrollbar = tableElement.scrollHeight > tableElement.clientHeight;
+        
+        const header = this.refs.header; 
+        const zHeader = header && header.refs.zHeader;
+        
+        
+        if(zHeader && hasVerticalScrollbar) {
+          zHeader.classList.add("z-has-vertical-scroller");
+        } else if(zHeader) {
+          zHeader.classList.remove("z-has-vertical-scroller");
+        }
+      }
     },
     
     toTheTop: function() {

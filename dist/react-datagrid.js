@@ -191,7 +191,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    componentDidMount: function componentDidMount() {
 	        window.addEventListener('click', this.windowClickListener = this.onWindowClick);
+	        this.hasVerticalScrollbar();
 	        // this.checkRowHeight(this.props)
+	    },
+
+	    componentDidUpdate: function componentDidUpdate() {
+	        this.hasVerticalScrollbar();
 	    },
 
 	    componentWillUnmount: function componentWillUnmount() {
@@ -240,6 +245,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	            defaultPageSize: props.defaultPageSize,
 	            defaultPage: props.defaultPage
 	        };
+	    },
+
+	    hasVerticalScrollbar: function hasVerticalScrollbar() {
+	        if (this.refs.wrapper && this.refs.wrapper.refs.table) {
+	            var tableElement = this.refs.wrapper.refs.table;
+	            var hasVerticalScrollbar = tableElement.scrollHeight > tableElement.clientHeight;
+
+	            var header = this.refs.header;
+	            var zHeader = header && header.refs.zHeader;
+
+	            if (zHeader && hasVerticalScrollbar) {
+	                zHeader.classList.add("z-has-vertical-scroller");
+	            } else if (zHeader) {
+	                zHeader.classList.remove("z-has-vertical-scroller");
+	            }
+	        }
 	    },
 
 	    toTheTop: function toTheTop() {
