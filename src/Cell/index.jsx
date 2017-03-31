@@ -61,6 +61,7 @@ var Cell = React.createClass({
         var column    = props.column
 
         var textAlign = column && column.textAlign
+        var cellClassName = column && column.cellClassName;
 
         var className = props.className || ''
 
@@ -78,6 +79,10 @@ var Cell = React.createClass({
 
         if (textAlign){
             className += ' z-align-' + textAlign
+        }
+        
+        if(cellClassName) {
+          className += ' ' + cellClassName;
         }
 
         return className

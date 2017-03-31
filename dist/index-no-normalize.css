@@ -784,7 +784,7 @@ html.u-app body * {
   border-right: 1px solid #a8a8a8;
 }
 .react-datagrid .z-header .z-column-header.z-cell.z-last {
-  border-right: 1px solid #a8a8a8;
+  border-right: none;
 }
 .react-datagrid.z-style-alternate .z-odd.z-row {
   background: #eceff4;
@@ -810,7 +810,7 @@ html.u-app body * {
   cursor: default;
 }
 .react-datagrid .z-row .z-cell .z-content {
-  padding: 0px 5px;
+  padding: 0.8rem 2rem;
 }
 .react-datagrid .z-group-row.z-over,
 .react-datagrid .z-group-row.z-over.z-odd {

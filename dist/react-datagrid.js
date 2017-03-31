@@ -50362,6 +50362,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var column = props.column;
 
 	        var textAlign = column && column.textAlign;
+	        var cellClassName = column && column.cellClassName;
 
 	        var className = props.className || '';
 
@@ -50379,6 +50380,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        if (textAlign) {
 	            className += ' z-align-' + textAlign;
+	        }
+
+	        if (cellClassName) {
+	            className += ' ' + cellClassName;
 	        }
 
 	        return className;
