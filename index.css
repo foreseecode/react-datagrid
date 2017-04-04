@@ -1090,6 +1090,13 @@ html.u-app body * {
       -ms-flex-align: stretch /* for vertical aligning text in header */;
           align-items: stretch /* for vertical aligning text in header */;
 }
+.react-datagrid .z-column-legend {
+  height: 2px;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
 .react-datagrid.z-with-column-menu .z-column-header .z-show-filter,
 .react-datagrid.z-with-column-menu .z-column-header .z-show-menu {
   position: absolute;

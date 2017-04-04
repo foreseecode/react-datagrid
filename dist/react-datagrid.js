@@ -47445,6 +47445,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                onMouseOut: this.handleMouseOut.bind(this, column),
 	                onMouseOver: this.handleMouseOver.bind(this, column)
 	            },
+	            column.colorClass && React.createElement('div', { className: 'z-column-legend ' + column.colorClass }),
 	            filter,
 	            menu,
 	            resizer
@@ -50452,7 +50453,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            style: {
 	                padding: props.contentPadding
 	            },
-	            title: props.title || (column.alt ? props.text : null),
+	            title: column.alt || props.title,
 	            onMouseUp: props.contentProps ? props.contentProps.onMouseUp : null,
 	            onMouseDown: props.contentProps ? props.contentProps.onMouseDown : null
 	        };
