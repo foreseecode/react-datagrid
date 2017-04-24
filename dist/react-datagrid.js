@@ -83,20 +83,20 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var PropTypes = __webpack_require__(254);
 	var Wrapper = __webpack_require__(255);
-	var Header = __webpack_require__(266);
+	var Header = __webpack_require__(256);
 	var WrapperFactory = _react2.default.createFactory(Wrapper);
 	var HeaderFactory = _react2.default.createFactory(Header);
-	var ResizeProxy = __webpack_require__(305);
+	var ResizeProxy = __webpack_require__(303);
 
-	var findIndexByName = __webpack_require__(301);
-	var group = __webpack_require__(306);
+	var findIndexByName = __webpack_require__(297);
+	var group = __webpack_require__(304);
 
-	var slice = __webpack_require__(307);
-	var _getTableProps = __webpack_require__(308);
-	var getGroupedRows = __webpack_require__(313);
-	var renderMenu = __webpack_require__(309);
+	var slice = __webpack_require__(305);
+	var _getTableProps = __webpack_require__(306);
+	var getGroupedRows = __webpack_require__(311);
+	var renderMenu = __webpack_require__(307);
 
-	var preventDefault = __webpack_require__(314);
+	var preventDefault = __webpack_require__(312);
 
 	var isArray = Array.isArray;
 
@@ -147,7 +147,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    displayName: 'ReactDataGrid',
 
-	    mixins: [__webpack_require__(315), __webpack_require__(317)],
+	    mixins: [__webpack_require__(313), __webpack_require__(315)],
 
 	    propTypes: {
 	        loading: _react2.default.PropTypes.bool,
@@ -187,7 +187,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    },
 
-	    getDefaultProps: __webpack_require__(318),
+	    getDefaultProps: __webpack_require__(316),
 
 	    componentDidMount: function componentDidMount() {
 	        window.addEventListener('click', this.windowClickListener = this.onWindowClick);
@@ -45623,7 +45623,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var React = __webpack_require__(177);
 	var assign = __webpack_require__(23);
-	var Scroller = __webpack_require__(256);
 
 	function emptyFn() {}
 
@@ -45705,837 +45704,549 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
+	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var _reactClass = __webpack_require__(257);
-
-	var _reactClass2 = _interopRequireDefault(_reactClass);
-
-	var _react = __webpack_require__(177);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactDom = __webpack_require__(1);
-
-	var LoadMask = __webpack_require__(180);
+	var React = __webpack_require__(177);
+	var Region = __webpack_require__(183);
+	var ReactMenu = React.createFactory(__webpack_require__(257));
 	var assign = __webpack_require__(23);
-	var DragHelper = __webpack_require__(258);
+	var clone = __webpack_require__(290);
+	var asArray = __webpack_require__(295);
+	var findIndexBy = __webpack_require__(296);
+	var findIndexByName = __webpack_require__(297);
+	var Cell = __webpack_require__(298);
+	var setupColumnDrag = __webpack_require__(299);
+	var setupColumnResize = __webpack_require__(302);
+
 	var normalize = __webpack_require__(195);
-	var hasTouch = __webpack_require__(264);
 
-	var preventDefault = function preventDefault(event) {
-	  return event && event.preventDefault();
-	};
-	var signum = function signum(x) {
-	  return x < 0 ? -1 : 1;
-	};
-	var emptyFn = function emptyFn() {};
-	var ABS = Math.abs;
+	function emptyFn() {}
 
-	var LoadMaskFactory = _react2['default'].createFactory(LoadMask);
+	function getColumnSortInfo(column, sortInfo) {
 
-	var horizontalScrollbarStyle = {};
+	    sortInfo = asArray(sortInfo);
 
-	var IS_MAC = global && global.navigator && global.navigator.appVersion && global.navigator.appVersion.indexOf("Mac") != -1;
-	var IS_FIREFOX = global && global.navigator && global.navigator.userAgent && !! ~global.navigator.userAgent.toLowerCase().indexOf('firefox');
+	    var index = findIndexBy(sortInfo, function (info) {
+	        return info.name === column.name;
+	    });
 
-	if (IS_MAC) {
-	  horizontalScrollbarStyle.height = 20;
-	  horizontalScrollbarStyle.marginTop = -5;
+	    return sortInfo[index];
 	}
 
-	var PT = _react2['default'].PropTypes;
-	var DISPLAY_NAME = 'Scroller';
+	function removeColumnSort(column, sortInfo) {
+	    sortInfo = asArray(sortInfo);
 
-	var ON_OVERFLOW_NAMES = {
-	  vertical: 'onVerticalScrollOverflow',
-	  horizontal: 'onHorizontalScrollOverflow'
-	};
+	    var index = findIndexBy(sortInfo, function (info) {
+	        return info.name === column.name;
+	    });
 
-	var ON_SCROLL_NAMES = {
-	  vertical: 'onVerticalScroll',
-	  horizontal: 'onHorizontalScroll'
-	};
-
-	/**
-	 * Called on scroll by mouse wheel
-	 */
-	var syncScrollbar = function syncScrollbar(orientation) {
-
-	  return function (scrollPos, event) {
-
-	    var domNode = orientation == 'horizontal' ? this.getHorizontalScrollbarNode() : this.getVerticalScrollbarNode();
-	    var scrollPosName = orientation == 'horizontal' ? 'scrollLeft' : 'scrollTop';
-	    var overflowCallback;
-
-	    domNode[scrollPosName] = scrollPos;
-
-	    var newScrollPos = domNode[scrollPosName];
-
-	    if (newScrollPos != scrollPos) {
-	      // overflowCallback = this.props[ON_OVERFLOW_NAMES[orientation]]
-	      // overflowCallback && overflowCallback(signum(scrollPos), newScrollPos)
-	    } else {
-	        preventDefault(event);
-	      }
-	  };
-	};
-
-	var syncHorizontalScrollbar = syncScrollbar('horizontal');
-	var syncVerticalScrollbar = syncScrollbar('vertical');
-
-	var scrollAt = function scrollAt(orientation) {
-	  var syncFn = orientation == 'horizontal' ? syncHorizontalScrollbar : syncVerticalScrollbar;
-
-	  return function (scrollPos, event) {
-	    // this.mouseWheelScroll = true
-
-	    syncFn.call(this, Math.round(scrollPos), event);
-
-	    // raf(function(){
-	    //     this.mouseWheelScroll = false
-	    // }.bind(this))
-	  };
-	};
-
-	var onScroll = function onScroll(orientation) {
-
-	  var clientHeightNames = {
-	    vertical: 'clientHeight',
-	    horizontal: 'clientWidth'
-	  };
-
-	  var scrollHeightNames = {
-	    vertical: 'scrollHeight',
-	    horizontal: 'scrollWidth'
-	  };
-
-	  return function (event) {
-
-	    var scrollPosName = orientation == 'horizontal' ? 'scrollLeft' : 'scrollTop';
-	    var target = event.target;
-	    var scrollPos = target[scrollPosName];
-
-	    var onScroll = this.props[ON_SCROLL_NAMES[orientation]];
-	    var onOverflow = this.props[ON_OVERFLOW_NAMES[orientation]];
-
-	    // if (!this.mouseWheelScroll && onOverflow){
-	    if (onOverflow) {
-	      if (scrollPos == 0) {
-	        onOverflow(-1, scrollPos);
-	      } else if (scrollPos + target[clientHeightNames[orientation]] >= target[scrollHeightNames[orientation]]) {
-	        onOverflow(1, scrollPos);
-	      }
+	    if (~index) {
+	        sortInfo.splice(index, 1);
 	    }
 
-	    ;(onScroll || emptyFn)(scrollPos);
-	  };
-	};
+	    return sortInfo;
+	}
 
-	/**
-	 * The scroller can have a load mask (loadMask prop is true by default),
-	 * you just need to specify loading=true to see it in action
-	 *
-	 * <Scroller loading={true} />
-	 *
-	 * If you don't want a load mask, specify
-	 *
-	 * <Scroller loadMask={false} />
-	 *
-	 * Or if you want to customize the loadMask factory, specify
-	 *
-	 * function mask(props) { return aMaskFactory(props) }
-	 * <Scroller loading={true} loadMask={mask}
-	 *
-	 */
+	function getDropState() {
+	    return {
+	        dragLeft: null,
+	        dragColumn: null,
+	        dragColumnIndex: null,
+	        dragging: false,
+	        dropIndex: null,
 
-	var Scroller = (function (_Component) {
-	  _inherits(Scroller, _Component);
+	        shiftIndexes: null,
+	        shiftSize: null
+	    };
+	}
 
-	  function Scroller() {
-	    _classCallCheck(this, Scroller);
+	module.exports = React.createClass({
 
-	    _get(Object.getPrototypeOf(Scroller.prototype), 'constructor', this).apply(this, arguments);
-	  }
+	    displayName: 'ReactDataGrid.Header',
 
-	  _createClass(Scroller, [{
-	    key: 'toTheTop',
-	    value: function toTheTop() {
-	      if (this.refs.verticalScrollbar) {
-	        var node = (0, _reactDom.findDOMNode)(this.refs.verticalScrollbar);
-	        node.scrollTop = 0;
-	      }
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var props = this.p = this.prepareProps(this.props);
+	    propTypes: {
+	        columns: React.PropTypes.array
+	    },
 
-	      var loadMask = this.renderLoadMask(props);
-	      var horizontalScrollbar = this.renderHorizontalScrollbar(props);
-	      var verticalScrollbar = this.renderVerticalScrollbar(props);
+	    onDrop: function onDrop(event) {
+	        var state = this.state;
+	        var props = this.props;
 
-	      var events = {};
-
-	      if (!hasTouch) {
-	        events.onWheel = this.handleWheel;
-	      } else {
-	        events.onTouchStart = this.handleTouchStart;
-	      }
-
-	      //extra div needed for SAFARI V SCROLL
-	      //maxWidth needed for FF - see
-	      //http://stackoverflow.com/questions/27424831/firefox-flexbox-overflow
-	      //http://stackoverflow.com/questions/27472595/firefox-34-ignoring-max-width-for-flexbox
-	      var content = _react2['default'].createElement('div', { className: 'z-content-wrapper-fix', style: { maxWidth: 'calc(100% - ' + props.scrollbarSize + 'px)' },
-	        children: props.children });
-
-	      var renderProps = this.prepareRenderProps(props);
-
-	      return _react2['default'].createElement(
-	        'div',
-	        renderProps,
-	        loadMask,
-	        _react2['default'].createElement(
-	          'div',
-	          _extends({ className: 'z-content-wrapper' }, events),
-	          content,
-	          verticalScrollbar
-	        ),
-	        horizontalScrollbar
-	      );
-	    }
-	  }, {
-	    key: 'prepareRenderProps',
-	    value: function prepareRenderProps(props) {
-	      var renderProps = assign({}, props);
-
-	      delete renderProps.height;
-	      delete renderProps.width;
-
-	      return renderProps;
-	    }
-	  }, {
-	    key: 'handleTouchStart',
-	    value: function handleTouchStart(event) {
-
-	      var props = this.props;
-	      var scroll = {
-	        top: props.scrollTop,
-	        left: props.scrollLeft
-	      };
-
-	      var newScrollPos;
-	      var side;
-
-	      DragHelper(event, {
-	        scope: this,
-	        onDrag: function onDrag(event, config) {
-	          if (config.diff.top == 0 && config.diff.left == 0) {
-	            return;
-	          }
-
-	          if (!side) {
-	            side = ABS(config.diff.top) > ABS(config.diff.left) ? 'top' : 'left';
-	          }
-
-	          var diff = config.diff[side];
-
-	          newScrollPos = scroll[side] - diff;
-
-	          if (side == 'top') {
-	            this.verticalScrollAt(newScrollPos, event);
-	          } else {
-	            this.horizontalScrollAt(newScrollPos, event);
-	          }
+	        if (state.dragging) {
+	            event.stopPropagation();
 	        }
-	      });
 
-	      event.stopPropagation();
-	      preventDefault(event);
-	    }
-	  }, {
-	    key: 'handleWheel',
-	    value: function handleWheel(event) {
+	        var dragIndex = state.dragColumnIndex;
+	        var dropIndex = state.dropIndex;
 
-	      var props = this.props;
-	      // var normalizedEvent = normalizeWheel(event)
+	        if (dropIndex != null) {
 
-	      var virtual = props.virtualRendering;
-	      var horizontal = IS_MAC ? ABS(event.deltaX) > ABS(event.deltaY) : event.shiftKey;
-	      var scrollStep = props.scrollStep;
-	      var minScrollStep = props.minScrollStep;
+	            //since we need the indexes in the array of all columns
+	            //not only in the array of the visible columns
+	            //we need to search them and make this transform
+	            var dragColumn = props.columns[dragIndex];
+	            var dropColumn = props.columns[dropIndex];
 
-	      var scrollTop = props.scrollTop;
-	      var scrollLeft = props.scrollLeft;
+	            if (!dropColumn.fixed) {
+	                dragIndex = findIndexByName(props.allColumns, dragColumn.name);
+	                dropIndex = findIndexByName(props.allColumns, dropColumn.name);
 
-	      // var delta = normalizedEvent.pixelY
-	      var delta = event.deltaY;
-
-	      if (horizontal) {
-	        // delta = delta || normalizedEvent.pixelX
-	        delta = delta || event.deltaX;
-	        minScrollStep = props.minHorizontalScrollStep || minScrollStep;
-	      } else {
-	        if (delta !== 0) {
-	          minScrollStep = props.minVerticalScrollStep || minScrollStep;
+	                this.props.onDropColumn(dragIndex, dropIndex);
+	            }
 	        }
-	      }
 
-	      if (typeof props.interceptWheelScroll == 'function') {
-	        delta = props.interceptWheelScroll(delta, normalizedEvent, event);
-	      } else if (minScrollStep) {
-	        if (ABS(delta) < minScrollStep && delta !== 0) {
-	          delta = signum(delta) * minScrollStep;
+	        this.setState(getDropState());
+	    },
+
+	    getDefaultProps: function getDefaultProps() {
+	        return {
+	            defaultClassName: 'z-header-wrapper',
+	            draggingClassName: 'z-dragging',
+	            cellClassName: 'z-column-header',
+	            defaultStyle: {},
+	            sortInfo: null,
+	            scrollTop: 0
+	        };
+	    },
+
+	    getInitialState: function getInitialState() {
+
+	        return {
+	            mouseOver: true,
+	            dragging: false,
+
+	            shiftSize: null,
+	            dragColumn: null,
+	            shiftIndexes: null
+	        };
+	    },
+
+	    render: function render() {
+	        var props = this.prepareProps(this.props);
+	        var state = this.state;
+
+	        var cellMap = {};
+
+	        var cells = props.columns.map(function (col, index) {
+	            var cell = this.renderCell(props, state, col, index);
+	            cellMap[col.name] = cell;
+
+	            return cell;
+	        }, this);
+
+	        if (props.columnGroups && props.columnGroups.length) {
+
+	            cells = props.columnGroups.map(function (colGroup) {
+	                var cellProps = {};
+	                var columns = [];
+
+	                var cells = colGroup.columns.map(function (colName) {
+	                    var col = props.columnMap[colName];
+	                    columns.push(col);
+	                    return cellMap[colName];
+	                });
+
+	                return React.createElement(
+	                    Cell,
+	                    cellProps,
+	                    cells
+	                );
+	            }, this);
 	        }
-	      }
 
-	      if (horizontal) {
-	        this.horizontalScrollAt(scrollLeft + delta, event);
-	        props.preventDefaultHorizontal && preventDefault(event);
-	      } else {
-	        if (delta !== 0) {
-	          this.verticalScrollAt(scrollTop + delta, event);
-	          props.preventDefaultVertical && preventDefault(event);
-	        }
-	      }
-	    }
-	  }, {
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      ;(this.props.onMount || emptyFn)(this);
-	    }
-	  }, {
-	    key: 'getVerticalScrollbarNode',
-	    value: function getVerticalScrollbarNode() {
-	      return this.verticalScrollbarNode = this.verticalScrollbarNode || (0, _reactDom.findDOMNode)(this).querySelector('.ref-verticalScrollbar');
-	    }
-	  }, {
-	    key: 'getHorizontalScrollbarNode',
-	    value: function getHorizontalScrollbarNode() {
-	      return this.horizontalScrollbarNode = this.horizontalScrollbarNode || (0, _reactDom.findDOMNode)(this).querySelector('.ref-horizontalScrollbar');
-	    }
-	  }, {
-	    key: 'componentWillUnmount',
-	    value: function componentWillUnmount() {
-	      delete this.horizontalScrollerNode;
-	      delete this.horizontalScrollbarNode;
-	      delete this.verticalScrollbarNode;
-	    }
+	        var style = normalize(props.style);
+	        var headerStyle = normalize({
+	            paddingRight: props.scrollbarSize
+	        });
 
-	    ////////////////////////////////////////////////
-	    //
-	    // RENDER METHODS
-	    //
-	    ////////////////////////////////////////////////
-	  }, {
-	    key: 'renderVerticalScrollbar',
-	    value: function renderVerticalScrollbar(props) {
-	      var height = props.scrollHeight;
-	      var verticalScrollbarStyle = {
-	        width: props.scrollbarSize
-	      };
-
-	      var onScroll = this.onVerticalScroll;
-
-	      return _react2['default'].createElement(
-	        'div',
-	        { className: 'z-vertical-scrollbar', style: verticalScrollbarStyle },
-	        _react2['default'].createElement(
-	          'div',
-	          {
-	            ref: 'verticalScrollbar',
-	            className: 'ref-verticalScrollbar',
-	            onScroll: onScroll,
-	            style: { overflow: 'auto', width: '100%', height: '100%' }
-	          },
-	          _react2['default'].createElement('div', { className: 'z-vertical-scroller', style: { height: height } })
-	        )
-	      );
-	    }
-	  }, {
-	    key: 'renderHorizontalScrollbar',
-	    value: function renderHorizontalScrollbar(props) {
-	      var scrollbar;
-	      var onScroll = this.onHorizontalScroll;
-	      var style = horizontalScrollbarStyle;
-	      var minWidth = props.scrollWidth;
-
-	      var scroller = _react2['default'].createElement('div', { xref: 'horizontalScroller', className: 'z-horizontal-scroller', style: { width: minWidth } });
-
-	      if (IS_MAC) {
-	        //needed for mac safari
-	        scrollbar = _react2['default'].createElement(
-	          'div',
-	          {
-	            style: style,
-	            className: 'z-horizontal-scrollbar mac-fix'
-	          },
-	          _react2['default'].createElement(
+	        return React.createElement(
 	            'div',
-	            {
-	              onScroll: onScroll,
-	              className: 'ref-horizontalScrollbar z-horizontal-scrollbar-fix'
-	            },
-	            scroller
-	          )
+	            { style: style, className: props.className },
+	            React.createElement(
+	                'div',
+	                { className: 'z-header', ref: 'zHeader', style: headerStyle },
+	                cells
+	            )
 	        );
-	      } else {
-	        scrollbar = _react2['default'].createElement(
-	          'div',
-	          {
-	            style: style,
-	            className: 'ref-horizontalScrollbar z-horizontal-scrollbar',
-	            onScroll: onScroll
-	          },
-	          scroller
-	        );
-	      }
+	    },
 
-	      return scrollbar;
-	    }
-	  }, {
-	    key: 'renderLoadMask',
-	    value: function renderLoadMask(props) {
-	      if (props.loadMask) {
-	        var loadMaskProps = assign({ visible: props.loading }, props.loadMaskProps);
+	    scrollLeft: function scrollLeft(_scrollLeft) {
+	        this.refs.zHeader.style.transform = 'translate3d(' + -_scrollLeft + 'px,0,0)';
+	    },
 
-	        var defaultFactory = LoadMaskFactory;
-	        var factory = typeof props.loadMask == 'function' ? props.loadMask : defaultFactory;
+	    renderCell: function renderCell(props, state, column, index) {
 
-	        var mask = factory(loadMaskProps);
+	        var resizing = props.resizing;
+	        var text = column.title;
+	        var className = props.cellClassName || '';
+	        var style = {
+	            left: 0
+	        };
 
-	        if (mask === undefined) {
-	          //allow the specified factory to just modify props
-	          //and then leave the rendering to the defaultFactory
-	          mask = defaultFactory(loadMaskProps);
+	        var menu = this.renderColumnMenu(props, state, column, index);
+
+	        if (state.dragColumn && state.shiftIndexes && state.shiftIndexes[index]) {
+	            style.left = state.shiftSize;
 	        }
 
-	        return mask;
-	      }
+	        if (state.dragColumn === column) {
+	            className += ' z-drag z-over';
+	            style.zIndex = 1;
+	            style.left = state.dragLeft || 0;
+	        }
+
+	        var filterIcon = props.filterIcon || React.createElement(
+	            'svg',
+	            { version: '1.1', style: { transform: 'translate3d(0,0,0)', height: '100%', width: '100%', padding: '0px 2px' }, viewBox: '0 0 3 4' },
+	            React.createElement('polygon', { points: '0,0 1,2 1,4 2,4 2,2 3,0 ', style: { fill: props.filterIconColor, strokeWidth: 0, fillRule: 'nonZero' } })
+	        );
+
+	        var filter = column.filterable ? React.createElement(
+	            'div',
+	            { className: 'z-show-filter', onMouseUp: this.handleFilterMouseUp.bind(this, column) },
+	            filterIcon
+	        ) : null;
+
+	        var resizer = column.resizable ? React.createElement('span', { className: 'z-column-resize', onMouseDown: this.handleResizeMouseDown.bind(this, column) }) : null;
+
+	        if (column.sortable) {
+	            text = React.createElement(
+	                'span',
+	                null,
+	                text,
+	                ' ',
+	                props.sortIcons && column.sortable && React.createElement(
+	                    'span',
+	                    { className: 'z-show-sort', onClick: this.toggleSort.bind(this, column) },
+	                    props.sortIcons
+	                )
+	            );
+
+	            var sortInfo = getColumnSortInfo(column, props.sortInfo);
+
+	            if (sortInfo && sortInfo.dir) {
+	                className += sortInfo.dir === -1 || sortInfo.dir === 'desc' ? ' z-desc' : ' z-asc';
+	            }
+
+	            className += ' z-sortable';
+	        }
+
+	        if (filter) {
+	            className += ' z-filterable';
+	        }
+
+	        if (state.mouseOver === column.name && !resizing) {
+	            className += ' z-over';
+	        }
+
+	        if (props.menuColumn === column.name) {
+	            className += ' z-active';
+	        }
+
+	        className += ' z-unselectable';
+
+	        var events = {};
+
+	        events.onMouseDown = this.handleMouseDown.bind(this, column);
+	        events.onMouseUp = this.handleMouseUp.bind(this, column);
+
+	        return React.createElement(
+	            Cell,
+	            {
+	                key: column.name,
+	                contentPadding: props.cellPadding,
+	                columns: props.columns || [],
+	                index: index,
+	                column: props.columns[index],
+	                className: className,
+	                style: style,
+	                text: text,
+	                title: column.title,
+	                header: true,
+	                contentProps: events,
+	                onMouseOut: this.handleMouseOut.bind(this, column),
+	                onMouseOver: this.handleMouseOver.bind(this, column)
+	            },
+	            column.colorClass && React.createElement('div', { className: 'z-column-legend ' + column.colorClass }),
+	            filter,
+	            menu,
+	            resizer
+	        );
+	    },
+
+	    toggleSort: function toggleSort(column) {
+	        var sortInfo = asArray(clone(this.props.sortInfo));
+	        var columnSortInfo = getColumnSortInfo(column, sortInfo);
+
+	        if (!columnSortInfo) {
+	            columnSortInfo = {
+	                name: column.name,
+	                type: column.type,
+	                fn: column.sortFn
+	            };
+
+	            sortInfo.push(columnSortInfo);
+	        }
+
+	        if (typeof column.sortable === 'function') {
+	            column.sortable(columnSortInfo, sortInfo);
+	        } else {
+
+	            var dir = columnSortInfo.dir;
+	            var dirSign = dir === 'asc' ? 1 : dir === 'desc' ? -1 : dir;
+	            var newDir = dirSign === 1 ? -1 : dirSign === -1 ? 0 : 1;
+
+	            columnSortInfo.dir = newDir;
+
+	            if (!newDir) {
+	                sortInfo = removeColumnSort(column, sortInfo);
+	            }
+	            ;(this.props.onSortChange || emptyFn)(sortInfo);
+	        }
+	    },
+
+	    renderColumnMenu: function renderColumnMenu(props, state, column, index) {
+	        if (!props.withColumnMenu || !column.rightNode) {
+	            return;
+	        }
+
+	        return React.createElement(
+	            'div',
+	            { className: 'z-show-menu clearfix' },
+	            column.rightNode && React.createElement(
+	                'div',
+	                { className: 'z-show-right-node' },
+	                column.rightNode
+	            )
+	        );
+	    },
+
+	    showMenu: function showMenu(column, event) {
+
+	        var menuItem = function (column) {
+	            var visibility = this.props.columnVisibility;
+
+	            var visible = column.visible;
+
+	            if (column.name in visibility) {
+	                visible = visibility[column.name];
+	            }
+
+	            return {
+	                cls: visible ? 'z-selected' : '',
+	                selected: visible ? React.createElement(
+	                    'span',
+	                    { style: { fontSize: '0.95em' } },
+	                    '\u2713'
+	                ) : '',
+	                label: column.title,
+	                fn: this.toggleColumn.bind(this, column)
+	            };
+	        }.bind(this);
+
+	        function menu(eventTarget, props) {
+
+	            var columns = props.gridColumns;
+
+	            props.columns = ['selected', 'label'];
+	            props.items = columns.map(menuItem);
+	            props.alignTo = eventTarget;
+	            props.alignPositions = ['tl-bl', 'tr-br', 'bl-tl', 'br-tr'];
+	            props.style = {
+	                position: 'absolute'
+	            };
+
+	            var factory = this.props.columnMenuFactory || ReactMenu;
+
+	            var result = factory(props);
+
+	            return result === undefined ? ReactMenu(props) : result;
+	        }
+
+	        this.props.showMenu(menu.bind(this, event.currentTarget), {
+	            menuColumn: column.name
+	        });
+	    },
+
+	    showFilterMenu: function showFilterMenu(column, event) {
+
+	        function menu(eventTarget, props) {
+
+	            var defaultFactory = this.props.filterMenuFactory;
+	            var factory = column.filterMenuFactory || defaultFactory;
+
+	            props.columns = ['component'];
+	            props.column = column;
+	            props.alignTo = eventTarget;
+	            props.alignPositions = ['tl-bl', 'tr-br', 'bl-tl', 'br-tr'];
+	            props.style = {
+	                position: 'absolute'
+	            };
+
+	            var result = factory(props);
+
+	            return result === undefined ? defaultFactory(props) : result;
+	        }
+
+	        this.props.showMenu(menu.bind(this, event.currentTarget), {
+	            menuColumn: column.name
+	        });
+	    },
+
+	    toggleColumn: function toggleColumn(column) {
+	        this.props.toggleColumn(column);
+	    },
+
+	    hideMenu: function hideMenu() {
+	        this.props.showColumnMenu(null, null);
+	    },
+
+	    handleResizeMouseDown: function handleResizeMouseDown(column, event) {
+	        setupColumnResize(this, this.props, column, event);
+
+	        //in order to prevent setupColumnDrag in handleMouseDown
+	        // event.stopPropagation()
+
+	        //we are doing setupColumnDrag protection using the resizing flag on native event
+	        if (event.nativeEvent) {
+	            event.nativeEvent.resizing = true;
+	        }
+	    },
+
+	    handleFilterMouseUp: function handleFilterMouseUp(column, event) {
+	        event.nativeEvent.stopSort = true;
+
+	        this.showFilterMenu(column, event);
+	        // event.stopPropagation()
+	    },
+
+	    handleMouseUp: function handleMouseUp(column, event) {
+
+	        if (this.state.dragging) {
+	            return;
+	        }
+
+	        if (this.state.resizing) {
+	            return;
+	        }
+
+	        if (event && event.nativeEvent && event.nativeEvent.stopSort) {
+	            return;
+	        }
+
+	        if (column.sortable) {
+	            this.toggleSort(column);
+	        }
+	    },
+
+	    handleMouseOut: function handleMouseOut(column) {
+	        this.setState({
+	            mouseOver: false
+	        });
+	    },
+
+	    handleMouseOver: function handleMouseOver(column) {
+	        this.setState({
+	            mouseOver: column.name
+	        });
+	    },
+
+	    handleMouseDown: function handleMouseDown(column, event) {
+	        if (event && event.nativeEvent && event.nativeEvent.resizing) {
+	            return;
+	        }
+
+	        if (!this.props.reorderColumns) {
+	            return;
+	        }
+
+	        if (!column.draggable) {
+	            return;
+	        }
+
+	        setupColumnDrag(this, this.props, column, event);
+	    },
+
+	    onResizeDragStart: function onResizeDragStart(config) {
+	        this.setState({
+	            resizing: true
+	        });
+	        this.props.onColumnResizeDragStart(config);
+	    },
+
+	    onResizeDrag: function onResizeDrag(config) {
+	        this.props.onColumnResizeDrag(config);
+	    },
+
+	    onResizeDrop: function onResizeDrop(config, resizeInfo, event) {
+	        this.setState({
+	            resizing: false
+	        });
+
+	        this.props.onColumnResizeDrop(config, resizeInfo);
+	    },
+
+	    prepareProps: function prepareProps(thisProps) {
+	        var props = {};
+
+	        assign(props, thisProps);
+
+	        this.prepareClassName(props);
+	        this.prepareStyle(props);
+
+	        var columnMap = {};(props.columns || []).forEach(function (col) {
+	            columnMap[col.name] = col;
+	        });
+
+	        props.columnMap = columnMap;
+
+	        return props;
+	    },
+
+	    prepareClassName: function prepareClassName(props) {
+	        props.className = props.className || '';
+	        props.className += ' ' + props.defaultClassName;
+
+	        if (this.state.dragging) {
+	            props.className += ' ' + props.draggingClassName;
+	        }
+	    },
+
+	    prepareStyle: function prepareStyle(props) {
+	        var style = props.style = {};
+
+	        assign(style, props.defaultStyle);
 	    }
-
-	    ////////////////////////////////////////////////
-	    //
-	    // PREPARE PROPS METHODS
-	    //
-	    ////////////////////////////////////////////////
-	  }, {
-	    key: 'prepareProps',
-	    value: function prepareProps(thisProps) {
-	      var props = assign({}, thisProps);
-
-	      props.className = this.prepareClassName(props);
-	      props.style = this.prepareStyle(props);
-
-	      return props;
-	    }
-	  }, {
-	    key: 'prepareStyle',
-	    value: function prepareStyle(props) {
-	      var style = assign({}, props.style);
-
-	      if (props.height != null) {
-	        style.height = props.height;
-	      }
-
-	      if (props.width != null) {
-	        style.width = props.width;
-	      }
-
-	      if (props.normalizeStyles) {
-	        style = normalize(style);
-	      }
-
-	      return style;
-	    }
-	  }, {
-	    key: 'prepareClassName',
-	    value: function prepareClassName(props) {
-	      var className = props.className || '';
-
-	      if (Scroller.className) {
-	        className += ' ' + Scroller.className;
-	      }
-
-	      return className;
-	    }
-	  }]);
-
-	  return Scroller;
-	})(_reactClass2['default']);
-
-	Scroller.className = 'z-scroller';
-	Scroller.displayName = DISPLAY_NAME;
-
-	assign(Scroller.prototype, {
-	  onVerticalScroll: onScroll('vertical'),
-	  onHorizontalScroll: onScroll('horizontal'),
-
-	  verticalScrollAt: scrollAt('vertical'),
-	  horizontalScrollAt: scrollAt('horizontal'),
-
-	  syncHorizontalScrollbar: syncHorizontalScrollbar,
-	  syncVerticalScrollbar: syncVerticalScrollbar
 	});
-
-	Scroller.propTypes = {
-	  loadMask: PT.oneOfType([PT.bool, PT.func]),
-
-	  loading: PT.bool,
-	  normalizeStyles: PT.bool,
-
-	  scrollTop: PT.number,
-	  scrollLeft: PT.number,
-
-	  scrollWidth: PT.number.isRequired,
-	  scrollHeight: PT.number.isRequired,
-
-	  height: PT.number,
-	  width: PT.number,
-
-	  minScrollStep: PT.number,
-	  minHorizontalScrollStep: PT.number,
-	  minVerticalScrollStep: PT.number,
-
-	  virtualRendering: PT.oneOf([true]),
-
-	  preventDefaultVertical: PT.bool,
-	  preventDefaultHorizontal: PT.bool
-	}, Scroller.defaultProps = {
-	  'data-display-name': DISPLAY_NAME,
-	  loadMask: true,
-
-	  virtualRendering: true, //FOR NOW, only true is supported
-	  scrollbarSize: 20,
-
-	  scrollTop: 0,
-	  scrollLeft: 0,
-
-	  minScrollStep: 10,
-
-	  minHorizontalScrollStep: IS_FIREFOX ? 40 : 1,
-
-	  //since FF goes back in browser history on scroll too soon
-	  //chrome and others also do this, but the normal preventDefault in syncScrollbar fn prevents this
-	  preventDefaultHorizontal: IS_FIREFOX
-	};
-
-	exports['default'] = Scroller;
-	module.exports = exports['default'];
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
 /* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var React = __webpack_require__(177);
-	var assign = __webpack_require__(23);
-
-	function autoBind(object) {
-	  var proto = object.constructor.prototype;
-
-	  var names = Object.getOwnPropertyNames(proto).filter(function (key) {
-	    return key != 'constructor' && key != 'render' && typeof proto[key] == 'function';
-	  });
-
-	  names.push('setState');
-	  names.forEach(function (key) {
-	    object[key] = object[key].bind(object);
-	  });
-
-	  return object;
-	}
-
-	var ReactClass = (function (_React$Component) {
-	  _inherits(ReactClass, _React$Component);
-
-	  function ReactClass(props) {
-	    _classCallCheck(this, ReactClass);
-
-	    _get(Object.getPrototypeOf(ReactClass.prototype), 'constructor', this).call(this, props);
-	    autoBind(this);
-	  }
-
-	  _createClass(ReactClass, [{
-	    key: 'prepareProps',
-	    value: function prepareProps(thisProps) {
-
-	      var props = assign({}, thisProps);
-
-	      props.style = this.prepareStyle(props);
-	      props.className = this.prepareClassName(props);
-
-	      return props;
-	    }
-	  }, {
-	    key: 'prepareClassName',
-	    value: function prepareClassName(props) {
-	      var className = props.className || '';
-
-	      var defaultProps = this.constructor.defaultProps;
-
-	      if (defaultProps && defaultProps.defaultClassName != null) {
-	        className += ' ' + defaultProps.defaultClassName;
-	      }
-
-	      return className;
-	    }
-	  }, {
-	    key: 'prepareStyle',
-	    value: function prepareStyle(props) {
-	      var defaultStyle;
-
-	      if (this.constructor.defaultProps) {
-	        defaultStyle = this.constructor.defaultProps.defaultStyle;
-	      }
-
-	      return assign({}, defaultStyle, props.style);
-	    }
-	  }]);
-
-	  return ReactClass;
-	})(React.Component);
-
-	module.exports = ReactClass;
+	'use strict';var MenuClass=__webpack_require__(258),MenuItem=__webpack_require__(280),MenuItemCell=__webpack_require__(276),MenuSeparator=__webpack_require__(283);MenuClass.Item=MenuItem,MenuClass.Item.Cell=MenuItemCell,MenuClass.ItemCell=MenuItemCell,MenuClass.Separator=MenuSeparator,module.exports=MenuClass;
 
 /***/ },
 /* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
-
-	var assign   = __webpack_require__(23)
-	var Region   = __webpack_require__(259)
-	var hasTouch = __webpack_require__(264)
-	var once     = __webpack_require__(265)
-
-	var mobileTest = global.navigator ?
-	    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(global.navigator.userAgent) :
-	    false
-
-	var isMobile = hasTouch && mobileTest;
-
-	var Helper = function(config){
-	    this.config = config
-	}
-
-	var EVENTS = {
-	    move: isMobile? 'touchmove': 'mousemove',
-	    up  : isMobile? 'touchend' : 'mouseup'
-	}
-
-	function emptyFn(){}
-
-	function getPageCoords(event){
-	    var firstTouch
-
-	    var pageX = event.pageX
-	    var pageY = event.pageY
-
-	    if (isMobile && event.touches && (firstTouch = event.touches[0])){
-	        pageX = firstTouch.pageX
-	        pageY = firstTouch.pageY
-	    }
-
-	    return {
-	        pageX: pageX,
-	        pageY: pageY
-	    }
-	}
-
-	assign(Helper.prototype, {
-
-	    /**
-	     * Should be called on a mousedown event
-	     *
-	     * @param  {Event} event
-	     * @return {[type]}       [description]
-	     */
-	    initDrag: function(event) {
-
-	        this.onDragInit(event)
-
-	        var events = this.config.events || EVENTS
-
-	        var onDragStart = once(this.onDragStart, this)
-	        var target = isMobile?
-	                        event.target:
-	                        global
-
-	        var mouseMoveListener = (function(event){
-	            onDragStart(event)
-	            this.onDrag(event)
-	        }).bind(this)
-
-	        var mouseUpListener = (function(event){
-
-	            this.onDrop(event)
-
-	            target.removeEventListener(events.move, mouseMoveListener)
-	            target.removeEventListener(events.up, mouseUpListener)
-	        }).bind(this)
-
-	        target.addEventListener(events.move, mouseMoveListener, false)
-	        target.addEventListener(events.up, mouseUpListener)
-	    },
-
-	    onDragInit: function(event){
-
-	        var config = {
-	            diff: {
-	                left: 0,
-	                top : 0
-	            }
-	        }
-	        this.state = {
-	            config: config
-	        }
-
-	        if (this.config.region){
-	            this.state.initialRegion = Region.from(this.config.region)
-	            this.state.dragRegion =
-	                config.dragRegion =
-	                    this.state.initialRegion.clone()
-	        }
-	        if (this.config.constrainTo){
-	            this.state.constrainTo = Region.from(this.config.constrainTo)
-	        }
-
-	        this.callConfig('onDragInit', event)
-	    },
-
-	    /**
-	     * Called when the first mousemove event occurs after drag is initialized
-	     * @param  {Event} event
-	     */
-	    onDragStart: function(event){
-	        this.state.initPageCoords = getPageCoords(event)
-
-	        this.state.didDrag = this.state.config.didDrag = true
-	        this.callConfig('onDragStart', event)
-	    },
-
-	    /**
-	     * Called on all mousemove events after drag is initialized.
-	     *
-	     * @param  {Event} event
-	     */
-	    onDrag: function(event){
-
-	        var config = this.state.config
-
-	        var initPageCoords = this.state.initPageCoords
-	        var eventCoords = getPageCoords(event)
-
-	        var diff = config.diff = {
-	            left: eventCoords.pageX - initPageCoords.pageX,
-	            top : eventCoords.pageY - initPageCoords.pageY
-	        }
-
-	        if (this.state.initialRegion){
-	            var dragRegion = config.dragRegion
-
-	            //set the dragRegion to initial coords
-	            dragRegion.set(this.state.initialRegion)
-
-	            //shift it to the new position
-	            dragRegion.shift(diff)
-
-	            if (this.state.constrainTo){
-	                //and finally constrain it if it's the case
-	                var boolConstrained = dragRegion.constrainTo(this.state.constrainTo)
-
-	                diff.left = dragRegion.left - this.state.initialRegion.left
-	                diff.top  = dragRegion.top  - this.state.initialRegion.top
-
-	                // console.log(diff);
-	            }
-
-	            config.dragRegion = dragRegion
-	        }
-
-	        this.callConfig('onDrag', event)
-	    },
-
-	    /**
-	     * Called on the mouseup event on window
-	     *
-	     * @param  {Event} event
-	     */
-	    onDrop: function(event){
-	        this.callConfig('onDrop', event)
-
-	        this.state = null
-	    },
-
-	    callConfig: function(fnName, event){
-	        var config = this.state.config
-	        var args   = [event, config]
-
-	        var fn = this.config[fnName]
-
-	        if (fn){
-	            fn.apply(this, args)
-	        }
-	    }
-
-	})
-
-	module.exports = function(event, config){
-
-	    if (config.scope){
-	        var skippedKeys = {
-	            scope      : 1,
-	            region     : 1,
-	            constrainTo: 1
-	        }
-
-	        Object.keys(config).forEach(function(key){
-	            var value = config[key]
-
-	            if (key in skippedKeys){
-	                return
-	            }
-
-	            if (typeof value == 'function'){
-	                config[key] = value.bind(config.scope)
-	            }
-	        })
-	    }
-	    var helper = new Helper(config)
-
-	    helper.initDrag(event)
-
-	    return helper
-	}
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+	'use strict';var _reactDom=__webpack_require__(1);function emptyFn(){}var React=__webpack_require__(177),assign=__webpack_require__(23),Region=__webpack_require__(259),inTriangle=__webpack_require__(264),hasTouch=__webpack_require__(265),normalize=__webpack_require__(195),getMenuOffset=__webpack_require__(266),getConstrainRegion=__webpack_require__(270),getItemStyleProps=__webpack_require__(271),renderSubMenu=__webpack_require__(272),renderChildren=__webpack_require__(275),prepareItem=__webpack_require__(277),propTypes=__webpack_require__(284),ScrollContainer=__webpack_require__(285);var MenuItem=__webpack_require__(280),MenuClass=React.createClass({displayName:'Menu',propTypes:propTypes,getDefaultProps:function getDefaultProps(){return{isMenu:!0,constrainTo:!0,enableScroll:!0,interactionStyles:!0,applyDefaultTheme:!0,defaultStyle:{display:'inline-block',boxSizing:'border-box',position:'relative',background:'white',//theme props
+	border:'1px solid rgb(46, 153, 235)'},defaultSubMenuStyle:{position:'absolute'},subMenuStyle:null,scrollerProps:{},columns:['label'],items:null,visible:!0,defaultItemStyle:{},itemStyle:{},defaultItemOverStyle:{},itemOverStyle:{},defaultItemDisabledStyle:{},itemDisabledStyle:{},defaultItemExpandedStyle:{},itemExpandedStyle:{},defaultCellStyle:{},cellStyle:{},stopClickPropagation:!0}},getInitialState:function getInitialState(){return{mouseOver:!1}},componentWillUnmount:function componentWillUnmount(){this.didMount=!1},componentDidMount:function componentDidMount(){(this.props.onMount||emptyFn)(this),this.didMount=!0,(this.props.constrainTo||this.props.alignTo)&&!this.props.subMenu&&setTimeout(function(){if(this.isMounted()){var i,a=this.props,b=Region.from((0,_reactDom.findDOMNode)(this.refs.scrollContainer)),c=(0,_reactDom.findDOMNode)(this),d=Region.from(c),e=d.height,f=b.height+e,g=Region({left:d.left,right:d.right,top:d.top,bottom:d.top+f}),h=a.constrainTo?getConstrainRegion(a.constrainTo):null;//get clientHeight of this dom node, so as to account for padding
+	//build the actual region of the menu
+	if(a.alignTo){var j=Region.from(c.parentNode),k=Region.from(a.alignTo);g.alignTo(k,a.alignPositions,{offset:a.alignOffset,constrain:h});var l=g.top-j.top,m=g.left-j.left;i={style:{left:m,top:l}}}h&&(i=i||{},g.bottom>h.bottom&&(i.maxHeight=h.bottom-g.top-e)),i&&this.setState(i)}}.bind(this),0)},prepareProps:function prepareProps(a,b){var c={};return assign(c,this.props),c.style=this.prepareStyle(c,b),c.className=this.prepareClassName(c),c.itemStyleProps=getItemStyleProps(c,b),c.children=this.prepareChildren(c,b),c.scrollerProps=this.prepareScrollerProps(c),c},prepareScrollerProps:function prepareScrollerProps(a){return assign({},a.scrollerProps)},prepareChildren:function prepareChildren(a,b){var c=a.children;return a.items&&a.items.length&&(c=a.items.map(this.prepareItem.bind(this,a,b))),c},prepareItem:prepareItem,prepareClassName:function prepareClassName(a){var b=a.className||'';return b+=' z-menu',b},prepareStyle:function prepareStyle(a,b){var c=a.subMenu?a.defaultSubMenuStyle:null,d=assign({},a.defaultStyle,c,a.style,a.subMenuStyle);if(a.visible&&(!a.items||a.items.length)||(d.display='none'),a.absolute&&(d.position='absolute'),a.at){var e=Array.isArray(a.at),f={left:e?a.at[0]:void 0===a.at.left?a.at.x||a.at.pageX:a.at.left,top:e?a.at[1]:void 0===a.at.top?a.at.y||a.at.pageY:a.at.top};assign(d,f)}return b.style&&assign(d,b.style),!this.didMount&&(a.constrainTo||a.alignTo)&&!a.subMenu&&(d.visibility='hidden',d.maxHeight=0,d.overflow='hidden'),normalize(d)},/////////////// RENDERING LOGIC
+	renderSubMenu:renderSubMenu,render:function render(){var a=this.state,b=this.prepareProps(this.props,a),c=this.renderSubMenu(b,a),d=this.renderChildren(b,a);return React.createElement('div',b,c,React.createElement(ScrollContainer,{onMouseEnter:this.handleMouseEnter,onMouseLeave:this.handleMouseLeave,scrollerProps:b.scrollerProps,ref:'scrollContainer',enableScroll:b.enableScroll,maxHeight:a.maxHeight||b.maxHeight},React.createElement('table',{ref:'table',style:{borderSpacing:0}},React.createElement('tbody',null,d))))},renderChildren:renderChildren,////////////////////////// BEHAVIOUR LOGIC
+	handleMouseEnter:function handleMouseEnter(){this.setState({mouseInside:!0}),this.onActivate()},handleMouseLeave:function handleMouseLeave(){this.setState({mouseInside:!1}),this.state.menu||this.state.nextItem||this.onInactivate()},onActivate:function onActivate(){this.state.activated||(this.setState({activated:!0}),(this.props.onActivate||emptyFn)())},onInactivate:function onInactivate(){this.state.activated&&(this.setState({activated:!1})// console.log('inactivate')
+	,(this.props.onInactivate||emptyFn)())},//we also need mouseOverSubMenu: Boolean
+	//since when from a submenu we move back to a parent menu, we may move
+	//to a different menu item than the one that triggered the submenu
+	//so we should display another submenu
+	handleSubMenuMouseEnter:function handleSubMenuMouseEnter(){this.setState({mouseOverSubMenu:!0})},handleSubMenuMouseLeave:function handleSubMenuMouseLeave(){this.setState({mouseOverSubMenu:!1})},isSubMenuActive:function isSubMenuActive(){return this.state.subMenuActive},onSubMenuActivate:function onSubMenuActivate(){this.setState({subMenuActive:!0})},onSubMenuInactivate:function onSubMenuInactivate(){var a=+new Date,b=this.state.nextItem,c=this.state.nextTimestamp||0;this.setState({subMenuActive:!1,timestamp:a},function(){setTimeout(function(){return a!=this.state.timestamp||b&&100>a-c?void this.setItem(this.state.nextItem,this.state.nextOffset):void(!this.isSubMenuActive()&&this.setItem())}.bind(this),10)})},removeMouseMoveListener:function removeMouseMoveListener(){this.onWindowMouseMove&&(window.removeEventListener('mousemove',this.onWindowMouseMove),this.onWindowMouseMove=null)},onMenuItemMouseOut:function onMenuItemMouseOut(a,b){this.state.menu&&this.setupCheck(b)},/**
+	     * Called when mouseout happens on the item for which there is a submenu displayed
+	     */onMenuItemMouseOver:function onMenuItemMouseOver(a,b){if(this.didMount){var c=a.menu;+new Date,c&&(this.state.menu?this.setNextItem(a,b):this.setItem(a,b))}},setupCheck:function setupCheck(a){// + tolerance
+	// - tolerance
+	if(this.didMount){var b=5,c=(0,_reactDom.findDOMNode)(this),d=c.querySelector('.z-menu');if(d){var e=Region.from(d),f=e.left,g=e.top,h=e.left,i=e.bottom;'left'==this.subMenuPosition&&(f=e.right,h=e.right);var j=a.x+('left'==this.subMenuPosition?b:-b),k=a.y,l=[[f,g],[h,i],[j,k]];this.removeMouseMoveListener(),this.onWindowMouseMove=function(m){var n=[m.pageX,m.pageY];inTriangle(n,l)||(this.removeMouseMoveListener(),!this.state.mouseOverSubMenu&&this.setItem(this.state.nextItem,this.state.nextOffset))}.bind(this),window.addEventListener('mousemove',this.onWindowMouseMove)}}},setNextItem:function setNextItem(a,b){var c=+new Date;this.setState({timestamp:c,nextItem:a,nextOffset:b,nextTimestamp:+new Date})},setItem:function setItem(a,b){var c=a?a.menu:null;// if (!menu){
+	//     return
+	// }
+	this.removeMouseMoveListener();this.didMount&&(!c&&!this.state.mouseInside&&this.onInactivate(),this.setState({itemProps:a,menu:c,menuOffset:b,timestamp:+new Date,nextItem:null,nextOffset:null,nextTimestamp:null}))},onMenuItemExpanderClick:function onMenuItemExpanderClick(a){a.nativeEvent.expanderClick=!0},onMenuItemClick:function onMenuItemClick(a,b,c){var d=a.isPropagationStopped();if(this.props.stopClickPropagation&&a.stopPropagation(),hasTouch&&b&&a&&a.nativeEvent&&a.nativeEvent.expanderClick){var e={x:a.pageX,y:a.pageY},f=getMenuOffset(a.currentTarget);return void this.onMenuItemMouseOver(b,f,e)}d||(b&&(this.props.onClick||emptyFn)(a,b,c),this.onChildClick(a,b))},onChildClick:function onChildClick(a,b){(this.props.onChildClick||emptyFn)(a,b),this.props.parentMenu&&this.props.parentMenu.onChildClick(a,b)}});MenuClass.themes=__webpack_require__(289),module.exports=MenuClass;
 
 /***/ },
 /* 259 */
@@ -47153,583 +46864,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 264 */
 /***/ function(module, exports) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {module.exports = 'ontouchstart' in global || (global.DocumentTouch && document instanceof DocumentTouch)
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
-
-/***/ },
-/* 265 */
-/***/ function(module, exports) {
-
-	'use once'
-
-	module.exports = function once(fn, scope){
-
-	    var called
-	    var result
-
-	    return function(){
-	        if (called){
-	            return result
-	        }
-
-	        called = true
-
-	        return result = fn.apply(scope || this, arguments)
-	    }
-	}
-
-/***/ },
-/* 266 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(177);
-	var Region = __webpack_require__(183);
-	var ReactMenu = React.createFactory(__webpack_require__(267));
-	var assign = __webpack_require__(23);
-	var clone = __webpack_require__(294);
-	var asArray = __webpack_require__(299);
-	var findIndexBy = __webpack_require__(300);
-	var findIndexByName = __webpack_require__(301);
-	var Cell = __webpack_require__(302);
-	var setupColumnDrag = __webpack_require__(303);
-	var setupColumnResize = __webpack_require__(304);
-
-	var normalize = __webpack_require__(195);
-
-	function emptyFn() {}
-
-	function getColumnSortInfo(column, sortInfo) {
-
-	    sortInfo = asArray(sortInfo);
-
-	    var index = findIndexBy(sortInfo, function (info) {
-	        return info.name === column.name;
-	    });
-
-	    return sortInfo[index];
-	}
-
-	function removeColumnSort(column, sortInfo) {
-	    sortInfo = asArray(sortInfo);
-
-	    var index = findIndexBy(sortInfo, function (info) {
-	        return info.name === column.name;
-	    });
-
-	    if (~index) {
-	        sortInfo.splice(index, 1);
-	    }
-
-	    return sortInfo;
-	}
-
-	function getDropState() {
-	    return {
-	        dragLeft: null,
-	        dragColumn: null,
-	        dragColumnIndex: null,
-	        dragging: false,
-	        dropIndex: null,
-
-	        shiftIndexes: null,
-	        shiftSize: null
-	    };
-	}
-
-	module.exports = React.createClass({
-
-	    displayName: 'ReactDataGrid.Header',
-
-	    propTypes: {
-	        columns: React.PropTypes.array
-	    },
-
-	    onDrop: function onDrop(event) {
-	        var state = this.state;
-	        var props = this.props;
-
-	        if (state.dragging) {
-	            event.stopPropagation();
-	        }
-
-	        var dragIndex = state.dragColumnIndex;
-	        var dropIndex = state.dropIndex;
-
-	        if (dropIndex != null) {
-
-	            //since we need the indexes in the array of all columns
-	            //not only in the array of the visible columns
-	            //we need to search them and make this transform
-	            var dragColumn = props.columns[dragIndex];
-	            var dropColumn = props.columns[dropIndex];
-
-	            if (!dropColumn.fixed) {
-	                dragIndex = findIndexByName(props.allColumns, dragColumn.name);
-	                dropIndex = findIndexByName(props.allColumns, dropColumn.name);
-
-	                this.props.onDropColumn(dragIndex, dropIndex);
-	            }
-	        }
-
-	        this.setState(getDropState());
-	    },
-
-	    getDefaultProps: function getDefaultProps() {
-	        return {
-	            defaultClassName: 'z-header-wrapper',
-	            draggingClassName: 'z-dragging',
-	            cellClassName: 'z-column-header',
-	            defaultStyle: {},
-	            sortInfo: null,
-	            scrollTop: 0
-	        };
-	    },
-
-	    getInitialState: function getInitialState() {
-
-	        return {
-	            mouseOver: true,
-	            dragging: false,
-
-	            shiftSize: null,
-	            dragColumn: null,
-	            shiftIndexes: null
-	        };
-	    },
-
-	    render: function render() {
-	        var props = this.prepareProps(this.props);
-	        var state = this.state;
-
-	        var cellMap = {};
-
-	        var cells = props.columns.map(function (col, index) {
-	            var cell = this.renderCell(props, state, col, index);
-	            cellMap[col.name] = cell;
-
-	            return cell;
-	        }, this);
-
-	        if (props.columnGroups && props.columnGroups.length) {
-
-	            cells = props.columnGroups.map(function (colGroup) {
-	                var cellProps = {};
-	                var columns = [];
-
-	                var cells = colGroup.columns.map(function (colName) {
-	                    var col = props.columnMap[colName];
-	                    columns.push(col);
-	                    return cellMap[colName];
-	                });
-
-	                return React.createElement(
-	                    Cell,
-	                    cellProps,
-	                    cells
-	                );
-	            }, this);
-	        }
-
-	        var style = normalize(props.style);
-	        var headerStyle = normalize({
-	            paddingRight: props.scrollbarSize
-	        });
-
-	        return React.createElement(
-	            'div',
-	            { style: style, className: props.className },
-	            React.createElement(
-	                'div',
-	                { className: 'z-header', ref: 'zHeader', style: headerStyle },
-	                cells
-	            )
-	        );
-	    },
-
-	    scrollLeft: function scrollLeft(_scrollLeft) {
-	        this.refs.zHeader.style.transform = 'translate3d(' + -_scrollLeft + 'px,0,0)';
-	    },
-
-	    renderCell: function renderCell(props, state, column, index) {
-
-	        var resizing = props.resizing;
-	        var text = column.title;
-	        var className = props.cellClassName || '';
-	        var style = {
-	            left: 0
-	        };
-
-	        var menu = this.renderColumnMenu(props, state, column, index);
-
-	        if (state.dragColumn && state.shiftIndexes && state.shiftIndexes[index]) {
-	            style.left = state.shiftSize;
-	        }
-
-	        if (state.dragColumn === column) {
-	            className += ' z-drag z-over';
-	            style.zIndex = 1;
-	            style.left = state.dragLeft || 0;
-	        }
-
-	        var filterIcon = props.filterIcon || React.createElement(
-	            'svg',
-	            { version: '1.1', style: { transform: 'translate3d(0,0,0)', height: '100%', width: '100%', padding: '0px 2px' }, viewBox: '0 0 3 4' },
-	            React.createElement('polygon', { points: '0,0 1,2 1,4 2,4 2,2 3,0 ', style: { fill: props.filterIconColor, strokeWidth: 0, fillRule: 'nonZero' } })
-	        );
-
-	        var filter = column.filterable ? React.createElement(
-	            'div',
-	            { className: 'z-show-filter', onMouseUp: this.handleFilterMouseUp.bind(this, column) },
-	            filterIcon
-	        ) : null;
-
-	        var resizer = column.resizable ? React.createElement('span', { className: 'z-column-resize', onMouseDown: this.handleResizeMouseDown.bind(this, column) }) : null;
-
-	        if (column.sortable) {
-	            text = React.createElement(
-	                'span',
-	                null,
-	                text,
-	                ' ',
-	                props.sortIcons && column.sortable && React.createElement(
-	                    'span',
-	                    { className: 'z-show-sort', onClick: this.toggleSort.bind(this, column) },
-	                    props.sortIcons
-	                )
-	            );
-
-	            var sortInfo = getColumnSortInfo(column, props.sortInfo);
-
-	            if (sortInfo && sortInfo.dir) {
-	                className += sortInfo.dir === -1 || sortInfo.dir === 'desc' ? ' z-desc' : ' z-asc';
-	            }
-
-	            className += ' z-sortable';
-	        }
-
-	        if (filter) {
-	            className += ' z-filterable';
-	        }
-
-	        if (state.mouseOver === column.name && !resizing) {
-	            className += ' z-over';
-	        }
-
-	        if (props.menuColumn === column.name) {
-	            className += ' z-active';
-	        }
-
-	        className += ' z-unselectable';
-
-	        var events = {};
-
-	        events.onMouseDown = this.handleMouseDown.bind(this, column);
-	        events.onMouseUp = this.handleMouseUp.bind(this, column);
-
-	        return React.createElement(
-	            Cell,
-	            {
-	                key: column.name,
-	                contentPadding: props.cellPadding,
-	                columns: props.columns || [],
-	                index: index,
-	                column: props.columns[index],
-	                className: className,
-	                style: style,
-	                text: text,
-	                title: column.title,
-	                header: true,
-	                contentProps: events,
-	                onMouseOut: this.handleMouseOut.bind(this, column),
-	                onMouseOver: this.handleMouseOver.bind(this, column)
-	            },
-	            column.colorClass && React.createElement('div', { className: 'z-column-legend ' + column.colorClass }),
-	            filter,
-	            menu,
-	            resizer
-	        );
-	    },
-
-	    toggleSort: function toggleSort(column) {
-	        var sortInfo = asArray(clone(this.props.sortInfo));
-	        var columnSortInfo = getColumnSortInfo(column, sortInfo);
-
-	        if (!columnSortInfo) {
-	            columnSortInfo = {
-	                name: column.name,
-	                type: column.type,
-	                fn: column.sortFn
-	            };
-
-	            sortInfo.push(columnSortInfo);
-	        }
-
-	        if (typeof column.sortable === 'function') {
-	            column.sortable(columnSortInfo, sortInfo);
-	        } else {
-
-	            var dir = columnSortInfo.dir;
-	            var dirSign = dir === 'asc' ? 1 : dir === 'desc' ? -1 : dir;
-	            var newDir = dirSign === 1 ? -1 : dirSign === -1 ? 0 : 1;
-
-	            columnSortInfo.dir = newDir;
-
-	            if (!newDir) {
-	                sortInfo = removeColumnSort(column, sortInfo);
-	            }
-	            ;(this.props.onSortChange || emptyFn)(sortInfo);
-	        }
-	    },
-
-	    renderColumnMenu: function renderColumnMenu(props, state, column, index) {
-	        if (!props.withColumnMenu || !column.rightNode) {
-	            return;
-	        }
-
-	        return React.createElement(
-	            'div',
-	            { className: 'z-show-menu clearfix' },
-	            column.rightNode && React.createElement(
-	                'div',
-	                { className: 'z-show-right-node' },
-	                column.rightNode
-	            )
-	        );
-	    },
-
-	    showMenu: function showMenu(column, event) {
-
-	        var menuItem = function (column) {
-	            var visibility = this.props.columnVisibility;
-
-	            var visible = column.visible;
-
-	            if (column.name in visibility) {
-	                visible = visibility[column.name];
-	            }
-
-	            return {
-	                cls: visible ? 'z-selected' : '',
-	                selected: visible ? React.createElement(
-	                    'span',
-	                    { style: { fontSize: '0.95em' } },
-	                    '\u2713'
-	                ) : '',
-	                label: column.title,
-	                fn: this.toggleColumn.bind(this, column)
-	            };
-	        }.bind(this);
-
-	        function menu(eventTarget, props) {
-
-	            var columns = props.gridColumns;
-
-	            props.columns = ['selected', 'label'];
-	            props.items = columns.map(menuItem);
-	            props.alignTo = eventTarget;
-	            props.alignPositions = ['tl-bl', 'tr-br', 'bl-tl', 'br-tr'];
-	            props.style = {
-	                position: 'absolute'
-	            };
-
-	            var factory = this.props.columnMenuFactory || ReactMenu;
-
-	            var result = factory(props);
-
-	            return result === undefined ? ReactMenu(props) : result;
-	        }
-
-	        this.props.showMenu(menu.bind(this, event.currentTarget), {
-	            menuColumn: column.name
-	        });
-	    },
-
-	    showFilterMenu: function showFilterMenu(column, event) {
-
-	        function menu(eventTarget, props) {
-
-	            var defaultFactory = this.props.filterMenuFactory;
-	            var factory = column.filterMenuFactory || defaultFactory;
-
-	            props.columns = ['component'];
-	            props.column = column;
-	            props.alignTo = eventTarget;
-	            props.alignPositions = ['tl-bl', 'tr-br', 'bl-tl', 'br-tr'];
-	            props.style = {
-	                position: 'absolute'
-	            };
-
-	            var result = factory(props);
-
-	            return result === undefined ? defaultFactory(props) : result;
-	        }
-
-	        this.props.showMenu(menu.bind(this, event.currentTarget), {
-	            menuColumn: column.name
-	        });
-	    },
-
-	    toggleColumn: function toggleColumn(column) {
-	        this.props.toggleColumn(column);
-	    },
-
-	    hideMenu: function hideMenu() {
-	        this.props.showColumnMenu(null, null);
-	    },
-
-	    handleResizeMouseDown: function handleResizeMouseDown(column, event) {
-	        setupColumnResize(this, this.props, column, event);
-
-	        //in order to prevent setupColumnDrag in handleMouseDown
-	        // event.stopPropagation()
-
-	        //we are doing setupColumnDrag protection using the resizing flag on native event
-	        if (event.nativeEvent) {
-	            event.nativeEvent.resizing = true;
-	        }
-	    },
-
-	    handleFilterMouseUp: function handleFilterMouseUp(column, event) {
-	        event.nativeEvent.stopSort = true;
-
-	        this.showFilterMenu(column, event);
-	        // event.stopPropagation()
-	    },
-
-	    handleMouseUp: function handleMouseUp(column, event) {
-
-	        if (this.state.dragging) {
-	            return;
-	        }
-
-	        if (this.state.resizing) {
-	            return;
-	        }
-
-	        if (event && event.nativeEvent && event.nativeEvent.stopSort) {
-	            return;
-	        }
-
-	        if (column.sortable) {
-	            this.toggleSort(column);
-	        }
-	    },
-
-	    handleMouseOut: function handleMouseOut(column) {
-	        this.setState({
-	            mouseOver: false
-	        });
-	    },
-
-	    handleMouseOver: function handleMouseOver(column) {
-	        this.setState({
-	            mouseOver: column.name
-	        });
-	    },
-
-	    handleMouseDown: function handleMouseDown(column, event) {
-	        if (event && event.nativeEvent && event.nativeEvent.resizing) {
-	            return;
-	        }
-
-	        if (!this.props.reorderColumns) {
-	            return;
-	        }
-
-	        if (!column.draggable) {
-	            return;
-	        }
-
-	        setupColumnDrag(this, this.props, column, event);
-	    },
-
-	    onResizeDragStart: function onResizeDragStart(config) {
-	        this.setState({
-	            resizing: true
-	        });
-	        this.props.onColumnResizeDragStart(config);
-	    },
-
-	    onResizeDrag: function onResizeDrag(config) {
-	        this.props.onColumnResizeDrag(config);
-	    },
-
-	    onResizeDrop: function onResizeDrop(config, resizeInfo, event) {
-	        this.setState({
-	            resizing: false
-	        });
-
-	        this.props.onColumnResizeDrop(config, resizeInfo);
-	    },
-
-	    prepareProps: function prepareProps(thisProps) {
-	        var props = {};
-
-	        assign(props, thisProps);
-
-	        this.prepareClassName(props);
-	        this.prepareStyle(props);
-
-	        var columnMap = {};(props.columns || []).forEach(function (col) {
-	            columnMap[col.name] = col;
-	        });
-
-	        props.columnMap = columnMap;
-
-	        return props;
-	    },
-
-	    prepareClassName: function prepareClassName(props) {
-	        props.className = props.className || '';
-	        props.className += ' ' + props.defaultClassName;
-
-	        if (this.state.dragging) {
-	            props.className += ' ' + props.draggingClassName;
-	        }
-	    },
-
-	    prepareStyle: function prepareStyle(props) {
-	        var style = props.style = {};
-
-	        assign(style, props.defaultStyle);
-	    }
-	});
-
-/***/ },
-/* 267 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';var MenuClass=__webpack_require__(268),MenuItem=__webpack_require__(284),MenuItemCell=__webpack_require__(280),MenuSeparator=__webpack_require__(287);MenuClass.Item=MenuItem,MenuClass.Item.Cell=MenuItemCell,MenuClass.ItemCell=MenuItemCell,MenuClass.Separator=MenuSeparator,module.exports=MenuClass;
-
-/***/ },
-/* 268 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';var _reactDom=__webpack_require__(1);function emptyFn(){}var React=__webpack_require__(177),assign=__webpack_require__(23),Region=__webpack_require__(259),inTriangle=__webpack_require__(269),hasTouch=__webpack_require__(264),normalize=__webpack_require__(195),getMenuOffset=__webpack_require__(270),getConstrainRegion=__webpack_require__(274),getItemStyleProps=__webpack_require__(275),renderSubMenu=__webpack_require__(276),renderChildren=__webpack_require__(279),prepareItem=__webpack_require__(281),propTypes=__webpack_require__(288),ScrollContainer=__webpack_require__(289);var MenuItem=__webpack_require__(284),MenuClass=React.createClass({displayName:'Menu',propTypes:propTypes,getDefaultProps:function getDefaultProps(){return{isMenu:!0,constrainTo:!0,enableScroll:!0,interactionStyles:!0,applyDefaultTheme:!0,defaultStyle:{display:'inline-block',boxSizing:'border-box',position:'relative',background:'white',//theme props
-	border:'1px solid rgb(46, 153, 235)'},defaultSubMenuStyle:{position:'absolute'},subMenuStyle:null,scrollerProps:{},columns:['label'],items:null,visible:!0,defaultItemStyle:{},itemStyle:{},defaultItemOverStyle:{},itemOverStyle:{},defaultItemDisabledStyle:{},itemDisabledStyle:{},defaultItemExpandedStyle:{},itemExpandedStyle:{},defaultCellStyle:{},cellStyle:{},stopClickPropagation:!0}},getInitialState:function getInitialState(){return{mouseOver:!1}},componentWillUnmount:function componentWillUnmount(){this.didMount=!1},componentDidMount:function componentDidMount(){(this.props.onMount||emptyFn)(this),this.didMount=!0,(this.props.constrainTo||this.props.alignTo)&&!this.props.subMenu&&setTimeout(function(){if(this.isMounted()){var i,a=this.props,b=Region.from((0,_reactDom.findDOMNode)(this.refs.scrollContainer)),c=(0,_reactDom.findDOMNode)(this),d=Region.from(c),e=d.height,f=b.height+e,g=Region({left:d.left,right:d.right,top:d.top,bottom:d.top+f}),h=a.constrainTo?getConstrainRegion(a.constrainTo):null;//get clientHeight of this dom node, so as to account for padding
-	//build the actual region of the menu
-	if(a.alignTo){var j=Region.from(c.parentNode),k=Region.from(a.alignTo);g.alignTo(k,a.alignPositions,{offset:a.alignOffset,constrain:h});var l=g.top-j.top,m=g.left-j.left;i={style:{left:m,top:l}}}h&&(i=i||{},g.bottom>h.bottom&&(i.maxHeight=h.bottom-g.top-e)),i&&this.setState(i)}}.bind(this),0)},prepareProps:function prepareProps(a,b){var c={};return assign(c,this.props),c.style=this.prepareStyle(c,b),c.className=this.prepareClassName(c),c.itemStyleProps=getItemStyleProps(c,b),c.children=this.prepareChildren(c,b),c.scrollerProps=this.prepareScrollerProps(c),c},prepareScrollerProps:function prepareScrollerProps(a){return assign({},a.scrollerProps)},prepareChildren:function prepareChildren(a,b){var c=a.children;return a.items&&a.items.length&&(c=a.items.map(this.prepareItem.bind(this,a,b))),c},prepareItem:prepareItem,prepareClassName:function prepareClassName(a){var b=a.className||'';return b+=' z-menu',b},prepareStyle:function prepareStyle(a,b){var c=a.subMenu?a.defaultSubMenuStyle:null,d=assign({},a.defaultStyle,c,a.style,a.subMenuStyle);if(a.visible&&(!a.items||a.items.length)||(d.display='none'),a.absolute&&(d.position='absolute'),a.at){var e=Array.isArray(a.at),f={left:e?a.at[0]:void 0===a.at.left?a.at.x||a.at.pageX:a.at.left,top:e?a.at[1]:void 0===a.at.top?a.at.y||a.at.pageY:a.at.top};assign(d,f)}return b.style&&assign(d,b.style),!this.didMount&&(a.constrainTo||a.alignTo)&&!a.subMenu&&(d.visibility='hidden',d.maxHeight=0,d.overflow='hidden'),normalize(d)},/////////////// RENDERING LOGIC
-	renderSubMenu:renderSubMenu,render:function render(){var a=this.state,b=this.prepareProps(this.props,a),c=this.renderSubMenu(b,a),d=this.renderChildren(b,a);return React.createElement('div',b,c,React.createElement(ScrollContainer,{onMouseEnter:this.handleMouseEnter,onMouseLeave:this.handleMouseLeave,scrollerProps:b.scrollerProps,ref:'scrollContainer',enableScroll:b.enableScroll,maxHeight:a.maxHeight||b.maxHeight},React.createElement('table',{ref:'table',style:{borderSpacing:0}},React.createElement('tbody',null,d))))},renderChildren:renderChildren,////////////////////////// BEHAVIOUR LOGIC
-	handleMouseEnter:function handleMouseEnter(){this.setState({mouseInside:!0}),this.onActivate()},handleMouseLeave:function handleMouseLeave(){this.setState({mouseInside:!1}),this.state.menu||this.state.nextItem||this.onInactivate()},onActivate:function onActivate(){this.state.activated||(this.setState({activated:!0}),(this.props.onActivate||emptyFn)())},onInactivate:function onInactivate(){this.state.activated&&(this.setState({activated:!1})// console.log('inactivate')
-	,(this.props.onInactivate||emptyFn)())},//we also need mouseOverSubMenu: Boolean
-	//since when from a submenu we move back to a parent menu, we may move
-	//to a different menu item than the one that triggered the submenu
-	//so we should display another submenu
-	handleSubMenuMouseEnter:function handleSubMenuMouseEnter(){this.setState({mouseOverSubMenu:!0})},handleSubMenuMouseLeave:function handleSubMenuMouseLeave(){this.setState({mouseOverSubMenu:!1})},isSubMenuActive:function isSubMenuActive(){return this.state.subMenuActive},onSubMenuActivate:function onSubMenuActivate(){this.setState({subMenuActive:!0})},onSubMenuInactivate:function onSubMenuInactivate(){var a=+new Date,b=this.state.nextItem,c=this.state.nextTimestamp||0;this.setState({subMenuActive:!1,timestamp:a},function(){setTimeout(function(){return a!=this.state.timestamp||b&&100>a-c?void this.setItem(this.state.nextItem,this.state.nextOffset):void(!this.isSubMenuActive()&&this.setItem())}.bind(this),10)})},removeMouseMoveListener:function removeMouseMoveListener(){this.onWindowMouseMove&&(window.removeEventListener('mousemove',this.onWindowMouseMove),this.onWindowMouseMove=null)},onMenuItemMouseOut:function onMenuItemMouseOut(a,b){this.state.menu&&this.setupCheck(b)},/**
-	     * Called when mouseout happens on the item for which there is a submenu displayed
-	     */onMenuItemMouseOver:function onMenuItemMouseOver(a,b){if(this.didMount){var c=a.menu;+new Date,c&&(this.state.menu?this.setNextItem(a,b):this.setItem(a,b))}},setupCheck:function setupCheck(a){// + tolerance
-	// - tolerance
-	if(this.didMount){var b=5,c=(0,_reactDom.findDOMNode)(this),d=c.querySelector('.z-menu');if(d){var e=Region.from(d),f=e.left,g=e.top,h=e.left,i=e.bottom;'left'==this.subMenuPosition&&(f=e.right,h=e.right);var j=a.x+('left'==this.subMenuPosition?b:-b),k=a.y,l=[[f,g],[h,i],[j,k]];this.removeMouseMoveListener(),this.onWindowMouseMove=function(m){var n=[m.pageX,m.pageY];inTriangle(n,l)||(this.removeMouseMoveListener(),!this.state.mouseOverSubMenu&&this.setItem(this.state.nextItem,this.state.nextOffset))}.bind(this),window.addEventListener('mousemove',this.onWindowMouseMove)}}},setNextItem:function setNextItem(a,b){var c=+new Date;this.setState({timestamp:c,nextItem:a,nextOffset:b,nextTimestamp:+new Date})},setItem:function setItem(a,b){var c=a?a.menu:null;// if (!menu){
-	//     return
-	// }
-	this.removeMouseMoveListener();this.didMount&&(!c&&!this.state.mouseInside&&this.onInactivate(),this.setState({itemProps:a,menu:c,menuOffset:b,timestamp:+new Date,nextItem:null,nextOffset:null,nextTimestamp:null}))},onMenuItemExpanderClick:function onMenuItemExpanderClick(a){a.nativeEvent.expanderClick=!0},onMenuItemClick:function onMenuItemClick(a,b,c){var d=a.isPropagationStopped();if(this.props.stopClickPropagation&&a.stopPropagation(),hasTouch&&b&&a&&a.nativeEvent&&a.nativeEvent.expanderClick){var e={x:a.pageX,y:a.pageY},f=getMenuOffset(a.currentTarget);return void this.onMenuItemMouseOver(b,f,e)}d||(b&&(this.props.onClick||emptyFn)(a,b,c),this.onChildClick(a,b))},onChildClick:function onChildClick(a,b){(this.props.onChildClick||emptyFn)(a,b),this.props.parentMenu&&this.props.parentMenu.onChildClick(a,b)}});MenuClass.themes=__webpack_require__(293),module.exports=MenuClass;
-
-/***/ },
-/* 269 */
-/***/ function(module, exports) {
-
 	//http://www.blackpawn.com/texts/pointinpoly/
 	module.exports = function pointInTriangle(point, triangle) {
 	    //compute vectors & dot products
@@ -47753,25 +46887,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 270 */
+/* 265 */
+/***/ function(module, exports) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {module.exports = 'ontouchstart' in global || (global.DocumentTouch && document instanceof DocumentTouch)
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 266 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';var Region=__webpack_require__(259),selectParent=__webpack_require__(271);module.exports=function(a){var b=Region.from(selectParent('.z-menu',a)),c=Region.from(a);return{// pageX : thisRegion.left,
+	'use strict';var Region=__webpack_require__(259),selectParent=__webpack_require__(267);module.exports=function(a){var b=Region.from(selectParent('.z-menu',a)),c=Region.from(a);return{// pageX : thisRegion.left,
 	// pageY : thisRegion.top,
 	left:c.left-b.left,top:c.top-b.top,width:c.width,height:c.height}};
 
 /***/ },
-/* 271 */
+/* 267 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var curry   = __webpack_require__(272)
+	var curry   = __webpack_require__(268)
 	var matches
 
 	module.exports = curry(function(selector, node){
 
-		matches = matches || __webpack_require__(273)
+		matches = matches || __webpack_require__(269)
 
 	    while (node = node.parentElement){
 	        if (matches.call(node, selector)){
@@ -47781,7 +46922,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	})
 
 /***/ },
-/* 272 */
+/* 268 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -47819,7 +46960,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = curry
 
 /***/ },
-/* 273 */
+/* 269 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -47836,45 +46977,45 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 274 */
+/* 270 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';var _reactDom=__webpack_require__(1),Region=__webpack_require__(259),selectParent=__webpack_require__(271);module.exports=function(a){var b;if(!0===a&&(b=Region.getDocRegion()),!b&&'string'==typeof a){var c=selectParent(a,(0,_reactDom.findDOMNode)(this));b=Region.from(c)}return b||'function'!=typeof a||(b=Region.from(a())),b};
+	'use strict';var _reactDom=__webpack_require__(1),Region=__webpack_require__(259),selectParent=__webpack_require__(267);module.exports=function(a){var b;if(!0===a&&(b=Region.getDocRegion()),!b&&'string'==typeof a){var c=selectParent(a,(0,_reactDom.findDOMNode)(this));b=Region.from(c)}return b||'function'!=typeof a||(b=Region.from(a())),b};
 
 /***/ },
-/* 275 */
+/* 271 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';var assign=__webpack_require__(23);module.exports=function(a){var b=assign({},a.defaultItemStyle,a.itemStyle),c=assign({},a.defaultItemOverStyle,a.itemOverStyle),d=assign({},a.defaultItemActiveStyle,a.itemActiveStyle),e=assign({},a.defaultItemDisabledStyle,a.itemDisabledStyle),f=assign({},a.defaultItemExpandedStyle,a.itemExpandedStyle),g=assign({},a.defaultCellStyle,a.cellStyle);return{itemStyle:b,itemOverStyle:c,itemActiveStyle:d,itemDisabledStyle:e,itemExpandedStyle:f,cellStyle:g}};
 
 /***/ },
-/* 276 */
+/* 272 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';var Region=__webpack_require__(259),assign=__webpack_require__(23),React=__webpack_require__(177),cloneElement=React.cloneElement,getPositionStyle=__webpack_require__(277);module.exports=function(a,b){var c=b.menu;if(c&&this.didMount){var d=getPositionStyle.call(this,a,b);return c=cloneElement(c,assign({ref:'subMenu',subMenu:!0,parentMenu:this,maxHeight:b.subMenuMaxHeight,onActivate:this.onSubMenuActivate,onInactivate:this.onSubMenuInactivate,scrollerProps:a.scrollerProps,constrainTo:a.constrainTo,expander:a.expander,theme:a.theme,themes:a.themes||this.constructor.themes},a.itemStyleProps)),React.createElement('div',{ref:'subMenuWrap',style:d,onMouseEnter:this.handleSubMenuMouseEnter,onMouseLeave:this.handleSubMenuMouseLeave},c)}};
+	'use strict';var Region=__webpack_require__(259),assign=__webpack_require__(23),React=__webpack_require__(177),cloneElement=React.cloneElement,getPositionStyle=__webpack_require__(273);module.exports=function(a,b){var c=b.menu;if(c&&this.didMount){var d=getPositionStyle.call(this,a,b);return c=cloneElement(c,assign({ref:'subMenu',subMenu:!0,parentMenu:this,maxHeight:b.subMenuMaxHeight,onActivate:this.onSubMenuActivate,onInactivate:this.onSubMenuInactivate,scrollerProps:a.scrollerProps,constrainTo:a.constrainTo,expander:a.expander,theme:a.theme,themes:a.themes||this.constructor.themes},a.itemStyleProps)),React.createElement('div',{ref:'subMenuWrap',style:d,onMouseEnter:this.handleSubMenuMouseEnter,onMouseLeave:this.handleSubMenuMouseLeave},c)}};
 
 /***/ },
-/* 277 */
+/* 273 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';var _reactDom=__webpack_require__(1),Region=__webpack_require__(259),assign=__webpack_require__(23),align=__webpack_require__(278);module.exports=function(b,c){if(!c.menu||!this.didMount)return void(this.prevMenuIndex=-1);var d=c.menuOffset,e=d.left+d.width,f=d.top,g=c.itemProps.index,h=this.prevMenuIndex==g;this.aligning&&!h&&(this.aligning=!1),this.prevMenuIndex=g;var i={position:'absolute',visibility:'hidden',overflow:'hidden',pointerEvents:'none',left:e,top:f,zIndex:1};return this.aligning||h||setTimeout(function(){if(this.didMount){var j=Region.from((0,_reactDom.findDOMNode)(this)),k=Region.from({left:j.left,top:j.top+d.top,width:d.width,height:d.height}),l=this.refs.subMenu&&this.refs.subMenu.isMounted();if(l){var q,m=Region.from(this.refs.subMenu.refs.scrollContainer.getCurrentSizeDOM()),n=m.height,o=align(b,m,/* alignTo */k,b.constrainTo),p=m.height;p<n&&(q=p-b.subMenuConstrainMargin),q&&-1==o/* upwards*/&&(m.top=m.bottom-q);var r=m.left-j.left,s=m.top-j.top;5>Math.abs(r-e)&&(r=e),5>Math.abs(s-f)&&(s=f),this.subMenuPosition=0>r?'left':'right',this.alignOffset={left:r,top:s},this.aligning=!0,this.setState({subMenuMaxHeight:q})}}}.bind(this),0),(h||this.aligning&&this.alignOffset)&&(assign(i,this.alignOffset),i.visibility='visible',delete i.pointerEvents,delete i.overflow),this.aligning=!1,i};
+	'use strict';var _reactDom=__webpack_require__(1),Region=__webpack_require__(259),assign=__webpack_require__(23),align=__webpack_require__(274);module.exports=function(b,c){if(!c.menu||!this.didMount)return void(this.prevMenuIndex=-1);var d=c.menuOffset,e=d.left+d.width,f=d.top,g=c.itemProps.index,h=this.prevMenuIndex==g;this.aligning&&!h&&(this.aligning=!1),this.prevMenuIndex=g;var i={position:'absolute',visibility:'hidden',overflow:'hidden',pointerEvents:'none',left:e,top:f,zIndex:1};return this.aligning||h||setTimeout(function(){if(this.didMount){var j=Region.from((0,_reactDom.findDOMNode)(this)),k=Region.from({left:j.left,top:j.top+d.top,width:d.width,height:d.height}),l=this.refs.subMenu&&this.refs.subMenu.isMounted();if(l){var q,m=Region.from(this.refs.subMenu.refs.scrollContainer.getCurrentSizeDOM()),n=m.height,o=align(b,m,/* alignTo */k,b.constrainTo),p=m.height;p<n&&(q=p-b.subMenuConstrainMargin),q&&-1==o/* upwards*/&&(m.top=m.bottom-q);var r=m.left-j.left,s=m.top-j.top;5>Math.abs(r-e)&&(r=e),5>Math.abs(s-f)&&(s=f),this.subMenuPosition=0>r?'left':'right',this.alignOffset={left:r,top:s},this.aligning=!0,this.setState({subMenuMaxHeight:q})}}}.bind(this),0),(h||this.aligning&&this.alignOffset)&&(assign(i,this.alignOffset),i.visibility='visible',delete i.pointerEvents,delete i.overflow),this.aligning=!1,i};
 
 /***/ },
-/* 278 */
+/* 274 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';var Region=__webpack_require__(259),getConstrainRegion=__webpack_require__(274);module.exports=function(a,b,c,d){var e=getConstrainRegion.call(this,d);if(e)if('function'==typeof a.alignSubMenu)a.alignSubMenu(b,c,e);else{var f=b.alignTo(c,['tl-tr','bl-br','tr-tl','br-bl'],{constrain:e});return'tl-tr'==f||'tr-tl'==f?//align downwards
+	'use strict';var Region=__webpack_require__(259),getConstrainRegion=__webpack_require__(270);module.exports=function(a,b,c,d){var e=getConstrainRegion.call(this,d);if(e)if('function'==typeof a.alignSubMenu)a.alignSubMenu(b,c,e);else{var f=b.alignTo(c,['tl-tr','bl-br','tr-tl','br-bl'],{constrain:e});return'tl-tr'==f||'tr-tl'==f?//align downwards
 	1://align upwards
 	-1}};
 
 /***/ },
-/* 279 */
+/* 275 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';var React=__webpack_require__(177),MenuItemCell=__webpack_require__(280),cloneElement=React.cloneElement,assign=__webpack_require__(23);function emptyFn(){}module.exports=function(a,b){var d=b.itemProps?b.itemProps.index:-1,e=a.children,f=1,g=[];React.Children.map(e,function(l){var m=l.props;if(g.push(l),m&&m.isMenuItem){var n=React.Children.count(m.children);f=Math.max(f,n)}});var h=a.itemStyleProps,j=-1,k=g.map(function(l,m){var n=l.props,o={};n&&n.isMenuItem&&(j++,o.onMenuItemMouseOver=this.onMenuItemMouseOver,o.onMenuItemMouseOut=this.onMenuItemMouseOut);var p=React.Children.map(n.children,function(t){return t}),q=React.Children.count(p);for(q<f&&(p=p?[p]:[]);q<f;)q++,p.push(React.createElement(MenuItemCell,null));var r=n.onClick||emptyFn,s=cloneElement(l,assign({interactionStyles:a.interactionStyles,itemIndex:j,itemCount:g.length,key:m,index:m,expanded:d==m,children:p,expander:a.expander,applyDefaultTheme:a.applyDefaultTheme,theme:a.theme,themes:a.themes||this.constructor.themes,onExpanderClick:this.onMenuItemExpanderClick,onClick:function(t,u,v){r.apply(null,arguments),this.onMenuItemClick(t,u,v)}.bind(this)},o,{style:h.itemStyle,overStyle:h.itemOverStyle,activeStyle:h.itemActiveStyle,disabledStyle:h.itemDisabledStyle,expandedStyle:h.itemExpandedStyle,cellStyle:h.cellStyle}));return s},this);return k};
+	'use strict';var React=__webpack_require__(177),MenuItemCell=__webpack_require__(276),cloneElement=React.cloneElement,assign=__webpack_require__(23);function emptyFn(){}module.exports=function(a,b){var d=b.itemProps?b.itemProps.index:-1,e=a.children,f=1,g=[];React.Children.map(e,function(l){var m=l.props;if(g.push(l),m&&m.isMenuItem){var n=React.Children.count(m.children);f=Math.max(f,n)}});var h=a.itemStyleProps,j=-1,k=g.map(function(l,m){var n=l.props,o={};n&&n.isMenuItem&&(j++,o.onMenuItemMouseOver=this.onMenuItemMouseOver,o.onMenuItemMouseOut=this.onMenuItemMouseOut);var p=React.Children.map(n.children,function(t){return t}),q=React.Children.count(p);for(q<f&&(p=p?[p]:[]);q<f;)q++,p.push(React.createElement(MenuItemCell,null));var r=n.onClick||emptyFn,s=cloneElement(l,assign({interactionStyles:a.interactionStyles,itemIndex:j,itemCount:g.length,key:m,index:m,expanded:d==m,children:p,expander:a.expander,applyDefaultTheme:a.applyDefaultTheme,theme:a.theme,themes:a.themes||this.constructor.themes,onExpanderClick:this.onMenuItemExpanderClick,onClick:function(t,u,v){r.apply(null,arguments),this.onMenuItemClick(t,u,v)}.bind(this)},o,{style:h.itemStyle,overStyle:h.itemOverStyle,activeStyle:h.itemActiveStyle,disabledStyle:h.itemDisabledStyle,expandedStyle:h.itemExpandedStyle,cellStyle:h.cellStyle}));return s},this);return k};
 
 /***/ },
-/* 280 */
+/* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';var React=__webpack_require__(177),assign=__webpack_require__(23),MenuItemCell=React.createClass({displayName:'ReactMenuItemCell',getDefaultProps:function getDefaultProps(){return{defaultStyle:{padding:5,whiteSpace:'nowrap'}}},render:function render(){var a=this.prepareProps(this.props),b=a.children;return a.expander&&(b=!0===a.expander?'\u203A':a.expander),React.createElement('td',a,b)},prepareProps:function prepareProps(a){var b={};return assign(b,a),b.style=this.prepareStyle(b),b},prepareStyle:function prepareStyle(a){var b={};// if (props.itemIndex != props.itemCount - 1){
@@ -47883,28 +47024,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	return assign(b,a.defaultStyle,a.style),b}});module.exports=MenuItemCell;
 
 /***/ },
-/* 281 */
+/* 277 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';var React=__webpack_require__(177),assign=__webpack_require__(23),renderCells=__webpack_require__(282),MenuItem=__webpack_require__(284),MenuItemFactory=React.createFactory(MenuItem),MenuSeparator=__webpack_require__(287);module.exports=function(a,b,c,d){var e=b.itemProps?b.itemProps.index:-1;if('-'===c)return React.createElement(MenuSeparator,{key:d});var f=[a.itemClassName,c.cls,c.className].filter(function(i){return!!i}).join(' '),g=assign({className:f,key:d,data:c,columns:a.columns,expanded:d===e,disabled:c.disabled,onClick:c.onClick||c.fn},a.itemStyleProps);if(g.children=renderCells(g),c.items){var h=__webpack_require__(268);g.children.push(React.createElement(Menu,{items:c.items}))}return(a.itemFactory||MenuItemFactory)(g)};
+	'use strict';var React=__webpack_require__(177),assign=__webpack_require__(23),renderCells=__webpack_require__(278),MenuItem=__webpack_require__(280),MenuItemFactory=React.createFactory(MenuItem),MenuSeparator=__webpack_require__(283);module.exports=function(a,b,c,d){var e=b.itemProps?b.itemProps.index:-1;if('-'===c)return React.createElement(MenuSeparator,{key:d});var f=[a.itemClassName,c.cls,c.className].filter(function(i){return!!i}).join(' '),g=assign({className:f,key:d,data:c,columns:a.columns,expanded:d===e,disabled:c.disabled,onClick:c.onClick||c.fn},a.itemStyleProps);if(g.children=renderCells(g),c.items){var h=__webpack_require__(258);g.children.push(React.createElement(Menu,{items:c.items}))}return(a.itemFactory||MenuItemFactory)(g)};
 
 /***/ },
-/* 282 */
+/* 278 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';var renderCell=__webpack_require__(283);module.exports=function(a){return a.columns.map(renderCell.bind(null,a))};
+	'use strict';var renderCell=__webpack_require__(279);module.exports=function(a){return a.columns.map(renderCell.bind(null,a))};
 
 /***/ },
-/* 283 */
+/* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';var React=__webpack_require__(177),assign=__webpack_require__(23),MenuItemCell=__webpack_require__(280);module.exports=function(a,b){var c=assign({},a.defaultCellStyle,a.cellStyle);return React.createElement(MenuItemCell,{style:c},a.data[b])};
+	'use strict';var React=__webpack_require__(177),assign=__webpack_require__(23),MenuItemCell=__webpack_require__(276);module.exports=function(a,b){var c=assign({},a.defaultCellStyle,a.cellStyle);return React.createElement(MenuItemCell,{style:c},a.data[b])};
 
 /***/ },
-/* 284 */
+/* 280 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';var _reactDom=__webpack_require__(1),React=__webpack_require__(177),assign=__webpack_require__(23),normalize=__webpack_require__(195),EVENT_NAMES=__webpack_require__(285),getMenuOffset=__webpack_require__(270),prepareChildren=__webpack_require__(286),Menu=__webpack_require__(268),MenuItemCell=__webpack_require__(280),emptyFn=function emptyFn(){};function toUpperFirst(a){return a?a.charAt(0).toUpperCase()+a.substring(1):''}var MenuItem=React.createClass({displayName:'ReactMenuItem',getInitialState:function getInitialState(){return{}},getDefaultProps:function getDefaultProps(){return{isMenuItem:!0,interactionStyles:!0,defaultStyle:{cursor:'pointer',userSelect:'none',boxSizing:'border-box'},expander:'\u203A'}},render:function render(){var a=this.prepareProps(this.props,this.state);return React.createElement('tr',a)},componentDidMount:function componentDidMount(){this.didMount=!0},prepareProps:function prepareProps(a,b){var c={};return assign(c,a),c.theme=this.prepareTheme(c),c.mouseOver=!!b.mouseOver,c.active=!!b.active,c.disabled=!!c.disabled,c.style=this.prepareStyle(c),c.className=this.prepareClassName(c),c.children=this.prepareChildren(c),c.onClick=this.handleClick.bind(this,c),c.onMouseEnter=this.handleMouseEnter.bind(this,c),c.onMouseLeave=this.handleMouseLeave.bind(this,c),c.onMouseDown=this.handleMouseDown,c.onMouseMove=this.handleMouseMove,c},prepareTheme:function prepareTheme(a){var b=a.themes=a.themes||this.constructor.theme||THEME,c=a.theme;return'string'==typeof c&&(c=b[c]),c||b.default},handleClick:function handleClick(a,b){if(a.disabled)return void b.stopPropagation();(this.props.onClick||this.props.fn||emptyFn)(b,a,a.index)},handleMouseMove:function handleMouseMove(){},handleMouseDown:function handleMouseDown(){var a=function(){this.setState({active:!1}),window.removeEventListener('mouseup',a)}.bind(this);window.addEventListener('mouseup',a),this.setState({active:!0})},showMenu:function showMenu(a,b){b.showMenu(a,offset)},handleMouseEnter:function handleMouseEnter(a,b){if(!a.disabled){var c={x:b.pageX,y:b.pageY};if(this.setState({mouseOver:!0}),a.onMenuItemMouseOver){var d;a.menu&&(d=getMenuOffset((0,_reactDom.findDOMNode)(this))),a.onMenuItemMouseOver(a,d,c)}}},handleMouseLeave:function handleMouseLeave(a,b){if(!a.disabled){var c={x:b.pageX,y:b.pageY};this.didMount&&this.setState({active:!1,mouseOver:!1}),a.onMenuItemMouseOut&&a.onMenuItemMouseOut(a,c)}},prepareChildren:prepareChildren,prepareClassName:function prepareClassName(a){var b=a.className||'';return b+=' menu-row',a.disabled?b+=' disabled '+(a.disabledClassName||''):(a.mouseOver&&(b+=' over '+(a.overClassName||'')),a.active&&(b+=' active '+(a.activeClassName||'')),a.expanded&&(b+=' expanded '+(a.expandedClassName||''))),b},prepareDefaultStyle:function prepareDefaultStyle(a){var b=assign({},a.defaultStyle);return a.disabled&&assign(b,a.defaultDisabledStyle),b},prepareComputedStyleNames:function prepareComputedStyleNames(a){var b=['style'];if(a.disabled)return b.push('disabledStyle'),b;a.expanded&&b.push('expandedStyle');//names is something like ['style','expandedStyle']
+	'use strict';var _reactDom=__webpack_require__(1),React=__webpack_require__(177),assign=__webpack_require__(23),normalize=__webpack_require__(195),EVENT_NAMES=__webpack_require__(281),getMenuOffset=__webpack_require__(266),prepareChildren=__webpack_require__(282),Menu=__webpack_require__(258),MenuItemCell=__webpack_require__(276),emptyFn=function emptyFn(){};function toUpperFirst(a){return a?a.charAt(0).toUpperCase()+a.substring(1):''}var MenuItem=React.createClass({displayName:'ReactMenuItem',getInitialState:function getInitialState(){return{}},getDefaultProps:function getDefaultProps(){return{isMenuItem:!0,interactionStyles:!0,defaultStyle:{cursor:'pointer',userSelect:'none',boxSizing:'border-box'},expander:'\u203A'}},render:function render(){var a=this.prepareProps(this.props,this.state);return React.createElement('tr',a)},componentDidMount:function componentDidMount(){this.didMount=!0},prepareProps:function prepareProps(a,b){var c={};return assign(c,a),c.theme=this.prepareTheme(c),c.mouseOver=!!b.mouseOver,c.active=!!b.active,c.disabled=!!c.disabled,c.style=this.prepareStyle(c),c.className=this.prepareClassName(c),c.children=this.prepareChildren(c),c.onClick=this.handleClick.bind(this,c),c.onMouseEnter=this.handleMouseEnter.bind(this,c),c.onMouseLeave=this.handleMouseLeave.bind(this,c),c.onMouseDown=this.handleMouseDown,c.onMouseMove=this.handleMouseMove,c},prepareTheme:function prepareTheme(a){var b=a.themes=a.themes||this.constructor.theme||THEME,c=a.theme;return'string'==typeof c&&(c=b[c]),c||b.default},handleClick:function handleClick(a,b){if(a.disabled)return void b.stopPropagation();(this.props.onClick||this.props.fn||emptyFn)(b,a,a.index)},handleMouseMove:function handleMouseMove(){},handleMouseDown:function handleMouseDown(){var a=function(){this.setState({active:!1}),window.removeEventListener('mouseup',a)}.bind(this);window.addEventListener('mouseup',a),this.setState({active:!0})},showMenu:function showMenu(a,b){b.showMenu(a,offset)},handleMouseEnter:function handleMouseEnter(a,b){if(!a.disabled){var c={x:b.pageX,y:b.pageY};if(this.setState({mouseOver:!0}),a.onMenuItemMouseOver){var d;a.menu&&(d=getMenuOffset((0,_reactDom.findDOMNode)(this))),a.onMenuItemMouseOver(a,d,c)}}},handleMouseLeave:function handleMouseLeave(a,b){if(!a.disabled){var c={x:b.pageX,y:b.pageY};this.didMount&&this.setState({active:!1,mouseOver:!1}),a.onMenuItemMouseOut&&a.onMenuItemMouseOut(a,c)}},prepareChildren:prepareChildren,prepareClassName:function prepareClassName(a){var b=a.className||'';return b+=' menu-row',a.disabled?b+=' disabled '+(a.disabledClassName||''):(a.mouseOver&&(b+=' over '+(a.overClassName||'')),a.active&&(b+=' active '+(a.activeClassName||'')),a.expanded&&(b+=' expanded '+(a.expandedClassName||''))),b},prepareDefaultStyle:function prepareDefaultStyle(a){var b=assign({},a.defaultStyle);return a.disabled&&assign(b,a.defaultDisabledStyle),b},prepareComputedStyleNames:function prepareComputedStyleNames(a){var b=['style'];if(a.disabled)return b.push('disabledStyle'),b;a.expanded&&b.push('expandedStyle');//names is something like ['style','expandedStyle']
 	//
 	//now we add over and active styles
 	var c;a.mouseOver&&(c=b.map(function(e){return'over'+toUpperFirst(e)}));var d;return a.active&&(d=b.map(function(e){return'active'+toUpperFirst(e)})),c&&b.push.apply(b,c),d&&b.push.apply(b,d),b},prepareStyle:function prepareStyle(a){var b=assign({},this.prepareDefaultStyle(a)),c=this.prepareComputedStyleNames(a),d=a.theme,e=a.themes;return d&&(a.applyDefaultTheme&&d!=e.default&&e.default&&c.forEach(function(f){assign(b,e.default[f])}),c.forEach(function(f){assign(b,d[f])})),(a.onThemeStyleReady||emptyFn)(b,a),c.forEach(function(f){assign(b,a[f])}),(a.onStyleReady||emptyFn)(b,a),normalize(b);// assign(style, props.defaultStyle, props.style)
@@ -47927,12 +47068,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	}});module.exports=MenuItem;
 
 /***/ },
-/* 285 */
+/* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(264)?
+	module.exports = __webpack_require__(265)?
 		{
 			onMouseDown: 'onTouchStart',
 			onMouseUp  : 'onTouchEnd',
@@ -47945,31 +47086,31 @@ return /******/ (function(modules) { // webpackBootstrap
 		}
 
 /***/ },
-/* 286 */
+/* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';var _extends=Object.assign||function(target){for(var i=1;i<arguments.length;i++){var source=arguments[i];for(var key in source)Object.prototype.hasOwnProperty.call(source,key)&&(target[key]=source[key])}return target},React=__webpack_require__(177),Menu=__webpack_require__(268),MenuItemCell=__webpack_require__(280),renderCell=__webpack_require__(283);var _react=__webpack_require__(177);module.exports=function(a){var c,b=[];if(React.Children.forEach(a.children,function(f){if(f){if(f.props&&f.props.isMenu)return void(c=(0,_react.cloneElement)(f,{ref:'subMenu',subMenu:!0}));'string'!=typeof f&&(f=(0,_react.cloneElement)(f,{style:a.cellStyle,itemIndex:a.itemIndex,itemCount:a.itemCount})),b.push(f)}}),c){a.menu=c;var d=a.expander||!0,e={};d&&(e.onClick=a.onExpanderClick),b.push(React.createElement(MenuItemCell,_extends({expander:d},e)))}return b};
+	'use strict';var _extends=Object.assign||function(target){for(var i=1;i<arguments.length;i++){var source=arguments[i];for(var key in source)Object.prototype.hasOwnProperty.call(source,key)&&(target[key]=source[key])}return target},React=__webpack_require__(177),Menu=__webpack_require__(258),MenuItemCell=__webpack_require__(276),renderCell=__webpack_require__(279);var _react=__webpack_require__(177);module.exports=function(a){var c,b=[];if(React.Children.forEach(a.children,function(f){if(f){if(f.props&&f.props.isMenu)return void(c=(0,_react.cloneElement)(f,{ref:'subMenu',subMenu:!0}));'string'!=typeof f&&(f=(0,_react.cloneElement)(f,{style:a.cellStyle,itemIndex:a.itemIndex,itemCount:a.itemCount})),b.push(f)}}),c){a.menu=c;var d=a.expander||!0,e={};d&&(e.onClick=a.onExpanderClick),b.push(React.createElement(MenuItemCell,_extends({expander:d},e)))}return b};
 
 /***/ },
-/* 287 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';var React=__webpack_require__(177),assign=__webpack_require__(23),emptyFn=function emptyFn(){},MenuSeparator=React.createClass({displayName:'ReactMenuSeparator',getDefaultProps:function getDefaultProps(){return{size:1}},render:function render(){var a=this.prepareProps(this.props);return React.createElement('tr',a,React.createElement('td',{colSpan:10,style:{padding:0}}))},prepareProps:function prepareProps(a){var b={};return assign(b,a),b.style=this.prepareStyle(b),b.className=this.prepareClassName(b),b},prepareClassName:function prepareClassName(a){var b=a.className||'';return b+=' menu-separator',b},prepareStyle:function prepareStyle(a){var b={};return assign(b,MenuSeparator.defaultStyle,MenuSeparator.style,{height:MenuSeparator.size||a.size},a.style),b}});MenuSeparator.defaultStyle={cursor:'auto',background:'gray'},MenuSeparator.style={},module.exports=MenuSeparator;
 
 /***/ },
-/* 288 */
+/* 284 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';var React=__webpack_require__(177);module.exports={items:React.PropTypes.array,columns:React.PropTypes.array,onMount:React.PropTypes.func,defaultRowActiveStyle:React.PropTypes.object,defaultRowOverStyle:React.PropTypes.object,defaultRowStyle:React.PropTypes.object,rowActiveStyle:React.PropTypes.object,rowOverStyle:React.PropTypes.object,rowStyle:React.PropTypes.object,cellStyle:React.PropTypes.object};
 
 /***/ },
-/* 289 */
+/* 285 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';var _reactDom=__webpack_require__(1),React=__webpack_require__(177),assign=__webpack_require__(23),buffer=__webpack_require__(290),Scroller=__webpack_require__(291);function stop(a){a.preventDefault(),a.stopPropagation()}module.exports=React.createClass({displayName:'ReactMenuScrollContainer',getInitialState:function getInitialState(){return{adjustScroll:!0,scrollPos:0}},getDefaultProps:function getDefaultProps(){return{scrollStep:5,scrollSpeed:50}},componentWillUnmount:function componentWillUnmount(){this.props.enableScroll&&window.removeEventListener('resize',this.onResizeListener)},componentDidMount:function componentDidMount(){this.props.enableScroll&&setTimeout(function(){this.isMounted()&&(this.adjustScroll(),window.addEventListener('resize',this.onResizeListener=buffer(this.onWindowResize,this.props.onWindowResizeBuffer,this)))}.bind(this),0)},componentDidUpdate:function componentDidUpdate(){this.props.enableScroll&&this.adjustScroll()},onWindowResize:function onWindowResize(){this.adjustScroll(),this.doScroll(0)},render:function render(){var a=this.props,b=a.children;if(!a.enableScroll)return b;var c={position:'relative'};this.state.scrollPos&&(c.top=-this.state.scrollPos);var d={position:'relative',overflow:'hidden'};return a.maxHeight&&(d.maxHeight=a.maxHeight),React.createElement('div',{onMouseEnter:a.onMouseEnter,onMouseLeave:a.onMouseLeave,className:'z-menu-scroll-container',style:d},React.createElement('div',{ref:'tableWrap',style:c},b),this.renderScroller(a,-1),this.renderScroller(a,1))},renderScroller:function renderScroller(a,b){var c=-1==b?this.handleScrollTop:this.handleScrollBottom,d=-1==b?this.handleScrollTopMax:this.handleScrollBottomMax,e=-1==b?this.state.hasTopScroll:this.state.hasBottomScroll,f=assign({},a.scrollerProps,{visible:e,side:-1==b?'top':'bottom',onMouseDown:c,onDoubleClick:d});return React.createElement(Scroller,f)},adjustScroll:function adjustScroll(){if(this.props.enableScroll){if(!this.state.adjustScroll)return void(this.state.adjustScroll=!0);var a=this.getAvailableHeight(),b=this.getCurrentTableHeight(),c={adjustScroll:!1,hasTopScroll:!1,hasBottomScroll:!1};b>a?(c.maxScrollPos=b-a,c.hasTopScroll=0!==this.state.scrollPos,c.hasBottomScroll=this.state.scrollPos!=c.maxScrollPos):(c.maxScrollPos=0,c.scrollPos=0),this.setState(c)}},getAvailableHeight:function getAvailableHeight(){return this.getAvailableSizeDOM().clientHeight},getAvailableSizeDOM:function getAvailableSizeDOM(){return(0,_reactDom.findDOMNode)(this)},getCurrentTableHeight:function getCurrentTableHeight(){return this.getCurrentSizeDOM().clientHeight},getCurrentSizeDOM:function getCurrentSizeDOM(){return(0,_reactDom.findDOMNode)(this.refs.tableWrap)},handleScrollTop:function handleScrollTop(a){a.preventDefault(),this.handleScroll(-1)},handleScrollBottom:function handleScrollBottom(a){a.preventDefault(),this.handleScroll(1)},handleScrollTopMax:function handleScrollTopMax(a){stop(a),this.handleScrollMax(-1)},handleScrollBottomMax:function handleScrollBottomMax(a){stop(a),this.handleScrollMax(1)},handleScrollMax:function handleScrollMax(a){var b=-1==a?0:this.state.maxScrollPos;this.setScrollPosition(b)},handleScroll:function handleScroll(a/*1 to bottom, -1 to up*/){var b=function(){this.stopScroll(),window.removeEventListener('mouseup',b)}.bind(this);window.addEventListener('mouseup',b),this.scrollInterval=setInterval(this.doScroll.bind(this,a),this.props.scrollSpeed)},doScroll:function doScroll(a){this.setState({scrollDirection:a});var b=this.state.scrollPos+a*this.props.scrollStep;this.setScrollPosition(b)},setScrollPosition:function setScrollPosition(a){a>this.state.maxScrollPos&&(a=this.state.maxScrollPos),0>a&&(a=0),this.setState({scrollPos:a,scrolling:!0})},stopScroll:function stopScroll(){clearInterval(this.scrollInterval),this.setState({scrolling:!1})}});
+	'use strict';var _reactDom=__webpack_require__(1),React=__webpack_require__(177),assign=__webpack_require__(23),buffer=__webpack_require__(286),Scroller=__webpack_require__(287);function stop(a){a.preventDefault(),a.stopPropagation()}module.exports=React.createClass({displayName:'ReactMenuScrollContainer',getInitialState:function getInitialState(){return{adjustScroll:!0,scrollPos:0}},getDefaultProps:function getDefaultProps(){return{scrollStep:5,scrollSpeed:50}},componentWillUnmount:function componentWillUnmount(){this.props.enableScroll&&window.removeEventListener('resize',this.onResizeListener)},componentDidMount:function componentDidMount(){this.props.enableScroll&&setTimeout(function(){this.isMounted()&&(this.adjustScroll(),window.addEventListener('resize',this.onResizeListener=buffer(this.onWindowResize,this.props.onWindowResizeBuffer,this)))}.bind(this),0)},componentDidUpdate:function componentDidUpdate(){this.props.enableScroll&&this.adjustScroll()},onWindowResize:function onWindowResize(){this.adjustScroll(),this.doScroll(0)},render:function render(){var a=this.props,b=a.children;if(!a.enableScroll)return b;var c={position:'relative'};this.state.scrollPos&&(c.top=-this.state.scrollPos);var d={position:'relative',overflow:'hidden'};return a.maxHeight&&(d.maxHeight=a.maxHeight),React.createElement('div',{onMouseEnter:a.onMouseEnter,onMouseLeave:a.onMouseLeave,className:'z-menu-scroll-container',style:d},React.createElement('div',{ref:'tableWrap',style:c},b),this.renderScroller(a,-1),this.renderScroller(a,1))},renderScroller:function renderScroller(a,b){var c=-1==b?this.handleScrollTop:this.handleScrollBottom,d=-1==b?this.handleScrollTopMax:this.handleScrollBottomMax,e=-1==b?this.state.hasTopScroll:this.state.hasBottomScroll,f=assign({},a.scrollerProps,{visible:e,side:-1==b?'top':'bottom',onMouseDown:c,onDoubleClick:d});return React.createElement(Scroller,f)},adjustScroll:function adjustScroll(){if(this.props.enableScroll){if(!this.state.adjustScroll)return void(this.state.adjustScroll=!0);var a=this.getAvailableHeight(),b=this.getCurrentTableHeight(),c={adjustScroll:!1,hasTopScroll:!1,hasBottomScroll:!1};b>a?(c.maxScrollPos=b-a,c.hasTopScroll=0!==this.state.scrollPos,c.hasBottomScroll=this.state.scrollPos!=c.maxScrollPos):(c.maxScrollPos=0,c.scrollPos=0),this.setState(c)}},getAvailableHeight:function getAvailableHeight(){return this.getAvailableSizeDOM().clientHeight},getAvailableSizeDOM:function getAvailableSizeDOM(){return(0,_reactDom.findDOMNode)(this)},getCurrentTableHeight:function getCurrentTableHeight(){return this.getCurrentSizeDOM().clientHeight},getCurrentSizeDOM:function getCurrentSizeDOM(){return(0,_reactDom.findDOMNode)(this.refs.tableWrap)},handleScrollTop:function handleScrollTop(a){a.preventDefault(),this.handleScroll(-1)},handleScrollBottom:function handleScrollBottom(a){a.preventDefault(),this.handleScroll(1)},handleScrollTopMax:function handleScrollTopMax(a){stop(a),this.handleScrollMax(-1)},handleScrollBottomMax:function handleScrollBottomMax(a){stop(a),this.handleScrollMax(1)},handleScrollMax:function handleScrollMax(a){var b=-1==a?0:this.state.maxScrollPos;this.setScrollPosition(b)},handleScroll:function handleScroll(a/*1 to bottom, -1 to up*/){var b=function(){this.stopScroll(),window.removeEventListener('mouseup',b)}.bind(this);window.addEventListener('mouseup',b),this.scrollInterval=setInterval(this.doScroll.bind(this,a),this.props.scrollSpeed)},doScroll:function doScroll(a){this.setState({scrollDirection:a});var b=this.state.scrollPos+a*this.props.scrollStep;this.setScrollPosition(b)},setScrollPosition:function setScrollPosition(a){a>this.state.maxScrollPos&&(a=this.state.maxScrollPos),0>a&&(a=0),this.setState({scrollPos:a,scrolling:!0})},stopScroll:function stopScroll(){clearInterval(this.scrollInterval),this.setState({scrolling:!1})}});
 
 /***/ },
-/* 290 */
+/* 286 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
@@ -48012,14 +47153,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 291 */
+/* 287 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';var React=__webpack_require__(177),assign=__webpack_require__(23),getArrowStyle=__webpack_require__(292);function emptyFn(){}var SCROLLER_STYLE={left:0,right:0,position:'absolute',cursor:'pointer',zIndex:1};function generateArrowStyle(a,b,c){var d=assign({},c),e={color:d.color||a.arrowColor},f=4,g=d.width||a.arrowWidth||a.arrowSize||a.style.height-f,h=d.height||a.arrowHeight||a.arrowSize||a.style.height-f;return e.width=g,e.height=h,assign(d,getArrowStyle('top'==a.side?'up':'down',e)),d.display='inline-block',d.position='absolute',d.left='50%',d.marginLeft=-g,d.top='50%',d.marginTop=-h/2,b.active&&(d.marginTop+='top'==a.side?-1:1),d}var Scroller=React.createClass({displayName:'Scroller',display:'ReactMenuScroller',getInitialState:function getInitialState(){return{}},getDefaultProps:function getDefaultProps(){return{height:10,defaultStyle:{background:'white'},defaultOverStyle:{},overStyle:{},defaultTopStyle:{borderBottom:'1px solid gray'},topStyle:{},defaultBottomStyle:{borderTop:'1px solid gray'},bottomStyle:{},arrowColor:'gray',arrowStyle:{},defaultArrowStyle:{},defaultArrowOverStyle:{color:'rgb(74, 74, 74)'},arrowOverStyle:{}}},handleMouseEnter:function handleMouseEnter(){this.setState({mouseOver:!0})},handleMouseLeave:function handleMouseLeave(){this.setState({mouseOver:!1})},handleMouseDown:function handleMouseDown(a){this.setState({active:!0}),(this.props.onMouseDown||emptyFn)(a)},handleMouseUp:function handleMouseUp(a){this.setState({active:!1}),(this.props.onMouseUp||emptyFn)(a)},render:function render(){var a=assign({},this.props,{onMouseEnter:this.handleMouseEnter,onMouseLeave:this.handleMouseLeave,onMouseDown:this.handleMouseDown,onMouseUp:this.handleMouseUp}),b=this.state,c=a.side;a.className=this.prepareClassName(a,b),a.style=this.prepareStyle(a,b);var d=this.prepareArrowStyle(a,b);return a.factory?a.factory(a,c):React.createElement('div',a,React.createElement('div',{style:d}))},prepareStyle:function prepareStyle(a,b){var c,d;b.mouseOver&&(d=a.overStyle,c=a.defaultOverStyle);var e='top'==a.side?a.defaultTopStyle:a.defaultBottomStyle,f='top'==a.side?a.topStyle:a.bottomStyle,g=assign({},SCROLLER_STYLE,a.defaultStyle,e,c,a.style,f,d);return g.height=g.height||a.height,g[a.side]=0,a.visible||(g.display='none'),g},prepareClassName:function prepareClassName(a){//className
+	'use strict';var React=__webpack_require__(177),assign=__webpack_require__(23),getArrowStyle=__webpack_require__(288);function emptyFn(){}var SCROLLER_STYLE={left:0,right:0,position:'absolute',cursor:'pointer',zIndex:1};function generateArrowStyle(a,b,c){var d=assign({},c),e={color:d.color||a.arrowColor},f=4,g=d.width||a.arrowWidth||a.arrowSize||a.style.height-f,h=d.height||a.arrowHeight||a.arrowSize||a.style.height-f;return e.width=g,e.height=h,assign(d,getArrowStyle('top'==a.side?'up':'down',e)),d.display='inline-block',d.position='absolute',d.left='50%',d.marginLeft=-g,d.top='50%',d.marginTop=-h/2,b.active&&(d.marginTop+='top'==a.side?-1:1),d}var Scroller=React.createClass({displayName:'Scroller',display:'ReactMenuScroller',getInitialState:function getInitialState(){return{}},getDefaultProps:function getDefaultProps(){return{height:10,defaultStyle:{background:'white'},defaultOverStyle:{},overStyle:{},defaultTopStyle:{borderBottom:'1px solid gray'},topStyle:{},defaultBottomStyle:{borderTop:'1px solid gray'},bottomStyle:{},arrowColor:'gray',arrowStyle:{},defaultArrowStyle:{},defaultArrowOverStyle:{color:'rgb(74, 74, 74)'},arrowOverStyle:{}}},handleMouseEnter:function handleMouseEnter(){this.setState({mouseOver:!0})},handleMouseLeave:function handleMouseLeave(){this.setState({mouseOver:!1})},handleMouseDown:function handleMouseDown(a){this.setState({active:!0}),(this.props.onMouseDown||emptyFn)(a)},handleMouseUp:function handleMouseUp(a){this.setState({active:!1}),(this.props.onMouseUp||emptyFn)(a)},render:function render(){var a=assign({},this.props,{onMouseEnter:this.handleMouseEnter,onMouseLeave:this.handleMouseLeave,onMouseDown:this.handleMouseDown,onMouseUp:this.handleMouseUp}),b=this.state,c=a.side;a.className=this.prepareClassName(a,b),a.style=this.prepareStyle(a,b);var d=this.prepareArrowStyle(a,b);return a.factory?a.factory(a,c):React.createElement('div',a,React.createElement('div',{style:d}))},prepareStyle:function prepareStyle(a,b){var c,d;b.mouseOver&&(d=a.overStyle,c=a.defaultOverStyle);var e='top'==a.side?a.defaultTopStyle:a.defaultBottomStyle,f='top'==a.side?a.topStyle:a.bottomStyle,g=assign({},SCROLLER_STYLE,a.defaultStyle,e,c,a.style,f,d);return g.height=g.height||a.height,g[a.side]=0,a.visible||(g.display='none'),g},prepareClassName:function prepareClassName(a){//className
 	var b=a.className||'';return b+=' z-menu-scroller '+a.side,a.active&&a.visible&&(b+=' active'),b},prepareArrowStyle:function prepareArrowStyle(a,b){var c,d;b.mouseOver&&(c=a.defaultArrowOverStyle,d=a.arrowOverStyle);var e=assign({},a.defaultArrowStyle,c,a.arrowStyle,d);return generateArrowStyle(a,b,e)},handleClick:function handleClick(a){a.stopPropagation}});module.exports=Scroller;
 
 /***/ },
-/* 292 */
+/* 288 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -48070,7 +47211,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 293 */
+/* 289 */
 /***/ function(module, exports) {
 
 	'use strict';module.exports={default:{// overStyle: {
@@ -48082,7 +47223,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	background:'linear-gradient(to bottom, rgb(162,210,246) 0%,rgb(151,204,245) 50%,rgb(154,206,246) 100%)',color:'white'},disabledStyle:{color:'gray',cursor:'default'}}};
 
 /***/ },
-/* 294 */
+/* 290 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {var clone = (function() {
@@ -48246,10 +47387,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  module.exports = clone;
 	}
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(295).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(291).Buffer))
 
 /***/ },
-/* 295 */
+/* 291 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/*!
@@ -48262,9 +47403,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict'
 
-	var base64 = __webpack_require__(296)
-	var ieee754 = __webpack_require__(297)
-	var isArray = __webpack_require__(298)
+	var base64 = __webpack_require__(292)
+	var ieee754 = __webpack_require__(293)
+	var isArray = __webpack_require__(294)
 
 	exports.Buffer = Buffer
 	exports.SlowBuffer = SlowBuffer
@@ -50045,7 +49186,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 296 */
+/* 292 */
 /***/ function(module, exports) {
 
 	'use strict'
@@ -50165,7 +49306,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 297 */
+/* 293 */
 /***/ function(module, exports) {
 
 	exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -50255,7 +49396,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 298 */
+/* 294 */
 /***/ function(module, exports) {
 
 	var toString = {}.toString;
@@ -50266,7 +49407,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 299 */
+/* 295 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -50284,7 +49425,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 300 */
+/* 296 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -50306,12 +49447,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = findIndexBy;
 
 /***/ },
-/* 301 */
+/* 297 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var findIndexBy = __webpack_require__(300);
+	var findIndexBy = __webpack_require__(296);
 
 	function findIndexByName(arr, name) {
 	    return findIndexBy(arr, function (info) {
@@ -50322,7 +49463,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = findIndexByName;
 
 /***/ },
-/* 302 */
+/* 298 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50482,13 +49623,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Cell;
 
 /***/ },
-/* 303 */
+/* 299 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var Region = __webpack_require__(183);
-	var DragHelper = __webpack_require__(258);
+	var DragHelper = __webpack_require__(300);
 	var findDOMNode = __webpack_require__(1).findDOMNode;
 
 	function range(start, end) {
@@ -50611,16 +49752,250 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 304 */
+/* 300 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
+
+	var assign   = __webpack_require__(23)
+	var Region   = __webpack_require__(259)
+	var hasTouch = __webpack_require__(265)
+	var once     = __webpack_require__(301)
+
+	var mobileTest = global.navigator ?
+	    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(global.navigator.userAgent) :
+	    false
+
+	var isMobile = hasTouch && mobileTest;
+
+	var Helper = function(config){
+	    this.config = config
+	}
+
+	var EVENTS = {
+	    move: isMobile? 'touchmove': 'mousemove',
+	    up  : isMobile? 'touchend' : 'mouseup'
+	}
+
+	function emptyFn(){}
+
+	function getPageCoords(event){
+	    var firstTouch
+
+	    var pageX = event.pageX
+	    var pageY = event.pageY
+
+	    if (isMobile && event.touches && (firstTouch = event.touches[0])){
+	        pageX = firstTouch.pageX
+	        pageY = firstTouch.pageY
+	    }
+
+	    return {
+	        pageX: pageX,
+	        pageY: pageY
+	    }
+	}
+
+	assign(Helper.prototype, {
+
+	    /**
+	     * Should be called on a mousedown event
+	     *
+	     * @param  {Event} event
+	     * @return {[type]}       [description]
+	     */
+	    initDrag: function(event) {
+
+	        this.onDragInit(event)
+
+	        var events = this.config.events || EVENTS
+
+	        var onDragStart = once(this.onDragStart, this)
+	        var target = isMobile?
+	                        event.target:
+	                        global
+
+	        var mouseMoveListener = (function(event){
+	            onDragStart(event)
+	            this.onDrag(event)
+	        }).bind(this)
+
+	        var mouseUpListener = (function(event){
+
+	            this.onDrop(event)
+
+	            target.removeEventListener(events.move, mouseMoveListener)
+	            target.removeEventListener(events.up, mouseUpListener)
+	        }).bind(this)
+
+	        target.addEventListener(events.move, mouseMoveListener, false)
+	        target.addEventListener(events.up, mouseUpListener)
+	    },
+
+	    onDragInit: function(event){
+
+	        var config = {
+	            diff: {
+	                left: 0,
+	                top : 0
+	            }
+	        }
+	        this.state = {
+	            config: config
+	        }
+
+	        if (this.config.region){
+	            this.state.initialRegion = Region.from(this.config.region)
+	            this.state.dragRegion =
+	                config.dragRegion =
+	                    this.state.initialRegion.clone()
+	        }
+	        if (this.config.constrainTo){
+	            this.state.constrainTo = Region.from(this.config.constrainTo)
+	        }
+
+	        this.callConfig('onDragInit', event)
+	    },
+
+	    /**
+	     * Called when the first mousemove event occurs after drag is initialized
+	     * @param  {Event} event
+	     */
+	    onDragStart: function(event){
+	        this.state.initPageCoords = getPageCoords(event)
+
+	        this.state.didDrag = this.state.config.didDrag = true
+	        this.callConfig('onDragStart', event)
+	    },
+
+	    /**
+	     * Called on all mousemove events after drag is initialized.
+	     *
+	     * @param  {Event} event
+	     */
+	    onDrag: function(event){
+
+	        var config = this.state.config
+
+	        var initPageCoords = this.state.initPageCoords
+	        var eventCoords = getPageCoords(event)
+
+	        var diff = config.diff = {
+	            left: eventCoords.pageX - initPageCoords.pageX,
+	            top : eventCoords.pageY - initPageCoords.pageY
+	        }
+
+	        if (this.state.initialRegion){
+	            var dragRegion = config.dragRegion
+
+	            //set the dragRegion to initial coords
+	            dragRegion.set(this.state.initialRegion)
+
+	            //shift it to the new position
+	            dragRegion.shift(diff)
+
+	            if (this.state.constrainTo){
+	                //and finally constrain it if it's the case
+	                var boolConstrained = dragRegion.constrainTo(this.state.constrainTo)
+
+	                diff.left = dragRegion.left - this.state.initialRegion.left
+	                diff.top  = dragRegion.top  - this.state.initialRegion.top
+
+	                // console.log(diff);
+	            }
+
+	            config.dragRegion = dragRegion
+	        }
+
+	        this.callConfig('onDrag', event)
+	    },
+
+	    /**
+	     * Called on the mouseup event on window
+	     *
+	     * @param  {Event} event
+	     */
+	    onDrop: function(event){
+	        this.callConfig('onDrop', event)
+
+	        this.state = null
+	    },
+
+	    callConfig: function(fnName, event){
+	        var config = this.state.config
+	        var args   = [event, config]
+
+	        var fn = this.config[fnName]
+
+	        if (fn){
+	            fn.apply(this, args)
+	        }
+	    }
+
+	})
+
+	module.exports = function(event, config){
+
+	    if (config.scope){
+	        var skippedKeys = {
+	            scope      : 1,
+	            region     : 1,
+	            constrainTo: 1
+	        }
+
+	        Object.keys(config).forEach(function(key){
+	            var value = config[key]
+
+	            if (key in skippedKeys){
+	                return
+	            }
+
+	            if (typeof value == 'function'){
+	                config[key] = value.bind(config.scope)
+	            }
+	        })
+	    }
+	    var helper = new Helper(config)
+
+	    helper.initDrag(event)
+
+	    return helper
+	}
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 301 */
+/***/ function(module, exports) {
+
+	'use once'
+
+	module.exports = function once(fn, scope){
+
+	    var called
+	    var result
+
+	    return function(){
+	        if (called){
+	            return result
+	        }
+
+	        called = true
+
+	        return result = fn.apply(scope || this, arguments)
+	    }
+	}
+
+/***/ },
+/* 302 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var Region = __webpack_require__(183);
-	var DragHelper = __webpack_require__(258);
+	var DragHelper = __webpack_require__(300);
 	var findDOMNode = __webpack_require__(1).findDOMNode;
 
-	var findIndexByName = __webpack_require__(301);
+	var findIndexByName = __webpack_require__(297);
 
 	module.exports = function (header, props, column, event) {
 
@@ -50706,7 +50081,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 305 */
+/* 303 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50746,7 +50121,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 
 /***/ },
-/* 306 */
+/* 304 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50857,7 +50232,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = groupByFields;
 
 /***/ },
-/* 307 */
+/* 305 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -50874,16 +50249,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = slice;
 
 /***/ },
-/* 308 */
+/* 306 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(177);
-	var renderMenu = __webpack_require__(309);
-	var renderRow = __webpack_require__(310);
-	var tableStyle = __webpack_require__(312);
-	var slice = __webpack_require__(307);
+	var renderMenu = __webpack_require__(307);
+	var renderRow = __webpack_require__(308);
+	var tableStyle = __webpack_require__(310);
+	var slice = __webpack_require__(305);
 	var LoadMask = __webpack_require__(180);
 
 	function getData(props) {
@@ -50914,7 +50289,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 309 */
+/* 307 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -50931,7 +50306,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 310 */
+/* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50941,7 +50316,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var assign = __webpack_require__(23);
 	var React = __webpack_require__(177);
 
-	var Row = __webpack_require__(311);
+	var Row = __webpack_require__(309);
 	var RowFactory = React.createFactory(Row);
 
 	var renderCell = Row.prototype.renderCell;
@@ -51056,7 +50431,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 311 */
+/* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51065,9 +50440,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	var Region = __webpack_require__(183);
 	var assign = __webpack_require__(23);
 	var normalize = __webpack_require__(195);
-	var Cell = __webpack_require__(302);
+	var Cell = __webpack_require__(298);
 	var CellFactory = React.createFactory(Cell);
-	var ReactMenu = __webpack_require__(267);
+	var ReactMenu = __webpack_require__(257);
 	var ReactMenuFactory = React.createFactory(ReactMenu);
 
 	module.exports = React.createClass({
@@ -51272,7 +50647,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 
 /***/ },
-/* 312 */
+/* 310 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51290,18 +50665,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 313 */
+/* 311 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(177);
 
-	var Row = __webpack_require__(311);
-	var Cell = __webpack_require__(302);
+	var Row = __webpack_require__(309);
+	var Cell = __webpack_require__(298);
 	var CellFactory = React.createFactory(Cell);
 
-	var renderRow = __webpack_require__(310);
+	var renderRow = __webpack_require__(308);
 
 	function renderData(props, data, depth) {
 
@@ -51373,7 +50748,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 314 */
+/* 312 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -51383,7 +50758,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 315 */
+/* 313 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51391,7 +50766,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	var assign = __webpack_require__(23);
-	var getSelected = __webpack_require__(316);
+	var getSelected = __webpack_require__(314);
 
 	var hasOwn = function hasOwn(obj, prop) {
 	    return Object.prototype.hasOwnProperty.call(obj, prop);
@@ -51615,7 +50990,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 316 */
+/* 314 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -51627,14 +51002,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 317 */
+/* 315 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(177);
 	var assign = __webpack_require__(23);
-	var ReactMenu = __webpack_require__(267);
+	var ReactMenu = __webpack_require__(257);
 	var findDOMNode = __webpack_require__(1).findDOMNode;
 
 	function stopPropagation(event) {
@@ -51823,13 +51198,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 318 */
+/* 316 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
 
 	if (!global.fetch && global.window) {
-	    __webpack_require__(319);
+	    __webpack_require__(317);
 	}
 
 	var fetch = global.fetch;
@@ -51890,7 +51265,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 319 */
+/* 317 */
 /***/ function(module, exports) {
 
 	(function() {
