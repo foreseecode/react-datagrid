@@ -80,7 +80,6 @@
     "react-menus": "^2.0.5",
     "react-simple-toolbar": "^1.0.5",
     "react-style-normalizer": "^1.2.8",
-    "react-virtual-scroller": "git+https://github.com/foreseecode/react-virtual-scroller.git",
     "region": "^2.1.2",
     "region-align": "^2.1.2",
     "ustring": "^1.4.1",
