@@ -199,6 +199,10 @@ module.exports = React.createClass({
       if (props.selected){
         className += ' z-selected ' + (props.selectedClassName || '')
       }
+      
+      if(!props.data.selectable) {
+        className += ' z-not-selectable';
+      }
 
       return className
   },

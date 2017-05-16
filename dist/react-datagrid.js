@@ -50632,6 +50632,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      className += ' z-selected ' + (props.selectedClassName || '');
 	    }
 
+	    if (!props.data.selectable) {
+	      className += ' z-not-selectable';
+	    }
+
 	    return className;
 	  },
 
