@@ -50260,6 +50260,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var tableStyle = __webpack_require__(310);
 	var slice = __webpack_require__(305);
 	var LoadMask = __webpack_require__(180);
+	var assign = __webpack_require__(23);
 
 	function getData(props) {
 
@@ -50273,6 +50274,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = function (props, rows) {
 
 	    rows = rows || getData(props).map(function (data, index) {
+	        data = assign({}, data, {
+	            selectable: data.selectable === undefined ? true : data.selectable
+	        });
+
 	        return renderRow.call(this, props, data, index + props.startIndex);
 	    }, this);
 
@@ -50502,6 +50507,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 
 	  handleRowClick: function handleRowClick(event) {
+	    if (!this.props.data.selectable) {
+	      return;
+	    }
 
 	    if (this.props.onClick) {
 	      this.props.onClick(event);

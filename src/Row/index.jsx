@@ -63,6 +63,10 @@ module.exports = React.createClass({
   },
 
   handleRowClick: function(event){
+    if(!this.props.data.selectable) {
+      return;
+    }
+    
 
     if (this.props.onClick){
         this.props.onClick(event)
