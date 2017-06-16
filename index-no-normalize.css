@@ -671,6 +671,7 @@ html.u-app body * {
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 1;
 }
 .react-datagrid.z-with-column-menu .z-column-header .z-show-filter,
 .react-datagrid.z-with-column-menu .z-column-header .z-show-menu {
