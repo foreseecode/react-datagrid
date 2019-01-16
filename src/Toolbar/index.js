@@ -4,7 +4,7 @@ var React     = require('react')
 var createClass = require('create-react-class')
 var normalize = require('react-style-normalizer')
 var assign    = require('object-assign')
-var clone = React.cloneElement || require('react-clonewithprops')
+var clone = React.cloneElement
 var emptyFn = function(){}
 
 var DISPLAY_NAME = 'ReactToolbar'
@@ -82,22 +82,7 @@ var Toolbar = createClass({
 		var state = this.state
 		var props = this.prepareProps(this.props, state)
 
-		// this.prepareContent(props)
-
 		return <div {...props} />
-	},
-
-	prepareContent: function(props){
-
-		// var style = {
-		// 	display : 'inline-flex',
-		// 	position: 'relative',
-		// 	overflow: 'hidden',
-		// 	flex    : '1 0 0',
-		// 	padding : props.style.padding
-		// }
-
-		// props.style.padding = 0
 	},
 
 	prepareProps: function(thisProps, state) {
