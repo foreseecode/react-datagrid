@@ -14,8 +14,8 @@
     "dist": "webpack --progress --colors --config build/dist.config.js",
     "watch-dist": "webpack --watch --progress --colors --config build/dist.config.js",
     "dist.min": "webpack --progress --colors -p --config build/dist.min.config.js",
-    "build": "npm run lib && npm run dist && npm run dist.min && npm run build-style && npm run build-style-dist && npm run build-style-dist-min",
-    "dev": "webpack-dev-server --progress --colors --config  build/dev.config.js",
+    "build": "NODE_ENV=production npm run lib && npm run dist && npm run dist.min && npm run build-style && npm run build-style-dist && npm run build-style-dist-min",
+    "dev": "NODE_ENV=production PORT=9090 webpack-dev-server --progress --colors --config  build/dev.config.js",
     "hot": "NODE_ENV=production HOT=true PORT=9090 webpack-dev-server --progress --colors --config build/dev.config.js"
   },
   "repository": {
