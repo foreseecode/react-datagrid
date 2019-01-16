@@ -2,19 +2,21 @@
 
 var React    = require('react')
 var assign   = require('object-assign')
+var createReactClass = require('create-react-class');
+var PropTypes = require('prop-types');
 
 function emptyFn(){}
 
-module.exports = React.createClass({
+module.exports = createReactClass({
 
     displayName: 'ReactDataGrid.Wrapper',
 
     propTypes: {
-        scrollLeft   : React.PropTypes.number,
-        scrollTop    : React.PropTypes.number,
-        scrollbarSize: React.PropTypes.number,
-        rowHeight   : React.PropTypes.any,
-        renderCount : React.PropTypes.number
+        scrollLeft   : PropTypes.number,
+        scrollTop    : PropTypes.number,
+        scrollbarSize: PropTypes.number,
+        rowHeight   : PropTypes.any,
+        renderCount : PropTypes.number
     },
 
     getDefaultProps: function(){

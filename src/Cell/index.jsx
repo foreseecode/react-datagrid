@@ -1,6 +1,9 @@
 'use strict';
 
 var React  = require('react')
+var DOM = require('react-dom-factories')
+var createClass = require('create-react-class')
+var PropTypes = require('prop-types')
 var assign = require('object-assign')
 var normalize = require('react-style-normalizer')
 
@@ -19,9 +22,7 @@ function copyProps(target, source, list){
 
 }
 
-var PropTypes = React.PropTypes
-
-var Cell = React.createClass({
+var Cell = createClass({
 
     displayName: 'ReactDataGrid.Cell',
 
@@ -80,10 +81,10 @@ var Cell = React.createClass({
         if (textAlign){
             className += ' z-align-' + textAlign
         }
-        
+
         if(cellClassName) {
-          className += ' ' + cellClassName;
-        }
+            className += ' ' + cellClassName;
+          }
 
         return className
     },
@@ -106,28 +107,28 @@ var Cell = React.createClass({
 
     prepareProps: function(thisProps){
 
-        var props = assign({}, thisProps)
+      var props = assign({}, thisProps)
 
-        if (!props.column && props.columns){
-            props.column  = props.columns[props.index]
-        }
+      if (!props.column && props.columns){
+        props.column  = props.columns[props.index]
+      }
 
-        props.className = this.prepareClassName(props)
-        props.style     = this.prepareStyle(props)
+      props.className = this.prepareClassName(props)
+      props.style     = this.prepareStyle(props)
 
-        return props
+      return props
     },
 
     render: function(){
-        var props = this.p = this.prepareProps(this.props)
+      var props = this.p = this.prepareProps(this.props)
 
-        var column    = props.column
-        var textAlign = column && column.textAlign
-        var text      = props.renderText?
-            props.renderText(props.text, column, props.rowIndex):
-            props.text
-
-        var contentProps = {
+      var column    = props.column
+      var textAlign = column && column.textAlign
+      var text      = props.renderText?
+      props.renderText(props.text, column, props.rowIndex):
+      props.text
+    
+              var contentProps = {
             className: 'z-content',
             style    : {
               padding: props.contentPadding
@@ -141,14 +142,14 @@ var Cell = React.createClass({
         
         var content = props.renderCell?
                             props.renderCell(contentProps, text, props):
-                            React.DOM.div(contentProps, text)
+                            DOM.div(contentProps, text)
 
         var renderProps = assign({}, props)
 
         delete renderProps.data
 
 
-
+        
 
         return (
             <div className={renderProps.className}

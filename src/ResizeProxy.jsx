@@ -2,13 +2,15 @@
 
 var React  = require('react')
 var assign = require('object-assign')
+var createReactClass = require('create-react-class');
+var PropTypes = require('prop-types');
 
-module.exports = React.createClass({
+module.exports = createReactClass({
 
     displayName: 'ReactDataGrid.ResizeProxy',
 
     propTypes: {
-        active: React.PropTypes.bool
+        active: PropTypes.bool
     },
 
     getInitialState: function(){

@@ -18,12 +18,12 @@ module.exports = [
   {
     test: /\.styl$/,
     exclude: /node_modules/,
-    loader: 'style-loader!css-loader!autoprefixer!stylus-loader'
+    loader: 'style-loader!css-loader!autoprefixer-loader!stylus-loader'
   },
   {
     test: /\.css$/,
     exclude: /node_modules/,
-    loader: 'style-loader!css-loader!autoprefixer'
+    loader: 'style-loader!css-loader!autoprefixer-loader'
   },
   {
     test: /\.json$/,

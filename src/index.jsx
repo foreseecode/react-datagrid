@@ -6,7 +6,9 @@ require('es6-promise').polyfill()
 import { findDOMNode } from 'react-dom'
 import React from 'react'
 import _ from 'lodash'
+var DOM = require('react-dom-factories')
 
+var createClass = require('create-react-class')
 var assign   = require('object-assign')
 import LoadMask from 'react-load-mask'
 var Region   = require('region')
@@ -14,7 +16,8 @@ var Region   = require('region')
 var PaginationToolbar = React.createFactory(require('./PaginationToolbar'))
 var Column = require('./models/Column')
 
-var PropTypes      = require('./PropTypes')
+var PropTypes      = require('prop-types')
+var RowPropTypes      = require('./PropTypes')
 var Wrapper        = require('./Wrapper')
 var Header         = require('./Header')
 var WrapperFactory = React.createFactory(Wrapper)
@@ -80,7 +83,7 @@ function findColumn(columns, column){
     }
 }
 
-module.exports = React.createClass({
+module.exports = createClass({
 
     displayName: 'ReactDataGrid',
 
@@ -90,34 +93,34 @@ module.exports = React.createClass({
     ],
 
     propTypes: {
-        loading          : React.PropTypes.bool,
-        virtualRendering : React.PropTypes.bool,
+        loading          : PropTypes.bool,
+        virtualRendering : PropTypes.bool,
 
         //specify false if you don't want any column to be resizable
-        resizableColumns : React.PropTypes.bool,
-        filterable: React.PropTypes.bool,
+        resizableColumns : PropTypes.bool,
+        filterable: PropTypes.bool,
 
         //specify false if you don't want column menus to be displayed
-        withColumnMenu   : React.PropTypes.bool,
-        cellEllipsis     : React.PropTypes.bool,
-        sortable         : React.PropTypes.bool,
-        loadMaskOverHeader : React.PropTypes.bool,
-        idProperty       : React.PropTypes.string.isRequired,
+        withColumnMenu   : PropTypes.bool,
+        cellEllipsis     : PropTypes.bool,
+        sortable         : PropTypes.bool,
+        loadMaskOverHeader : PropTypes.bool,
+        idProperty       : PropTypes.string.isRequired,
 
         //you can customize the column menu by specifying a factory
-        columnMenuFactory: React.PropTypes.func,
-        onDataSourceResponse: React.PropTypes.func,
-        onDataSourceSuccess: React.PropTypes.func,
-        onDataSourceError: React.PropTypes.func,
+        columnMenuFactory: PropTypes.func,
+        onDataSourceResponse: PropTypes.func,
+        onDataSourceSuccess: PropTypes.func,
+        onDataSourceError: PropTypes.func,
 
         /**
          * @cfg {Number/String} columnMinWidth=50
          */
-        columnMinWidth   : PropTypes.numeric,
-        scrollBy         : PropTypes.numeric,
-        rowHeight        : PropTypes.numeric,
-        sortInfo         : PropTypes.sortInfo,
-        columns          : PropTypes.column,
+        columnMinWidth   : RowPropTypes.numeric,
+        scrollBy         : RowPropTypes.numeric,
+        rowHeight        : RowPropTypes.numeric,
+        sortInfo         : RowPropTypes.sortInfo,
+        columns          : RowPropTypes.column,
 
         data: function(props, name){
             var value = props[name]
@@ -134,10 +137,10 @@ module.exports = React.createClass({
         this.hasVerticalScrollbar();
         // this.checkRowHeight(this.props)
     },
-    
+
     componentDidUpdate: function() {
-      this.hasVerticalScrollbar();
-    },
+        this.hasVerticalScrollbar();
+      },
 
     componentWillUnmount: function(){
         this.scroller = null
@@ -172,7 +175,7 @@ module.exports = React.createClass({
     },
 
     getInitialState: function(){
-      this.scrollLeft = 0;
+        this.scrollLeft = 0;
 
         var props = this.props
         var defaultSelected = props.defaultSelected
@@ -186,41 +189,41 @@ module.exports = React.createClass({
             defaultPage : props.defaultPage
         }
     },
-    
+
     hasVerticalScrollbar: function() {
-      if(this.refs.wrapper && this.refs.wrapper.refs.table) {
-        const tableElement = this.refs.wrapper.refs.table;
-        const hasVerticalScrollbar = tableElement.scrollHeight > tableElement.clientHeight;
-        
-        const header = this.refs.header; 
-        const zHeader = header && header.refs.zHeader;
-        
-        
-        if(zHeader && hasVerticalScrollbar) {
-          zHeader.classList.add("z-has-vertical-scroller");
-        } else if(zHeader) {
-          zHeader.classList.remove("z-has-vertical-scroller");
+        if(this.refs.wrapper && this.refs.wrapper.refs.table) {
+            const tableElement = this.refs.wrapper.refs.table;
+            const hasVerticalScrollbar = tableElement.scrollHeight > tableElement.clientHeight;
+            
+            const header = this.refs.header; 
+            const zHeader = header && header.refs.zHeader;
+            
+            
+            if(zHeader && hasVerticalScrollbar) {
+            zHeader.classList.add("z-has-vertical-scroller");
+            } else if(zHeader) {
+            zHeader.classList.remove("z-has-vertical-scroller");
+            }
         }
-      }
-    },
-    
-    toTheTop: function() {
-      if(this.refs.wrapper) {
-        this.refs.wrapper.toTheTop();
-      }
     },
 
+    toTheTop: function() {
+        if(this.refs.wrapper) {
+            this.refs.wrapper.toTheTop();
+        }
+    },
+      
     updateStartIndex: function() {
         this.handleScrollTop()
     },
 
     handleScrollLeft: function(scrollLeft){
-      this.scrollLeft = scrollLeft;
-      
-      if(this.refs.header && this.refs.header.refs.zHeader) {
-        this.refs.header.scrollLeft(scrollLeft);
-      }
-      
+        this.scrollLeft = scrollLeft;
+    
+        if(this.refs.header && this.refs.header.refs.zHeader) {
+            this.refs.header.scrollLeft(scrollLeft);
+        }
+        
         // this.setState({
         //     menuColumn: null
         // })
@@ -364,7 +367,7 @@ module.exports = React.createClass({
     },
 
     prepareFooter: function(props, state){
-        return (props.footerFactory || React.DOM.div)({
+        return (props.footerFactory || DOM.div)({
             className: 'z-footer-wrapper'
         })
     },
@@ -395,7 +398,7 @@ module.exports = React.createClass({
 
         this.data       = props.data
         this.dataSource = props.dataSource
-        
+
         var fixedColumns = _.filter(props.columns, { fixed: true }) ;
         var nonFixedColumns = _.filter(props.columns, { fixed: false }) ;
         props.columns = fixedColumns.concat(nonFixedColumns);
@@ -455,12 +458,12 @@ module.exports = React.createClass({
                 bottomToolbar = paginationToolbar
             }
         }
-        
+
         if(renderProps.style.height) {
-          const HEADER_HEIGHT = 40;
-          renderProps.style.height += HEADER_HEIGHT;
+            const HEADER_HEIGHT = 40;
+            renderProps.style.height += HEADER_HEIGHT;
         }
-        
+
         var result = (
             <div {...renderProps}>
                 {topToolbar}
@@ -600,11 +603,11 @@ module.exports = React.createClass({
         return (props.WrapperFactory || WrapperFactory)(wrapperProps)
 
     },
-    
+   
     handleScroll() {
-      if(this.scrollLeft !== this.refs.wrapper.refs.table.scrollLeft) {
-        this.handleScrollLeft(this.refs.wrapper.refs.table.scrollLeft);
-      }
+        if(this.scrollLeft !== this.refs.wrapper.refs.table.scrollLeft) {
+          this.handleScrollLeft(this.refs.wrapper.refs.table.scrollLeft);
+        }
     },
 
     handleRowClick: function(rowProps, event){
