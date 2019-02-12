@@ -4,9 +4,10 @@ import { findDOMNode } from 'react-dom';
 var React     = require('react')
 var ReactDOM  = require('react-dom')
 var assign    = require('object-assign')
-var Toolbar   = require('react-simple-toolbar')
+var Toolbar   = require('./Toolbar')
 var Region    = Toolbar.Region
 var normalize = require('react-style-normalizer')
+var createReactClass = require('create-react-class');
 
 var WHITESPACE = '\u00a0'
 function sortAsc(a, b){
@@ -112,7 +113,7 @@ var defaultStyles = {
 	// gotoNext: { marginLeft: 10}
 }
 
-module.exports = React.createClass({
+module.exports = createReactClass({
 
 	displayName: 'PaginationToolbar',
 
