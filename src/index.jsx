@@ -83,7 +83,7 @@ function findColumn(columns, column){
     }
 }
 
-module.exports = createClass({
+const ReactDataGrid = createClass({
 
     displayName: 'ReactDataGrid',
 
@@ -129,8 +129,6 @@ module.exports = createClass({
             }
         }
     },
-
-    getDefaultProps: require('./getDefaultProps'),
 
     componentDidMount: function(){
         window.addEventListener('click', this.windowClickListener = this.onWindowClick)
@@ -418,7 +416,7 @@ module.exports = createClass({
         var loadMask
 
         if (props.loadMaskOverHeader){
-            loadMask = <LoadMask visible={props.loading} />
+            loadMask = <LoadMask visible={`${props.loading}`} />
         }
 
         var paginationToolbar
@@ -982,7 +980,7 @@ module.exports = createClass({
         return dataSource
     },
 
-    componentWillMount: function(){
+    componentDidMount: function(){
         this.rowCache = {}
         this.groupData(this.props)
 
@@ -991,16 +989,18 @@ module.exports = createClass({
         }
     },
 
-    componentWillReceiveProps: function(nextProps){
-        this.rowCache = {}
-        this.groupData(nextProps)
+    componentDidUpdate: function(prevProps) {
+        if (this.props.groupBy !== prevProps.groupBy) {
+            this.rowCache = {}
+            this.groupData(nextProps)
+        }
 
-        if (this.isRemoteDataSource(nextProps)){
-            var otherPage     = this.props.page != nextProps.page
-            var otherPageSize = this.props.pageSize != nextProps.pageSize
+        if (this.isRemoteDataSource(this.props)){
+            var otherPage     = this.props.page != prevProps.page
+            var otherPageSize = this.props.pageSize != prevProps.pageSize
 
             if (nextProps.reload || otherPage || otherPageSize){
-                this.loadDataSource(nextProps.dataSource, nextProps)
+                this.loadDataSource(this.props.dataSource, this.props)
             }
         }
     },
@@ -1170,3 +1170,7 @@ module.exports = createClass({
         onColumnResize(firstCol, firstSize, secondCol, secondSize)
     }
 })
+
+ReactDataGrid.defaultProps = require('./getDefaultProps');
+
+module.exports = ReactDataGrid;

@@ -45,17 +45,6 @@ var Cell = createClass({
         rowIndex   : PropTypes.number
     },
 
-    getDefaultProps: function(){
-        return {
-            text: '',
-
-            firstClassName: 'z-first',
-            lastClassName : 'z-last',
-
-            defaultStyle: {}
-        }
-    },
-
     prepareClassName: function(props) {
         var index     = props.index
         var columns   = props.columns
@@ -163,5 +152,12 @@ var Cell = createClass({
 })
 
 Cell.className = 'z-cell'
+
+Cell.defaultProps = {
+    text: '',
+    firstClassName: 'z-first',
+    lastClassName : 'z-last',
+    defaultStyle: {}
+},
 
 module.exports = Cell

@@ -24,44 +24,9 @@ var TEXT_ALIGN = {
 	end  :'right'
 }
 
-module.exports = createClass({
+const ToolbarRegion = createClass({
 
 	displayName: DISPLAY_NAME,
-
-	getDefaultProps: function(){
-		return {
-			'data-display-name': DISPLAY_NAME,
-
-			isToolbarRegion: true,
-
-			flex: 1,
-			flexShrink: null,
-			flexBasis : null,
-
-			defaultStyle: {
-				boxSizing   : 'border-box',
-
-				alignItems  : 'center',
-				flexShrink  : 1,
-				flexBasis   : 0,
-
-				position    : 'relative',
-				display     : 'inline-block',
-
-				overflow    : 'hidden',
-				whiteSpace  : 'nowrap',
-				textOverflow: 'ellipsis',
-			},
-
-			defaultHorizontalStyle: {
-				flexFlow: 'row'
-			},
-
-			defaultVerticalStyle: {
-				flexFlow: 'column'
-			}
-		}
-	},
 
 	render: function(){
 		var props = this.prepareProps(this.props)
@@ -117,4 +82,39 @@ module.exports = createClass({
 
 		return normalize(style)
 	}
-})
+});
+
+ToolbarRegion.defaultProps = {
+	'data-display-name': DISPLAY_NAME,
+
+	isToolbarRegion: true,
+
+	flex: 1,
+	flexShrink: null,
+	flexBasis : null,
+
+	defaultStyle: {
+		boxSizing   : 'border-box',
+
+		alignItems  : 'center',
+		flexShrink  : 1,
+		flexBasis   : 0,
+
+		position    : 'relative',
+		display     : 'inline-block',
+
+		overflow    : 'hidden',
+		whiteSpace  : 'nowrap',
+		textOverflow: 'ellipsis',
+	},
+
+	defaultHorizontalStyle: {
+		flexFlow: 'row'
+	},
+
+	defaultVerticalStyle: {
+		flexFlow: 'column'
+	}
+};
+
+module.exports = ToolbarRegion;

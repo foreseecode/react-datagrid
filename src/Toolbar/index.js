@@ -39,40 +39,6 @@ var Toolbar = createClass({
 
 	displayName: DISPLAY_NAME,
 
-	getDefaultProps: function() {
-		return {
-			'data-display-name': DISPLAY_NAME,
-			isReactToolbar: true,
-
-			padding: 2,
-			theme: 'default',
-
-			defaultStyle  : {
-				display  : 'inline-flex',
-				boxSizing: 'border-box',
-				overflow: 'hidden',
-				whiteSpace: 'nowrap',
-				textOverflow: 'ellipsis',
-
-				padding: 2
-			},
-
-			defaultHorizontalStyle: {
-				width       : '100%',
-				flexFlow    : 'row',
-				alignItems  : 'center', //so items are centered vertically
-				alignContent: 'stretch'
-			},
-
-			defaultVerticalStyle: {
-				height      : '100%',
-				flexFlow    : 'column',
-				alignItems  : 'stretch',
-				alignContent: 'center'
-			}
-		}
-	},
-
 	getInitialState: function(){
 		return {}
 	},
@@ -174,5 +140,37 @@ var Toolbar = createClass({
 
 Toolbar.Region = require('./ToolbarRegion')
 Toolbar.themes = THEMES
+
+Toolbar.defaultProps = {
+	'data-display-name': DISPLAY_NAME,
+	isReactToolbar: true,
+
+	padding: 2,
+	theme: 'default',
+
+	defaultStyle  : {
+		display  : 'inline-flex',
+		boxSizing: 'border-box',
+		overflow: 'hidden',
+		whiteSpace: 'nowrap',
+		textOverflow: 'ellipsis',
+
+		padding: 2
+	},
+
+	defaultHorizontalStyle: {
+		width       : '100%',
+		flexFlow    : 'row',
+		alignItems  : 'center', //so items are centered vertically
+		alignContent: 'stretch'
+	},
+
+	defaultVerticalStyle: {
+		height      : '100%',
+		flexFlow    : 'column',
+		alignItems  : 'stretch',
+		alignContent: 'center'
+	}
+};
 
 module.exports = Toolbar

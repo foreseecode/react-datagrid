@@ -1,8 +1,9 @@
 'use strict';
 
 var DataGrid  = require('../DataGrid')
-var React     = require('react/addons')
-var TestUtils = React.addons.TestUtils
+var React     = require('react')
+var ReactDOM     = require('react-dom')
+var TestUtils = require('react-dom/test-utils');
 
 var testUtils = require('../utils')
 
@@ -23,7 +24,7 @@ var columns = [
 ];
 
 function checkSelected(row, value){
-    React.findDOMNode(row)
+    ReactDOM.findDOMNode(row)
         .className.includes(SELECTED_CLASSNAME)
         .should.be[value]
 }
@@ -58,7 +59,7 @@ describe('DataGrid Test Suite - Selection', function() {
         checkSelected(rows[1], true)
         checkSelected(rows[2], false)
 
-        TestUtils.Simulate.click(React.findDOMNode(rows[2]))
+        TestUtils.Simulate.click(ReactDOM.findDOMNode(rows[2]))
 
         checkSelected(rows[0], false)
         checkSelected(rows[1], false)

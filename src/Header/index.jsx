@@ -56,7 +56,7 @@ function getDropState(){
     }
 }
 
-module.exports = createReactClass({
+const Header = createReactClass({
 
     displayName: 'ReactDataGrid.Header',
 
@@ -92,17 +92,6 @@ module.exports = createReactClass({
         }
 
         this.setState(getDropState())
-    },
-
-    getDefaultProps: function(){
-        return {
-            defaultClassName : 'z-header-wrapper',
-            draggingClassName: 'z-dragging',
-            cellClassName    : 'z-column-header',
-            defaultStyle    : {},
-            sortInfo        : null,
-            scrollTop       : 0
-        }
     },
 
     getInitialState: function(){
@@ -522,3 +511,14 @@ module.exports = createReactClass({
         assign(style, props.defaultStyle)
     }
 })
+
+Header.defaultProps = {
+    defaultClassName : 'z-header-wrapper',
+    draggingClassName: 'z-dragging',
+    cellClassName    : 'z-column-header',
+    defaultStyle    : {},
+    sortInfo        : null,
+    scrollTop       : 0
+};
+
+module.exports = Header;
