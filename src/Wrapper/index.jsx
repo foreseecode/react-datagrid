@@ -7,7 +7,7 @@ var PropTypes = require('prop-types');
 
 function emptyFn(){}
 
-module.exports = createReactClass({
+const Wrapper = createReactClass({
 
     displayName: 'ReactDataGrid.Wrapper',
 
@@ -17,13 +17,6 @@ module.exports = createReactClass({
         scrollbarSize: PropTypes.number,
         rowHeight   : PropTypes.any,
         renderCount : PropTypes.number
-    },
-
-    getDefaultProps: function(){
-        return {
-            scrollLeft: 0,
-            scrollTop : 0
-        }
     },
 
     onMount: function(scroller){
@@ -81,3 +74,9 @@ module.exports = createReactClass({
         return props
     }
 })
+
+Wrapper.defaultProps = {
+    scrollLeft: 0,
+    scrollTop : 0
+};
+module.exports = Wrapper;

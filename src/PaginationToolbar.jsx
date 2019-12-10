@@ -113,50 +113,9 @@ var defaultStyles = {
 	// gotoNext: { marginLeft: 10}
 }
 
-module.exports = createReactClass({
+const PaginationToolbar =  createReactClass({
 
 	displayName: 'PaginationToolbar',
-
-	getDefaultProps: function(){
-		return {
-			iconSize: 20,
-			showRefreshIcon: true,
-			showPageSize: true,
-			defaultStyle: {
-				color : 'inherit'
-			},
-
-			pageSizes: [
-				10,
-				20,
-				50,
-				100,
-				200,
-				500,
-				1000
-			],
-
-			theme: '',
-
-			defaultIconProps: {
-				version: '1.2',
-				style: {
-					cursor       : 'pointer',
-					marginLeft   : 3,
-					marginRight  : 3,
-					fill         : '#8E8E8E',
-					verticalAlign: 'middle'
-				},
-				disabledStyle: {
-					cursor: 'auto',
-					fill: '#DFDCDC'
-				},
-				overStyle: {
-					fill: 'gray'
-				}
-			}
-		}
-	},
 
 	getInitialState: function(){
 		return {
@@ -486,4 +445,45 @@ module.exports = createReactClass({
 	gotoPage: function(page) {
 		this.props.onPageChange(page)
 	}
-})
+});
+
+PaginationToolbar.defaultProps = {
+	iconSize: 20,
+	showRefreshIcon: true,
+	showPageSize: true,
+	defaultStyle: {
+		color : 'inherit'
+	},
+
+	pageSizes: [
+		10,
+		20,
+		50,
+		100,
+		200,
+		500,
+		1000
+	],
+
+	theme: '',
+
+	defaultIconProps: {
+		version: '1.2',
+		style: {
+			cursor       : 'pointer',
+			marginLeft   : 3,
+			marginRight  : 3,
+			fill         : '#8E8E8E',
+			verticalAlign: 'middle'
+		},
+		disabledStyle: {
+			cursor: 'auto',
+			fill: '#DFDCDC'
+		},
+		overStyle: {
+			fill: 'gray'
+		}
+	}
+};
+
+module.exports = PaginationToolbar;

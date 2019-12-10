@@ -1,8 +1,9 @@
 'use strict';
 
 var DataGrid  = require('../DataGrid')
-var React     = require('react/addons')
-var TestUtils = React.addons.TestUtils
+var React     = require('react')
+var ReactDOM  = require('react-dom')
+var TestUtils = require('react-dom/test-utils');
 
 var TABLE_CLASS         = 'z-table'
 var ROW_CLASS           = 'z-row'
@@ -52,7 +53,7 @@ describe('DataGrid Test Suite - Basic', function(){
         var tableDom = findWithClass(table, TABLE_CLASS)
         var cellTexts = tryWithClass(rows[0], CELLTEXT_CLASS)
 
-        cellTexts[0].getDOMNode()
+        ReactDOM.findDOMNode(cellTexts[0])
             .textContent
             .should.equal('1')
 
@@ -84,7 +85,7 @@ describe('DataGrid Test Suite - Basic', function(){
 
         tryWithClass(table, COLUMN_HEADER_CLASS)
             .map(function(header) {
-                headers.push(header.getDOMNode().textContent)
+                headers.push(ReactDOM.findDOMNode(header).textContent.trim())
             })
 
         headers.should.eql(expectedHeaders)

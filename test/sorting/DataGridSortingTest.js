@@ -1,8 +1,9 @@
 'use strict';
 
 var DataGrid  = require('../DataGrid')
-var React     = require('react/addons')
-var TestUtils = React.addons.TestUtils
+var React     = require('react')
+var ReactDOM     = require('react-dom')
+var TestUtils = require('react-dom/test-utils');
 
 var TABLE_CLASS         = 'z-table'
 var ROW_CLASS           = 'z-row'
@@ -46,7 +47,7 @@ describe('DataGrid Test Suite -  Sorting',function() {
         )
 
         var headers = tryWithClass(table,COLUMN_HEADER_CLASS)
-        var checkHeader = React.findDOMNode(headers[1])
+        var checkHeader = ReactDOM.findDOMNode(headers[1])
         checkHeader.className.includes(SORT_ASC_CLASS).should.be.true
 
     })
@@ -67,8 +68,8 @@ describe('DataGrid Test Suite -  Sorting',function() {
         )
 
         var headers = tryWithClass(table,COLUMN_HEADER_CLASS)
-        var checkHeader1 = React.findDOMNode(headers[1])
-        var checkHeader2 = React.findDOMNode(headers[2])
+        var checkHeader1 = ReactDOM.findDOMNode(headers[1])
+        var checkHeader2 = ReactDOM.findDOMNode(headers[2])
         checkHeader1.className.includes(SORT_ASC_CLASS).should.be.true
         checkHeader2.className.includes(SORT_ASC_CLASS).should.be.true
 
@@ -98,7 +99,7 @@ describe('DataGrid Test Suite -  Sorting',function() {
         )
 
         var headers = tryWithClass(table,COLUMN_HEADER_CLASS)
-        var checkHeader = React.findDOMNode(headers[1])
+        var checkHeader = ReactDOM.findDOMNode(headers[1])
         checkHeader.className.includes(SORT_ASC_CLASS).should.be.true
 
         TestUtils.Simulate.mouseDown(checkHeader)
@@ -133,7 +134,7 @@ describe('DataGrid Test Suite -  Sorting',function() {
         )
 
         var headers = tryWithClass(table,COLUMN_HEADER_CLASS)
-        var checkHeader = React.findDOMNode(headers[1])
+        var checkHeader = ReactDOM.findDOMNode(headers[1])
         checkHeader.className.includes(SORT_ASC_CLASS).should.be.true
 
         TestUtils.Simulate.mouseDown(checkHeader)

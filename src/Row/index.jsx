@@ -11,7 +11,7 @@ var ReactMenuFactory = React.createFactory(ReactMenu)
 var createReactClass = require('create-react-class');
 var PropTypes = require('prop-types');
 
-module.exports = createReactClass({
+const Row = createReactClass({
 
   displayName: 'ReactDataGrid.Row',
 
@@ -19,13 +19,6 @@ module.exports = createReactClass({
     data   : PropTypes.object,
     columns: PropTypes.array,
     index  : PropTypes.number
-  },
-
-  getDefaultProps: function(){
-
-    return {
-      defaultStyle: {}
-    }
   },
 
   getInitialState: function(){
@@ -223,3 +216,9 @@ module.exports = createReactClass({
     return style
   }
 })
+
+Row.defaultProps = {
+  defaultStyle: {}
+};
+
+module.exports = Row;

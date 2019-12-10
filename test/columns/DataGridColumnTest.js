@@ -3,8 +3,9 @@
 //ensure DOM environment
 require('../testdom')()
 
-var React     = require('react/addons')
-var TestUtils = React.addons.TestUtils
+var React     = require('react')
+var ReactDOM  = require('react-dom')
+var TestUtils = require('react-dom/test-utils');
 var DataGrid  = require('../DataGrid')
 
 var TABLE_CLASS         = 'z-table'
@@ -174,7 +175,7 @@ describe('DataGrid Test Suite - Columns', function(){
 
         tryWithClass(table,COLUMN_HEADER_CLASS)
             .map(function(header) {
-                headers.push(header.getDOMNode().textContent)
+                headers.push(ReactDOM.findDOMNode(header).textContent.trim())
             })
 
         var expectedHeaders    = ['#','First name','Last name','City','Email']
@@ -190,7 +191,7 @@ describe('DataGrid Test Suite - Columns', function(){
         var newHeaders = []
         tryWithClass(table,COLUMN_HEADER_CLASS)
             .map(function(header) {
-                newHeaders.push(header.getDOMNode().textContent)
+                newHeaders.push(ReactDOM.findDOMNode(header).textContent.trim())
             })
 
         newHeaders.should.eql(expectedHeadersLater)

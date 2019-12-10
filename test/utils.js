@@ -1,7 +1,6 @@
 'use strict';
 
-var React     = require('react/addons')
-var TestUtils = React.addons.TestUtils
+var TestUtils = require('react-dom/test-utils');
 var faker = require('faker')
 
 function render(node){
