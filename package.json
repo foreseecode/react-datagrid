@@ -1,6 +1,6 @@
 {
   "name": "@foresee/react-datagrid",
-  "version": "2.1.5",
+  "version": "2.1.6",
   "description": "React DataGrid",
   "main": "lib/index.js",
   "scripts": {
