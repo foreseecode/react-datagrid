@@ -1,5 +1,5 @@
 {
-  "name": "react-datagrid",
+  "name": "@foresee/react-datagrid",
   "version": "2.1.5",
   "description": "React DataGrid",
   "main": "lib/index.js",
